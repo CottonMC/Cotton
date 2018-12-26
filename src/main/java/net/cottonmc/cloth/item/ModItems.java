@@ -1,11 +1,14 @@
 package net.cottonmc.cloth.item;
 
-import net.cottonmc.cloth.InfraRedstone;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 
 public class ModItems {
 
+	public static final Item COPPER_INGOT = register(new ItemBase("copper_ingot", ItemBase.DEFAULT_SETTINGS));
+	public static final Item STEEL_INGOT = register(new ItemBase("steel_ingot", ItemBase.DEFAULT_SETTINGS));
+	public static final Item SILVER_INGOT = register(new ItemBase("silver_ingot", ItemBase.DEFAULT_SETTINGS));
+	public static final Item LEAD_INGOT = register(new ItemBase("lead_ingot", ItemBase.DEFAULT_SETTINGS));
 
 	public static void init() {
 
@@ -17,7 +20,7 @@ public class ModItems {
 	}
 
 	public static Item register(ItemBase item) {
-		Registry.register(Registry.ITEM, "cloth:" + item.getName(), item);
+		register(item.getName(), item);
 		return item;
 	}
 }
