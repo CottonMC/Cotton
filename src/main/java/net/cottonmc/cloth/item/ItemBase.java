@@ -1,6 +1,6 @@
-package net.panno.cloth.item;
+package net.cottonmc.cloth.item;
 
-import net.panno.cloth.Cloth;
+import net.cottonmc.cloth.Cloth;
 import net.minecraft.item.Item;
 
 public class ItemBase extends Item {

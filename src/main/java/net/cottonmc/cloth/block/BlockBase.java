@@ -1,4 +1,4 @@
-package net.panno.cloth.block;
+package net.cottonmc.cloth.block;
 
 import net.minecraft.block.Block;
 

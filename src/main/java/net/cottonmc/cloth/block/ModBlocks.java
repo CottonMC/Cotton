@@ -1,7 +1,7 @@
-package net.panno.cloth.block;
+package net.cottonmc.cloth.block;
 
-import net.panno.cloth.Cloth;
-import net.panno.cloth.item.ModItems;
+import net.cottonmc.cloth.Cloth;
+import net.cottonmc.cloth.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;

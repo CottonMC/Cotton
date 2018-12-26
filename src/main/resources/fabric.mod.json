@@ -4,6 +4,6 @@
   "version": "1.0",
   "side": "universal",
   "initializers": [
-    "net.panno.cloth.Cloth"
+    "net.cottonmc.cloth.Cloth"
   ]
 }

@@ -1,6 +1,6 @@
-package net.panno.cloth.item;
+package net.cottonmc.cloth.item;
 
-import net.panno.cloth.InfraRedstone;
+import net.cottonmc.cloth.InfraRedstone;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 

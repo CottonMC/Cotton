@@ -1,8 +1,8 @@
-package net.panno.cloth;
+package net.cottonmc.cloth;
 
 import net.minecraft.item.ItemStack;
-import net.panno.cloth.block.ModBlocks;
-import net.panno.cloth.item.ModItems;
+import net.cottonmc.cloth.block.ModBlocks;
+import net.cottonmc.cloth.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
