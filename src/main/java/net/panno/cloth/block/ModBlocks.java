@@ -1,6 +1,6 @@
 package net.panno.cloth.block;
 
-import net.panno.cloth.InfraRedstone;
+import net.panno.cloth.Cloth;
 import net.panno.cloth.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
