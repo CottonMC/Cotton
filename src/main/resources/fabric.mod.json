@@ -1,0 +1,9 @@
+{
+  "id": "cloth",
+  "name": "Cloth",
+  "version": "1.0",
+  "side": "universal",
+  "initializers": [
+    "net.panno.cloth.Cloth"
+  ]
+}
