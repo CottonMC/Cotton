@@ -7,17 +7,35 @@ import net.minecraft.item.block.BlockItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Map;
+
 public class CottonBlocks {
 
-	public static Block register(String name, Block block, ItemGroup tab) {
-		if (!Registry.BLOCK.contains(new Identifier("cotton", name))) {
-			Registry.register(Registry.BLOCK, new Identifier("cotton", name), block);
+	public static Map<String, Block> registeredBlocks;
+
+	public static Block register(Identifier id, Block block, ItemGroup tab) {
+		if (!registeredBlocks.containsKey(id.getPath())) {
+			Registry.register(Registry.BLOCK, id, block);
 			BlockItem item = new BlockItem(block, new Item.Settings().itemGroup(tab));
-			CottonItems.register(name, item);
+			CottonItems.register(id, item);
+			registeredBlocks.put(id.getPath(), block);
 			return block;
 		}
 		else {
-			return Registry.BLOCK.get(new Identifier("cotton", name));
+			return registeredBlocks.get(id.getPath());
+		}
+	}
+
+	public static Block register(Identifier id, Block block) {
+		if (!registeredBlocks.containsKey(id.getPath())) {
+			Registry.register(Registry.BLOCK, id, block);
+			BlockItem item = new BlockItem(block, new Item.Settings());
+			CottonItems.register(id, item);
+			registeredBlocks.put(id.getPath(), block);
+			return block;
+		}
+		else {
+			return registeredBlocks.get(id.getPath());
 		}
 	}
 }

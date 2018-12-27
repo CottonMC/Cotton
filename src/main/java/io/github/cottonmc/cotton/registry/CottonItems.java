@@ -4,15 +4,20 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Map;
+
 public class CottonItems {
 
-	public static Item register(String name, Item item) {
-		if (!Registry.ITEM.contains(new Identifier("cotton", name))) {
-			Registry.register(Registry.ITEM, "cotton:" + name, item);
+	public static Map<String, Item> registeredItems;
+
+	public static Item register(Identifier id, Item item) {
+		if (!registeredItems.containsKey(id.getPath())) {
+			Registry.register(Registry.ITEM, id, item);
+			registeredItems.put(id.getPath(), item);
 			return item;
 		}
 		else {
-			return Registry.ITEM.get(new Identifier("cotton", name));
+			return registeredItems.get(id.getPath());
 		}
 	}
 
