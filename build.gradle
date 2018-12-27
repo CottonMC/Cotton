@@ -47,3 +47,7 @@ dependencies {
 	//jankson, the json parser we are using to allow comments
 	compile "blue.endless:jankson:1.0.0-7"
 }
+
+configurations.all {
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
