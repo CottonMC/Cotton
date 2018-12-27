@@ -1,11 +1,11 @@
-package io.github.cottonmc.util.config;
+package io.github.cottonmc.cotton.util.config;
 
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.impl.SyntaxError;
 import com.google.gson.Gson;
-import io.github.cottonmc.util.config.annotations.ConfigFile;
+import io.github.cottonmc.cotton.util.config.annotations.ConfigFile;
 import net.fabricmc.loader.FabricLoader;
 
 import java.io.File;

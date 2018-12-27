@@ -4,6 +4,6 @@
   "version": "1.0.0",
   "side": "universal",
   "initializers": [
-    "io.github.cottonmc.Cotton"
+    "io.github.cottonmc.cotton.Cotton"
   ]
 }

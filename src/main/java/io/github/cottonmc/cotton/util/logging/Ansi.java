@@ -1,4 +1,4 @@
-package io.github.cottonmc.util.logging;
+package io.github.cottonmc.cotton.util.logging;
 
 import java.util.ArrayList;
 import java.util.Collections;

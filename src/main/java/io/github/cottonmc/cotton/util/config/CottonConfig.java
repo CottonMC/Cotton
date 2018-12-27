@@ -1,7 +1,7 @@
-package io.github.cottonmc.util.config;
+package io.github.cottonmc.cotton.util.config;
 
 import blue.endless.jankson.Comment;
-import io.github.cottonmc.util.config.annotations.ConfigFile;
+import io.github.cottonmc.cotton.util.config.annotations.ConfigFile;
 
 @ConfigFile(name="CottonConfig")
 public class CottonConfig {

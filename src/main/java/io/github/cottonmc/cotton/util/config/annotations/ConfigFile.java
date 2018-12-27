@@ -1,4 +1,4 @@
-package io.github.cottonmc.util.config.annotations;
+package io.github.cottonmc.cotton.util.config.annotations;
 
 import java.lang.annotation.*;
 
