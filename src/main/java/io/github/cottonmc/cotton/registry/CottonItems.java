@@ -6,7 +6,6 @@ import net.minecraft.util.registry.Registry;
 
 public class CottonItems {
 
-
 	public static Item register(String name, Item item) {
 		Identifier id = new Identifier("cotton", name);
 		if (!Registry.ITEM.contains(id)) {

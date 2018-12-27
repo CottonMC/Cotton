@@ -12,19 +12,16 @@ import java.util.Map;
 
 public class CottonBlocks {
 
-	public static Map<String, Block> registeredBlocks;
-	public static Map<String, Identifier> registeredBlockNames;
-
 	public static Block register(String name, Block block, ItemGroup tab) {
 		Identifier id = new Identifier("cotton", name);
 		if (!Registry.BLOCK.contains(id)) {
 			Registry.register(Registry.BLOCK, id, block);
 			BlockItem item = new BlockItem(block, new Item.Settings().itemGroup(tab));
-			CottonItems.register(id, item);
+			CottonItems.register(id.getPath(), item);
 			return block;
 		}
 		else {
-			return registeredBlocks.get(id.getPath());
+			return Registry.BLOCK.get(id);
 		}
 	}
 
@@ -33,7 +30,7 @@ public class CottonBlocks {
 		if (!Registry.BLOCK.contains(id)) {
 			Registry.register(Registry.BLOCK, id, block);
 			BlockItem item = new BlockItem(block, new Item.Settings());
-			CottonItems.register(id, item);
+			CottonItems.register(id.getPath(), item);
 			return block;
 		}
 		else {

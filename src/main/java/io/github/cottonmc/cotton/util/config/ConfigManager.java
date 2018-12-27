@@ -16,7 +16,6 @@ public class ConfigManager {
 
     private static final String CONFIG_FILE_EXTENSION = ".conf";
 
-
     /**Loads a .config file from the config folder and parses it to a POJO.
      *
      * @param clazz The class of the POJO that will store all our properties
@@ -85,7 +84,6 @@ public class ConfigManager {
         return null;
     }
 
-
     /**Saves a POJO Config object to the disk and uses either the name specified in the Annotation (if available) or
      * the simple Class name as filename.
      * This function is used to create new configs if they don't already exist.
@@ -100,7 +98,6 @@ public class ConfigManager {
         }
         saveConfig(object,configName);
     }
-
 
     /**Saves a POJO Config object to the disk. This is mostly used to create new configs if they don't already exist
      *
@@ -128,7 +125,5 @@ public class ConfigManager {
             e.printStackTrace();
         }
     }
-
-
 
 }
