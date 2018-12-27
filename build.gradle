@@ -26,7 +26,7 @@ apply plugin: net.fabricmc.loom.LoomGradlePlugin
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-archivesBaseName = "cloth"
+archivesBaseName = "cotton"
 version = "18w50a-1.0.0"
 
 repositories {
