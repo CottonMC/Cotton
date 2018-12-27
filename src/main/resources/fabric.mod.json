@@ -1,7 +1,7 @@
 {
   "id": "cotton",
   "name": "Cotton",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "side": "universal",
   "initializers": [
     "io.github.cottonmc.cotton.Cotton"
