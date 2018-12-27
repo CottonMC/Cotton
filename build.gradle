@@ -30,7 +30,10 @@ archivesBaseName = "cotton"
 version = "18w50a-1.0.0"
 
 repositories {
-
+    maven {
+    	//jankson
+        url "http://repo.elytradev.com/"
+    }
 }
 
 dependencies {
@@ -40,4 +43,7 @@ dependencies {
 	modCompile "net.fabricmc:fabric:0.1.2.64"
 	implementation 'org.jetbrains:annotations:15.0'
 	modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
+
+	//jankson, the json parser we are using to allow comments
+	compile "blue.endless:jankson:1.0.0-7"
 }
