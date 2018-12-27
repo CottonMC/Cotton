@@ -1,7 +1,7 @@
 # Features:
-Config Files
-Custom Logger
-JsonBased OreGeneration. (not done yet)
+- Config Files
+- Custom Logger
+- JsonBased OreGeneration. (not done yet)
 
 # Ideas discussion (editable)
 
