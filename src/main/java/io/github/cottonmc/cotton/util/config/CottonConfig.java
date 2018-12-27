@@ -3,14 +3,13 @@ package io.github.cottonmc.cotton.util.config;
 import blue.endless.jankson.Comment;
 import io.github.cottonmc.cotton.util.config.annotations.ConfigFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ConfigFile(name="CottonConfig")
 public class CottonConfig {
 
-
-    public String someString = "sada";
-
-    @Comment(value="A comment describing number1.")
-    public int number1 = 8; //this is new 2
-
+    @Comment(value="A list of mod ids, in order of preference for resource loading.")
+    public List<String> namespacePreferenceOrder = new ArrayList<>();
 
 }
