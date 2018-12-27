@@ -1,6 +1,8 @@
 # Features:
 - Config Files
 - Custom Logger
+
+# Upcoming Features
 - JsonBased OreGeneration. (not done yet)
 
 # Ideas discussion (editable)
