@@ -1,6 +1,5 @@
 package net.cottonmc.cloth.block;
 
-import net.cottonmc.cloth.Cloth;
 import net.cottonmc.cloth.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;

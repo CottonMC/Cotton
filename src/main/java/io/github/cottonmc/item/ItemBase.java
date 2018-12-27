@@ -1,13 +1,13 @@
-package net.cottonmc.cloth.item;
+package io.github.cottonmc.item;
 
-import net.cottonmc.cloth.Cloth;
+import io.github.cottonmc.Cotton;
 import net.minecraft.item.Item;
 
 public class ItemBase extends Item {
 
 	protected String name;
 
-	public static Settings DEFAULT_SETTINGS = new Item.Settings().itemGroup(Cloth.clothGroup);
+	public static Settings DEFAULT_SETTINGS = new Item.Settings().itemGroup(Cotton.cottonGroup);
 
 	public ItemBase(String name, Settings settings) {
 		super(settings);
