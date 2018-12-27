@@ -27,7 +27,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 archivesBaseName = "cotton"
-version = "18w50a-1.0.0"
+version = "18w50a-0.0.1"
 
 repositories {
     maven {
