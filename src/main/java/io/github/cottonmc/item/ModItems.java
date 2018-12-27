@@ -1,4 +1,4 @@
-package net.cottonmc.cloth.item;
+package io.github.cottonmc.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
@@ -15,7 +15,7 @@ public class ModItems {
 	}
 
 	public static Item register(String name, Item item) {
-		Registry.register(Registry.ITEM, "cloth:" + name, item);
+		Registry.register(Registry.ITEM, "cotton:" + name, item);
 		return item;
 	}
 

@@ -1,8 +1,6 @@
-package net.cottonmc.cloth.block;
+package io.github.cottonmc.block;
 
 import net.minecraft.block.Block;
-
-import java.util.List;
 
 public class BlockBase extends Block implements NamedBlock {
 

@@ -1,4 +1,4 @@
-package net.cottonmc.cloth.block;
+package io.github.cottonmc.block;
 
 import net.minecraft.block.Block;
 

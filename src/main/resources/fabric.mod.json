@@ -1,9 +1,9 @@
 {
-  "id": "cloth",
-  "name": "Cloth",
-  "version": "1.0",
+  "id": "cotton",
+  "name": "Cotton",
+  "version": "1.0.0",
   "side": "universal",
   "initializers": [
-    "net.cottonmc.cloth.Cloth"
+    "io.github.cottonmc.Cotton"
   ]
 }

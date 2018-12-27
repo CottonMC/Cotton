@@ -1,7 +1,6 @@
-package net.cottonmc.cloth.block;
+package io.github.cottonmc.block;
 
-import net.cottonmc.cloth.Cloth;
-import net.cottonmc.cloth.item.ModItems;
+import io.github.cottonmc.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -28,6 +27,6 @@ public class ModBlocks {
 	}
 
 	public static BlockEntityType register(String name, Supplier<BlockEntity> be) {
-		return Registry.register(Registry.BLOCK_ENTITY, "cloth:" + name, BlockEntityType.Builder.create(be).method_11034(null));
+		return Registry.register(Registry.BLOCK_ENTITY, "cotton:" + name, BlockEntityType.Builder.create(be).method_11034(null));
 	}
 }
