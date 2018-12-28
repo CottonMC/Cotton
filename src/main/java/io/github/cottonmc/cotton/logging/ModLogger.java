@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.util.logging;
+package io.github.cottonmc.cotton.logging;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

@@ -5,5 +5,11 @@
   "side": "universal",
   "initializers": [
     "io.github.cottonmc.cotton.Cotton"
-  ]
+  ],
+  "requires": {
+    "fabric": "*"
+  },
+  "mixins": {
+    "common": "cotton.common.json"
+  }
 }
