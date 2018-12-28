@@ -38,7 +38,6 @@ public class Cotton implements ModInitializer {
 		logger.info("loaded config");
 		logger.info("number 1 is "+config.number1);
 
-		CommonItems.register("test_tem", new Item((new Item.Settings()).itemGroup(commonGroup)));
-		CommonItems.register("test_item_no_tab", new Item((new Item.Settings())));
+
 	}
 }
