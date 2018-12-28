@@ -49,6 +49,7 @@ dependencies {
 	shadow "blue.endless:jankson:1.0.0-7"
 }
 
-configurations.all {
-	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+shadowJar {
+	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
+	configurations = [project.configurations.shadow]
 }
