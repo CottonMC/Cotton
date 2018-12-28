@@ -1,7 +1,7 @@
-package io.github.cottonmc.cotton.util.config;
+package io.github.cottonmc.cotton.config;
 
 import blue.endless.jankson.Comment;
-import io.github.cottonmc.cotton.util.config.annotations.ConfigFile;
+import io.github.cottonmc.cotton.config.annotations.ConfigFile;
 
 import java.util.ArrayList;
 import java.util.List;
