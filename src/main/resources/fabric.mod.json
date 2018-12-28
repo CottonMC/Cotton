@@ -8,8 +8,5 @@
   ],
   "requires": {
     "fabric": "*"
-  },
-  "mixins": {
-    "common": "cotton.common.json"
   }
 }

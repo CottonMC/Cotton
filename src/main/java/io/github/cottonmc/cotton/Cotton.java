@@ -1,10 +1,10 @@
 package io.github.cottonmc.cotton;
 
-import io.github.cottonmc.cotton.registry.CommonItems;
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
+import io.github.cottonmc.cotton.registry.CommonItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.block.Blocks;
@@ -19,7 +19,7 @@ public class Cotton implements ModInitializer {
 
 	public static final String MODID = "cotton";
 
-	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(new Identifier("cotton:cotton_tab"), new Supplier<ItemStack>() {
+	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(new Identifier("cotton:common_tab"), new Supplier<ItemStack>() {
 		@Override
 		public ItemStack get() {
 			return new ItemStack(Blocks.LIGHT_BLUE_WOOL);
@@ -37,5 +37,8 @@ public class Cotton implements ModInitializer {
 		config = ConfigManager.loadConfig(CottonConfig.class);
 		logger.info("loaded config");
 		logger.info("number 1 is "+config.number1);
+
+		CommonItems.register("test_tem", new Item((new Item.Settings()).itemGroup(commonGroup)));
+		CommonItems.register("test_item_no_tab", new Item((new Item.Settings())));
 	}
 }

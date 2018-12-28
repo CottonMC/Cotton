@@ -26,7 +26,7 @@ public class ModLogger {
 
     private void setPrefix(String prefix) {
         if(prefix.length()>0){
-            this.prefix="["+prefix+"] ";
+            this.prefix="["+prefix+"]: ";
         } else {
             this.prefix="";
         }
