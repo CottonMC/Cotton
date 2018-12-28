@@ -22,6 +22,7 @@ plugins {
 	id 'idea'
 }
 
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: net.fabricmc.loom.LoomGradlePlugin
 
 sourceCompatibility = 1.8
@@ -42,14 +43,18 @@ dependencies {
 	mappings "net.fabricmc:yarn:18w50a.71"
 	modCompile "net.fabricmc:fabric-loader:0.3.0.75"
 	modCompile "net.fabricmc:fabric:0.1.2.64"
-	implementation 'org.jetbrains:annotations:15.0'
+	
 	modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
 
 	//jankson, the json parser we are using to allow comments
+	modCompile "blue.endless:jankson:1.0.0-7"
 	shadow "blue.endless:jankson:1.0.0-7"
 }
 
 shadowJar {
 	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
 	configurations = [project.configurations.shadow]
+	classifier ''
 }
+
+tasks.build.dependsOn shadowJar
