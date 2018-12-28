@@ -11,7 +11,7 @@ import net.minecraft.util.registry.Registry;
 public class CommonBlocks {
 	public static final String SHARED_NAMESPACE = "cotton";
 
-	/**Attempts to get a common block by name. If no block with this name was found register a new block and return it.
+	/**Attempts to get a common block by name. If no block with this name was found register the given and return it.
 	 * @param name The block name to look for. This is the path and does not include the namespace.
 	 * @param block A block that will be registered if no block with this namespace was found.
 	 * @return Returns either an already existing block with the specified name or a new one that was register und the given name.
@@ -20,7 +20,7 @@ public class CommonBlocks {
 		return register(name, block, Cotton.commonGroup);
 	}
 
-	/**Attempts to get a common block by name. If no block with this name was found register a new block, add it to the specified tab
+	/**Attempts to get a common block by name. If no block with this name was found register the given block, add it to the specified tab
 	 * and return it.
 	 * Only use this method if you are sure that you want to add the new block to a tag.
 	 *
@@ -33,7 +33,7 @@ public class CommonBlocks {
 		return register(name, block, new Item.Settings(), tab);
 	}
 
-	/**Attempts to get a common block by name. If no block with this name was found register a new block.
+	/**Attempts to get a common block by name. If no block with this name was found register the given block.
 	 *
 	 * @param name The block name to look for. This is the path and does not include the namespace.
 	 * @param block A block that will be registered if no block with this namespace was found.
@@ -44,7 +44,7 @@ public class CommonBlocks {
 		return register(name, block, settings, Cotton.commonGroup);
 	}
 
-	/**Attempts to get a common block by name. If no block with this name was found register a new block, add it to the specified tab
+	/**Attempts to get a common block by name. If no block with this name was found register the given block, add it to the specified tab
 	 * and return it.
 	 * Only use this method if you are sure that you want to add the new block to a tag.
 	 *
