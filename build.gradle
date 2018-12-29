@@ -52,6 +52,28 @@ dependencies {
 	shadow "blue.endless:jankson:1.0.0-7"
 }
 
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'io.github.cottonmc'
+			artifactId = 'cotton'
+			
+			/* START TERRIBLE, HORRIBLE, AWFUL, VERY BAD HACK. Removes entire minecraft dependencies from POM */
+			pom.withXml {
+				def projectNode = asNode();
+				def deps = projectNode.get("dependencies");
+				projectNode.remove(deps);
+			}
+			/* END TERRIBLE, HORRIBLE, AWFUL, VERY BAD HACK */
+			
+			from components.java
+			//Below is a slightly less noxious, different hack so that we pick up the correct reobfShadowJar.
+			artifacts = [ "build/libs/cotton-"+version+".jar" ]
+		}
+	}
+}
+
+
 shadowJar {
 	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
 	configurations = [project.configurations.shadow]
@@ -60,3 +82,5 @@ shadowJar {
 
 tasks.remapJar.dependsOn.remove Jar
 tasks.remapJar.dependsOn shadowJar
+tasks.publish.dependsOn build
+tasks.publishToMavenLocal.dependsOn build
