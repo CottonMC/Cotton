@@ -72,6 +72,8 @@ public class ConfigManager {
         } catch (SyntaxError syntaxError) {
             Cotton.logger.warn("Failed to load config File "+configName+"."+CONFIG_FILE_EXTENSION+": ", syntaxError);
 
+        } catch (IllegalAccessException | InstantiationException e) {
+            Cotton.logger.warn("Failed to create new config file for "+configName+"."+CONFIG_FILE_EXTENSION+": ", e);
         }
 
         //Something obviously went wrong, create placeholder config
