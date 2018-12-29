@@ -5,6 +5,7 @@ import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.impl.SyntaxError;
 import com.google.gson.Gson;
+import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
 import net.fabricmc.loader.FabricLoader;
 
@@ -55,9 +56,6 @@ public class ConfigManager {
 
                 T result = gson.fromJson(cleaned, clazz);
 
-                if(result==null)
-                    result = clazz.newInstance();
-
                 //check if the config file is outdate. If so overwrite it
                 JsonElement jsonElementNew = jankson.toJson(clazz.newInstance());
                 if(jsonElementNew instanceof JsonObject){
@@ -69,18 +67,22 @@ public class ConfigManager {
 
                 return result;
             } catch (IOException e) {
-                System.out.println("Failed to load config File: ");
-                e.printStackTrace();
+                Cotton.logger.warn("Failed to load config File "+configName+"."+CONFIG_FILE_EXTENSION+": ", e);
             }
         } catch (SyntaxError syntaxError) {
-            System.out.println("Failed to load config File: ");
-            syntaxError.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+            Cotton.logger.warn("Failed to load config File "+configName+"."+CONFIG_FILE_EXTENSION+": ", syntaxError);
+
         }
 
+        //Something obviously went wrong, create placeholder config
+        Cotton.logger.warn("Creating placeholder config for "+configName+"."+CONFIG_FILE_EXTENSION);
+        try {
+            return clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            Cotton.logger.warn("Failed to create placeholder config for "+configName+"."+CONFIG_FILE_EXTENSION+" :",e);
+        }
+
+        //this is ... unfortunate
         return null;
     }
 
