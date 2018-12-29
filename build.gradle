@@ -60,4 +60,3 @@ shadowJar {
 
 tasks.remapJar.dependsOn.remove Jar
 tasks.remapJar.dependsOn shadowJar
-//tasks.build.dependsOn shadowJar
