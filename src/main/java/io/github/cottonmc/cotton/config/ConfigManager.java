@@ -67,21 +67,21 @@ public class ConfigManager {
 
                 return result;
             } catch (IOException e) {
-                Cotton.logger.warn("Failed to load config File "+configName+"."+CONFIG_FILE_EXTENSION+": ", e);
+                Cotton.logger.warn("Failed to load config File "+configName+CONFIG_FILE_EXTENSION+": ", e);
             }
         } catch (SyntaxError syntaxError) {
-            Cotton.logger.warn("Failed to load config File "+configName+"."+CONFIG_FILE_EXTENSION+": ", syntaxError);
+            Cotton.logger.warn("Failed to load config File "+configName+CONFIG_FILE_EXTENSION+": ", syntaxError);
 
         } catch (IllegalAccessException | InstantiationException e) {
-            Cotton.logger.warn("Failed to create new config file for "+configName+"."+CONFIG_FILE_EXTENSION+": ", e);
+            Cotton.logger.warn("Failed to create new config file for "+configName+CONFIG_FILE_EXTENSION+": ", e);
         }
 
         //Something obviously went wrong, create placeholder config
-        Cotton.logger.warn("Creating placeholder config for "+configName+"."+CONFIG_FILE_EXTENSION);
+        Cotton.logger.warn("Creating placeholder config for "+configName+CONFIG_FILE_EXTENSION+"...");
         try {
             return clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            Cotton.logger.warn("Failed to create placeholder config for "+configName+"."+CONFIG_FILE_EXTENSION+" :",e);
+            Cotton.logger.warn("Failed to create placeholder config for "+configName+CONFIG_FILE_EXTENSION+": ",e);
         }
 
         //this is ... unfortunate
