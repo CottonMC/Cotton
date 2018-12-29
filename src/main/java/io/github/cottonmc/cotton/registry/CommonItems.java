@@ -3,6 +3,7 @@ package io.github.cottonmc.cotton.registry;
 import io.github.cottonmc.cotton.Cotton;
 import net.fabricmc.loader.FabricLoader;
 import net.fabricmc.loader.ModContainer;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -40,6 +41,20 @@ public class CommonItems {
 		else {
 			return Registry.ITEM.get(id);
 		}
+	}
+
+	/**Checks if a Common Item with the given name exists and returns it.
+	 *
+	 * @param name The name to look for.
+	 * @return Either the item if it is found or null if no such Common Item exists
+	 */
+	public static Item getItem(String name){
+		Identifier id = new Identifier(SHARED_NAMESPACE, name);
+
+		if (Registry.ITEM.contains(id)) {
+			return Registry.ITEM.get(id);
+		}
+		return null;
 	}
 
 

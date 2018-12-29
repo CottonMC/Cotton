@@ -45,6 +45,19 @@ public class CommonBlocks {
 		}
 	}
 
+	/**Checks if a Common Block with the given name exists and returns it.
+	 *
+	 * @param name The name to look for.
+	 * @return Either the block if it is found or null if no such Common Block exists
+	 */
+	public static Block getBlock(String name){
+		Identifier id = new Identifier(SHARED_NAMESPACE, name);
+
+		if (Registry.BLOCK.contains(id)) {
+			return Registry.BLOCK.get(id);
+		}
+		return null;
+	}
 
 
 }
