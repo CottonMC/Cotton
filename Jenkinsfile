@@ -5,7 +5,7 @@ pipeline {
 			steps {
 				checkout scm
 				sh 'rm -f private.gradle'
-				sh './gradlew init clean build'
+				sh './gradlew init clean build -Dorg.gradle.daemon=false'
 				archive 'build/libs/*jar'
 			}
 		}
