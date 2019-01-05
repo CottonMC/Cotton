@@ -41,6 +41,9 @@ repositories {
     	//jankson
         url "http://repo.elytradev.com/"
     }
+    maven{
+  	url "http://server.bbkr.space:8081/artifactory/libs-snapshot-local"
+    }
 }
 
 dependencies {
