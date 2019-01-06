@@ -37,10 +37,12 @@ group = 'io.github.cottonmc'
 version = "18w50a-0.0.2"
 
 configurations {
+    //this config is used to generate the pom, and to select what to shadow in the release jar.
     dependency
 
     //extends from makes it contain the dependency that it extends from
     compile.extendsFrom dependency
+    shadow.extendsFrom dependency
 }
 repositories {
     maven {
@@ -59,7 +61,7 @@ dependencies {
 
     //jankson, the json parser we are using to allow comments
     dependency "blue.endless:jankson:1.0.0-7"
-    shadow "blue.endless:jankson:1.0.0-7"
+    //shadow "blue.endless:jankson:1.0.0-7"
 }
 
 artifactory {
