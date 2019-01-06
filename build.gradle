@@ -1,28 +1,31 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 buildscript {
-	repositories {
-		mavenCentral()
-		jcenter()
-		maven {
-			name = 'Fabric'
-			url = 'http://maven.modmuss50.me/'
-		}
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
-	}
-	dependencies {
-		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT"
-		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
-	}
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            name = 'Fabric'
+            url = 'http://maven.modmuss50.me/'
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+    }
 }
 
 plugins {
-	id 'java'
-	id 'eclipse'
-	id 'idea'
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id "com.jfrog.artifactory" version "4.9.0"
 }
 
-apply plugin: 'maven-publish'	//to make jitpack execute the build task instead of the jar task
+apply plugin: 'maven-publish'    //to make jitpack execute the build task instead of the jar task
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: net.fabricmc.loom.LoomGradlePlugin
 
@@ -30,57 +33,104 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 archivesBaseName = "cotton"
+group = 'io.github.cottonmc'
 version = "18w50a-0.0.2"
 
+configurations {
+    dependency
+
+    //extends from makes it contain the dependency that it extends from
+    compile.extendsFrom dependency
+}
 repositories {
     maven {
-    	//jankson
+        //jankson
         url "http://repo.elytradev.com/"
     }
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:18w50a"
-	mappings "net.fabricmc:yarn:18w50a.71"
-	modCompile "net.fabricmc:fabric-loader:0.3.0.75"
-	modCompile "net.fabricmc:fabric:0.1.2.64"
-	
-	modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
+    minecraft "com.mojang:minecraft:18w50a"
+    mappings "net.fabricmc:yarn:18w50a.71"
+    modCompile "net.fabricmc:fabric-loader:0.3.0.75"
+    modCompile "net.fabricmc:fabric:0.1.2.64"
 
-	//jankson, the json parser we are using to allow comments
-	modCompile "blue.endless:jankson:1.0.0-7"
-	shadow "blue.endless:jankson:1.0.0-7"
+    modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
+
+    //jankson, the json parser we are using to allow comments
+    dependency "blue.endless:jankson:1.0.0-7"
+    shadow "blue.endless:jankson:1.0.0-7"
 }
+
+artifactory {
+    contextUrl = 'http://server.bbkr.space:8081/artifactory/'
+    //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+
+        repository {
+            repoKey = 'libs-snapshot-local'   //The Artifactory repository key to publish to
+            username = System.getProperty("artifactoryUser")          //The publisher user name
+            password = System.getProperty('artifactoryPassword')       //The publisher password
+        }
+        defaults {
+            //List of Gradle Publications (names or objects) from which to collect the list of artifacts to be deployed to Artifactory.
+            publications('maven')
+
+            publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
+            publishPom = true   //Publish generated POM files to Artifactory (true by default).
+        }
+    }
+}
+
 
 publishing {
-	publications {
-		maven(MavenPublication) {
-			groupId = 'io.github.cottonmc'
-			artifactId = 'cotton'
-			
-			/* START TERRIBLE, HORRIBLE, AWFUL, VERY BAD HACK. Removes entire minecraft dependencies from POM */
-			pom.withXml {
-				def projectNode = asNode();
-				def deps = projectNode.get("dependencies");
-				projectNode.remove(deps);
-			}
-			/* END TERRIBLE, HORRIBLE, AWFUL, VERY BAD HACK */
-			
-			from components.java
-			//Below is a slightly less noxious, different hack so that we pick up the correct reobfShadowJar.
-			artifacts = [ "build/libs/cotton-"+version+".jar" ]
-		}
-	}
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'cotton'
+
+            //modifying the pom, so we can know what is included.
+            pom.withXml {
+                def pomFile = asNode()
+                pomFile.appendNode("dependencies").replaceNode({
+                    def deps = pomFile.appendNode("dependencies")
+                    configurations.dependency.getResolvedConfiguration().getFirstLevelModuleDependencies().each {
+                        def artifactNode = deps.appendNode("dependency")
+                        artifactNode.appendNode('groupId', it.moduleGroup)
+                        artifactNode.appendNode('artifactId', it.moduleName)
+                        artifactNode.appendNode('version', it.moduleVersion)
+                    }
+                })
+            }
+
+            artifact file("build/libs/cotton-" + version + "-dev.jar")
+            artifact sourcesJar
+            artifact releaseJar
+        }
+    }
 }
 
 
-shadowJar {
-	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
-	configurations = [project.configurations.shadow]
-	classifier ''
+task sourcesJar(type: Zip) {
+    baseName = archivesBaseName
+    version = version + "-sources"
+    extension = "jar"
+    from sourceSets.main.allSource
+    from sourceSets.main.resources
 }
 
-tasks.remapJar.dependsOn.remove Jar
-tasks.remapJar.dependsOn shadowJar
+
+task releaseJar(type: ShadowJar) {
+    dependsOn remapJar
+
+    relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
+    relocate 'javax.annotation', 'io.github.cottonmc.repackage.javax.annotation'
+    classifier = 'release'
+    from zipTree("$project.buildDir.absolutePath/libs/$archivesBaseName-${version}.jar")
+    configurations = [project.configurations.shadow]
+
+}
+
+tasks.build.dependsOn sourcesJar
+tasks.build.dependsOn releaseJar
 tasks.publish.dependsOn build
 tasks.publishToMavenLocal.dependsOn build
