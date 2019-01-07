@@ -25,7 +25,7 @@ plugins {
     id "com.jfrog.artifactory" version "4.9.0"
 }
 
-apply plugin: 'maven-publish'    //to make jitpack execute the build task instead of the jar task
+apply plugin: 'maven-publish'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: net.fabricmc.loom.LoomGradlePlugin
 
@@ -36,14 +36,6 @@ archivesBaseName = "cotton"
 group = 'io.github.cottonmc'
 version = "18w50a-0.0.2"
 
-configurations {
-    //this config is used to generate the pom, and to select what to shadow in the release jar.
-    dependency
-
-    //extends from makes it contain the dependency that it extends from
-    compile.extendsFrom dependency
-    shadow.extendsFrom dependency
-}
 repositories {
     maven {
         //jankson
@@ -60,8 +52,7 @@ dependencies {
     modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
 
     //jankson, the json parser we are using to allow comments
-    dependency "blue.endless:jankson:1.0.0-7"
-    //shadow "blue.endless:jankson:1.0.0-7"
+    shadow "blue.endless:jankson:1.0.0-7"
 }
 
 artifactory {
@@ -95,7 +86,7 @@ publishing {
                 def pomFile = asNode()
                 pomFile.appendNode("dependencies").replaceNode({
                     def deps = pomFile.appendNode("dependencies")
-                    configurations.dependency.getResolvedConfiguration().getFirstLevelModuleDependencies().each {
+                    configurations.modCompile.getResolvedConfiguration().getFirstLevelModuleDependencies().each {
                         def artifactNode = deps.appendNode("dependency")
                         artifactNode.appendNode('groupId', it.moduleGroup)
                         artifactNode.appendNode('artifactId', it.moduleName)
@@ -127,7 +118,6 @@ task releaseJar(type: ShadowJar) {
     dependsOn remapJar
 
     relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
-    relocate 'javax.annotation', 'io.github.cottonmc.repackage.javax.annotation'
     classifier = 'release'
     from zipTree("$project.buildDir.absolutePath/libs/$archivesBaseName-${version}.jar")
     configurations = [project.configurations.shadow]
