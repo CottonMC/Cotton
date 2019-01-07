@@ -104,7 +104,9 @@ publishing {
                 })
             }
 
-            artifact file("build/libs/cotton-" + version + "-dev.jar")
+            artifact ("build/libs/cotton-" + version + "-dev.jar") {
+            	classifier "dev"
+            }
             artifact sourcesJar
             artifact releaseJar
         }
