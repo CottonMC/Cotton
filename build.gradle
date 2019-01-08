@@ -66,6 +66,7 @@ dependencies {
 	
 	//jankson, the json parser we are using to allow comments
 	shadow "blue.endless:jankson:1.0.0-9"
+	implementation "blue.endless:jankson:1.0.0-9"
 }
 
 publishing {
