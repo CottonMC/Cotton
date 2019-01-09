@@ -104,6 +104,31 @@ publishing {
 	}
 }
 
+if(rootProject.file('private.gradle').exists()) { //gives people more ways to configure the project for publish
+	apply from: 'private.gradle';
+}
+
+artifactory {
+	contextUrl = 'http://server.bbkr.space:8081/artifactory/'
+	//The base Artifactory URL if not overridden by the publisher/resolver
+	publish {
+	
+		repository {
+			repoKey = "libs-snapshot-local"   //The Artifactory repository key to publish to
+			//println("Publishing from artifactory user "+System.getProperty("artifactoryUser"))
+			username = System.getProperty("artifactoryUser")          //The publisher user name
+			password = System.getProperty("artifactoryPassword")       //The publisher password
+		}
+		defaults {
+			//List of Gradle Publications (names or objects) from which to collect the list of artifacts to be deployed to Artifactory.
+			publications('maven')
+			
+			publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
+			publishPom = true   //Publish generated POM files to Artifactory (true by default).
+		}
+	}
+}
+
 
 task sourcesJar(type: Jar) {
 	baseName = archivesBaseName
