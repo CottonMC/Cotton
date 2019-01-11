@@ -13,7 +13,7 @@ buildscript {
 		}  
 		//added so we can resolve custom loom builds
 		maven {
-            		url 'http://server.bbkr.space:8081/artifactory/libs-release'
+            		url 'http://server.bbkr.space:8081/artifactory/libs-snapshot'
         	}
 	}
 	dependencies {
