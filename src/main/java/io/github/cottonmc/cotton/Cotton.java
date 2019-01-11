@@ -19,12 +19,7 @@ public class Cotton implements ModInitializer {
 
 	public static final String MODID = "cotton";
 
-	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(new Identifier("cotton:common_tab"), new Supplier<ItemStack>() {
-		@Override
-		public ItemStack get() {
-			return new ItemStack(Blocks.LIGHT_BLUE_WOOL);
-		}
-	});
+	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(new Identifier("cotton","common_tab"), () -> new ItemStack(Blocks.LIGHT_BLUE_WOOL));
 
 	public static ModLogger logger = new ModLogger(MODID, "COTTON");
 	public static CottonConfig config;
