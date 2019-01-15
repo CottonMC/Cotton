@@ -57,10 +57,10 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:18w50a"
-	mappings "net.fabricmc:yarn:18w50a.71"
-	modCompile "net.fabricmc:fabric-loader:0.3.0.75"
-	modCompile "net.fabricmc:fabric:0.1.2.64"
+	minecraft "com.mojang:minecraft:19w02a"
+	mappings "net.fabricmc:yarn:19w02a.24"
+	modCompile "net.fabricmc:fabric-loader:0.3.2.96"
+	modCompile "net.fabricmc:fabric:0.1.4.73"
 	
 	modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
 	
@@ -90,7 +90,7 @@ remapJar {
 
 
 if(rootProject.file('private.gradle').exists()) { //gives people more ways to configure the project for publish
-	apply from: 'private.gradle';
+	apply from: 'private.gradle'
 }
 
 publishing {
@@ -103,10 +103,10 @@ publishing {
 			
 			pom.withXml {
 				def pomFile = asNode()
-				def depsNode = pomFile.get("dependencies");
-				pomFile.remove(depsNode);
+				def depsNode = pomFile.get("dependencies")
+				pomFile.remove(depsNode)
 				
-				def newDeps = pomFile.appendNode("dependencies");
+				def newDeps = pomFile.appendNode("dependencies")
 				configurations.modCompile.getResolvedConfiguration().getFirstLevelModuleDependencies().each {
 					def artifactNode = newDeps.appendNode("dependency")
 					artifactNode.appendNode('groupId', it.moduleGroup)

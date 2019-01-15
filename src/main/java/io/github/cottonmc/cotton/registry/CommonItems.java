@@ -28,7 +28,7 @@ public class CommonItems {
 		while(iterator.hasNext()){
 			lastLoadedMod = iterator.next();
 		}
-		if(item.getItemGroup()!=null) {
+		if(item.getItemGroup() != null) {
 			Cotton.logger.info("Mod \"" + lastLoadedMod.getInfo().getName() + "\" is adding common item \"" + name + "\" to tab \"" + item.getItemGroup().getUntranslatedName()+"\".");
 		} else {
 			Cotton.logger.warn("Mod \"" + lastLoadedMod.getInfo().getName() + "\" is adding common item \"" + name + "\" to no tab.");
