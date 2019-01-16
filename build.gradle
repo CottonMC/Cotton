@@ -17,7 +17,7 @@ buildscript {
         	}
 	}
 	dependencies {
-		classpath "net.fabricmc:fabric-loom:0.2.1-SNAPSHOT" //Don't backdate; new 0.2.0 features prevent messy workarounds!
+		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate; new 0.2.0 features prevent messy workarounds!
 		classpath "com.github.jengelman.gradle.plugins:shadow:2.0.0"
 	}
 }
@@ -51,7 +51,7 @@ group = "io.github.cottonmc"
  *
  * That's a lot of minuses, but the plusses are very big plusses.
  */
-version = "0.0.2+18w50a"
+version = "0.0.2+19w02a"
 
 repositories {
 	maven {
