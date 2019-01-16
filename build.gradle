@@ -13,8 +13,8 @@ buildscript {
 		}  
 		//added so we can resolve custom loom builds
 		maven {
-            		url 'http://server.bbkr.space:8081/artifactory/libs-snapshot'
-        	}
+			url 'http://server.bbkr.space:8081/artifactory/libs-snapshot'
+		}
 	}
 	dependencies {
 		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate; new 0.2.0 features prevent messy workarounds!
@@ -152,8 +152,8 @@ artifactory {
 	publish {
 		repository {
 			repoKey = "libs-snapshot-local"
-			username = System.getProperty("artifactoryUser")
-			password = System.getProperty("artifactoryPassword")
+			username = artifactoryUsername
+			password = artifactoryPassword
 		}
 		defaults {
 			publications('maven')
