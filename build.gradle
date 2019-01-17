@@ -11,13 +11,9 @@ buildscript {
 		maven {
 			url "https://plugins.gradle.org/m2/"
 		}  
-		//added so we can resolve custom loom builds
-		maven {
-			url 'http://server.bbkr.space:8081/artifactory/libs-snapshot'
-		}
 	}
 	dependencies {
-		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate; new 0.2.0 features prevent messy workarounds!
+		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
 		classpath "com.github.jengelman.gradle.plugins:shadow:2.0.0"
 	}
 }
@@ -51,7 +47,7 @@ group = "io.github.cottonmc"
  *
  * That's a lot of minuses, but the plusses are very big plusses.
  */
-version = "0.0.2+19w02a"
+version = "0.0.2+19w03a"
 
 repositories {
 	maven {
@@ -61,8 +57,8 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:19w02a"
-	mappings "net.fabricmc:yarn:19w02a.24"
+	minecraft "com.mojang:minecraft:19w03a"
+	mappings "net.fabricmc:yarn:19w03a.4"
 	modCompile "net.fabricmc:fabric-loader:0.3.2.96"
 	modCompile "net.fabricmc:fabric:0.1.4.73"
 	
@@ -148,19 +144,23 @@ publishing {
 }
 
 artifactory {
-	contextUrl = 'http://server.bbkr.space:8081/artifactory/'
-	publish {
-		repository {
-			repoKey = "libs-snapshot-local"
-			username = artifactoryUsername
-			password = artifactoryPassword
+	if (project.hasProperty("artifactoryUsername")) {
+		contextUrl = 'http://server.bbkr.space:8081/artifactory/'
+		publish {
+			repository {
+				repoKey = "libs-snapshot-local"
+				username = artifactoryUsername
+				password = artifactoryPassword
+			}
+			defaults {
+				publications('maven')
+				
+				publishArtifacts = true
+				publishPom = true
+			}
 		}
-		defaults {
-			publications('maven')
-			
-			publishArtifacts = true
-			publishPom = true
-		}
+	} else {
+		println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
 	}
 }
 
