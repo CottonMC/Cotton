@@ -50,23 +50,20 @@ group = "io.github.cottonmc"
 version = "0.0.2+19w03a"
 
 repositories {
-	maven {
-		//jankson
-		url "http://repo.elytradev.com/"
-	}
+	mavenCentral();
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:19w03a"
-	mappings "net.fabricmc:yarn:19w03a.4"
+	mappings "net.fabricmc:yarn:19w03a.7"
 	modCompile "net.fabricmc:fabric-loader:0.3.2.96"
 	modCompile "net.fabricmc:fabric:0.1.4.73"
 	
 	modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
 	
 	//jankson, the json parser we are using to allow comments
-	shadow "blue.endless:jankson:1.0.0-9"
-	implementation "blue.endless:jankson:1.0.0-9"
+	shadow "blue.endless:jankson:1.1.0"
+	implementation "blue.endless:jankson:1.1.0"
 }
 
 task sourcesJar(type: Jar) {

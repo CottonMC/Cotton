@@ -4,7 +4,6 @@ import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.impl.SyntaxError;
-import com.google.gson.Gson;
 import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
 import net.fabricmc.loader.FabricLoader;
@@ -42,7 +41,6 @@ public class ConfigManager {
         try {
             File file = new File(FabricLoader.INSTANCE.getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
             Jankson jankson = Jankson.builder().build();
-            Gson gson = new Gson(); //we need gson since jankson has problems with creating objects from json...
 
             //Generate config file if it doesn't exist
             if(!file.exists()) {
@@ -54,7 +52,7 @@ public class ConfigManager {
                 JsonObject json = jankson.load(file);
                 String cleaned = json.toJson(false,true); //remove comments
 
-                T result = gson.fromJson(cleaned, clazz);
+                T result = jankson.fromJson(json, clazz);
 
                 //check if the config file is outdate. If so overwrite it
                 JsonElement jsonElementNew = jankson.toJson(clazz.newInstance());
