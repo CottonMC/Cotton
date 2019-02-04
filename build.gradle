@@ -47,19 +47,21 @@ group = "io.github.cottonmc"
  *
  * That's a lot of minuses, but the plusses are very big plusses.
  */
-version = "0.0.2+19w03a"
+version = "0.0.2+19w05a"
 
 repositories {
-	mavenCentral();
+	mavenCentral()
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:19w03a"
-	mappings "net.fabricmc:yarn:19w03a.7"
-	modCompile "net.fabricmc:fabric-loader:0.3.2.96"
-	modCompile "net.fabricmc:fabric:0.1.4.73"
+	minecraft "com.mojang:minecraft:19w05a"
+	mappings "net.fabricmc:yarn:19w05a.6"
+	modCompile "net.fabricmc:fabric-loader:0.3.4.104"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modCompile "net.fabricmc:fabric:0.1.5.87"
 	
-	modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
+	//modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
 	
 	//jankson, the json parser we are using to allow comments
 	shadow "blue.endless:jankson:1.1.0"
@@ -134,7 +136,7 @@ publishing {
 	repositories {
 		if (rootProject.ext.has("localMavenUrl")) {
 			maven {
-				url = rootProject.ext.localMavenUrl;
+				url = rootProject.ext.localMavenUrl
 			}
 		}
 	}
@@ -201,4 +203,4 @@ artifactory {
  */
 
 //The following is probably just me being paranoid
-tasks.publish.mustRunAfter remapJar
+//tasks.publish.mustRunAfter remapJar
