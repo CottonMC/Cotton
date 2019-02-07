@@ -12,4 +12,7 @@ public class CottonConfig {
     @Comment(value="A list of mod ids, in order of preference for resource loading.")
     public List<String> namespacePreferenceOrder = new ArrayList<>();
 
+    @Comment("Enable the Cotton Tweaks module.")
+    public boolean includeTweaks = true;
+
 }
