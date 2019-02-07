@@ -3,7 +3,6 @@ package io.github.cottonmc.cotton.registry;
 import io.github.cottonmc.cotton.Cotton;
 import net.fabricmc.loader.FabricLoader;
 import net.fabricmc.loader.ModContainer;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;

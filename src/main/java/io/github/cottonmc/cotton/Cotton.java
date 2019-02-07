@@ -4,16 +4,13 @@ import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
-import io.github.cottonmc.cotton.registry.CommonItems;
+import io.github.cottonmc.cotton.tweaks.Tweaks;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-
-import java.util.function.Supplier;
 
 public class Cotton implements ModInitializer {
 
@@ -26,13 +23,13 @@ public class Cotton implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		logger.setPrefixFormat(Ansi.Bold.and(Ansi.Green));
+		logger.setPrefixFormat(Ansi.Green);
 
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);
 		logger.info("loaded config");
-		logger.info("number 1 is "+config.number1);
 
+		Tweaks.initialize();
 
 	}
 }
