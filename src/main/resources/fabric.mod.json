@@ -8,5 +8,8 @@
   ],
   "requires": {
     "fabric": "*"
+  },
+  "mixins": {
+    "client": "cotton.client.json"
   }
 }
