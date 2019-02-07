@@ -11,7 +11,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.PositionImpl;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -24,8 +23,10 @@ public class Tweaks {
             BlockPos pos = blockPointer.getBlockPos();
             BlockPos target = pos.offset(blockPointer.getBlockState().get(DispenserBlock.FACING)).offset(Direction.DOWN);
             ActionResult result = itemStack.useOnBlock(new DispenserUsageContext(world, null, itemStack, new BlockHitResult(new Vec3d(0.5, 0.5, 0.5), Direction.UP, target, true)));
-            if (result != ActionResult.SUCCESS) {
-                ItemDispenserBehavior.dispenseItem(world, itemStack, 1, blockPointer.getBlockState().get(DispenserBlock.FACING), new PositionImpl(pos.getX(), pos.getY(), pos.getZ()));
+            if (result == ActionResult.SUCCESS) {
+                world.fireWorldEvent(2005, target.offset(Direction.UP), 0);
+            } else {
+                world.fireWorldEvent(1001, target.offset(Direction.UP), 0);
             }
             return itemStack;
         };
