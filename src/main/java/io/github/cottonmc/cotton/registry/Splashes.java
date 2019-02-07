@@ -2,7 +2,6 @@ package io.github.cottonmc.cotton.registry;
 
 import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.Utils;
-import io.github.cottonmc.cotton.config.CottonConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -36,7 +35,7 @@ public class Splashes {
     private static List<String> holidaySplashes = new ArrayList<>();
 
     public static void initialize() {
-        if (CottonConfig.add_cotton_splashes) {
+        if (Cotton.config.add_cotton_splashes) {
             addSplash("It has been planted!");
             addSplash("Fresh and organic!");
             addSplash("Hello Fabric World!");
@@ -92,10 +91,10 @@ public class Splashes {
             return Utils.getRandomElement(holidaySplashes);
         }
         else {
-            if (CottonConfig.prioritize_custom_splashes) {
+            if (Cotton.config.prioritize_custom_splashes) {
                 // Roll a dice from 0 to X, and if it lands on 0 (chance is 1/X), use a vanilla splash.
                 // Else, use a modded one.
-                if (random.nextInt(CottonConfig.custom_splash_priority) == 0) {
+                if (random.nextInt(Cotton.config.custom_splash_priority) == 0) {
                     return Utils.getRandomElement(defaultSplashes);
                 }
                 else {

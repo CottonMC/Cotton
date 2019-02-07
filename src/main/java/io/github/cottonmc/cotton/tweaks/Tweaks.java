@@ -1,7 +1,6 @@
 package io.github.cottonmc.cotton.tweaks;
 
 import io.github.cottonmc.cotton.Cotton;
-import io.github.cottonmc.cotton.config.CottonConfig;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.item.FoodCropItem;
@@ -34,7 +33,7 @@ public class Tweaks {
 
     public static void initialize() {
         if (Cotton.config.include_tweaks) {
-            if (CottonConfig.enable_dispenser_tweaks) {
+            if (Cotton.config.enable_dispenser_tweaks) {
                 registerDispenserSeedPlanting();
             }
             Cotton.logger.info("Tweaks initialized.");
