@@ -4,6 +4,7 @@ import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
+import io.github.cottonmc.cotton.registry.Splashes;
 import io.github.cottonmc.cotton.tweaks.Tweaks;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -28,7 +29,7 @@ public class Cotton implements ModInitializer {
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);
 		logger.info("loaded config");
-
+		Splashes.initialize();
 		Tweaks.initialize();
 
 	}

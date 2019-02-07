@@ -1,7 +1,6 @@
 package io.github.cottonmc.cotton.mixin;
 
-import io.github.cottonmc.cotton.registry.SplashRegistry;
-import java.util.Random;
+import io.github.cottonmc.cotton.registry.Splashes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.MainMenuScreen;
@@ -14,9 +13,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Random;
+
 @Environment(EnvType.CLIENT)
 @Mixin(MainMenuScreen.class)
-public abstract class MainMenuScreenMixin extends Screen{
+public abstract class MainMenuScreenMixin extends Screen {
     @Shadow @Final
     private static Random RANDOM;
     
@@ -26,13 +27,9 @@ public abstract class MainMenuScreenMixin extends Screen{
     @Shadow @Final
     private static Identifier SPLASHES_LOC;
     
-    @Inject(
-        method = "<init>",
-        at = @At("RETURN")
-    )
-    private void init(CallbackInfo callbackInfo){
-        SplashRegistry.loadSplashes();
-        SplashRegistry.loadDefaultSplashes(SPLASHES_LOC);
-        splashText = SplashRegistry.getRandomSplash(RANDOM);
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void init(CallbackInfo ci) {
+        Splashes.loadDefaultSplashes(SPLASHES_LOC);
+        splashText = Splashes.getRandomSplash(RANDOM);
     }
 }
