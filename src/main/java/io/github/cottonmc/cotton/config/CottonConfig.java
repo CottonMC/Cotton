@@ -28,4 +28,7 @@ public class CottonConfig {
     @Comment("Enable dispenser tweaks, like seed planting?")
     public boolean enable_dispenser_tweaks = true;
 
+    @Comment("Enable the shape-based torch placement algorithm.")
+    public boolean enable_custom_torch_placement = true;
+
 }
