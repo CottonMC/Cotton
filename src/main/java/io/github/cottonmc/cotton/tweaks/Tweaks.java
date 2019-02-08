@@ -26,7 +26,7 @@ public class Tweaks {
             if (result == ActionResult.SUCCESS) {
                 world.fireWorldEvent(2005, target.offset(Direction.UP), 0);
             } else {
-                world.fireWorldEvent(1001, target.offset(Direction.UP), 0);
+                world.fireWorldEvent(1001, pos, 0);
             }
             return itemStack;
         };
