@@ -36,11 +36,12 @@ public class Splashes {
 
     public static void initialize() {
         if (Cotton.config.add_cotton_splashes) {
-            addSplash("It has been planted!");
-            addSplash("Fresh and organic!");
-            addSplash("Hello Fabric World!");
-            addSplash("NullPointerException");
-            addSplash("Say hello to the New Age");
+            addSplashes(
+                    "It has been planted!",
+                    "Fresh and organic!",
+                    "Hello Fabric World!",
+                    "NullPointerException",
+                    "Say hello to the New Age");
         }
         Cotton.logger.info("Splashes initialized.");
     }

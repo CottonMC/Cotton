@@ -28,8 +28,10 @@ public class CottonConfig {
     @Comment("Enable dispenser tweaks, like seed planting?")
     public boolean enable_dispenser_tweaks = true;
 
+    @Comment("Enable dispenser placing blocks if no behaviour is found otherwise.")
+    public boolean enable_dispenser_place_blocks = true;
+
     @Comment("Tweaks: Enable the shape-based torch placement algorithm. " +
             "Allows you to place torches on more blocks.")
     public boolean enable_custom_torch_placement = true;
-
 }

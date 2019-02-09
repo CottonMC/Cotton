@@ -4,6 +4,7 @@
   "plugin": "io.github.cottonmc.cotton.CottonMixinPlugin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "DispenserBlockMixin",
     "TorchBlockMixin"
   ],
   "injectors": {
