@@ -23,9 +23,9 @@ public class PlaceBlockBehavior implements DispenserBehavior {
             World world = blockPointer.getWorld();
             Direction facing = blockPointer.getBlockState().get(DispenserBlock.FACING);
             BlockPos target = blockPointer.getBlockPos().offset(facing);
-            world.setBlockState(target, item.getBlock().getPlacementState(new ItemPlacementContext(new DispenserUsageContext(
-                world, itemStack, new BlockHitResult(new Vec3d(0.5, 0.5, 0.5), facing.getOpposite(), target, true)
-            ))));
+            world.setBlockState(target, item.getBlock().getPlacementState(new DispenserPlacementContext(
+                world, itemStack, new BlockHitResult(new Vec3d(0.5, 0.5, 0.5), facing, target, true)
+            )));
             itemStack.subtractAmount(1);
             return itemStack;
         } else {
