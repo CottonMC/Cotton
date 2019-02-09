@@ -22,7 +22,7 @@ public class CottonMixinPlugin implements IMixinConfigPlugin {
     private static final CottonConfig CONFIG = ConfigManager.loadConfig(CottonConfig.class);
     private static final ImmutableMap<String, BooleanSupplier> MIXIN_STATES =
         ImmutableMap.of(
-            PACKAGE + ".TorchBlockMixin", () -> CONFIG.enable_custom_torch_placement
+            PACKAGE + ".TorchBlockMixin", () -> CONFIG.include_tweaks && CONFIG.enable_custom_torch_placement
         );
 
     @Override

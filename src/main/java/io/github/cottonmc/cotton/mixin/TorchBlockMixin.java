@@ -13,8 +13,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+/* Allows placing torches on more blocks by checking their collision shape
+* if they can't be placed otherwise. */
 @Mixin(TorchBlock.class)
 public class TorchBlockMixin {
+    // This is as wide as a fence post and 0.5/16 blocks tall.
     private static final BoundingBox TOP_BOX = Block.createCuboidShape(6, 15.5, 6, 10, 16, 10).getBoundingBox();
 
     /**
