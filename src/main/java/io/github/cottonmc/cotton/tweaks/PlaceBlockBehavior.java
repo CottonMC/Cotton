@@ -31,10 +31,7 @@ public class PlaceBlockBehavior implements DispenserBehavior {
             boolean replaceable = world.getBlockState(target).getMaterial().isReplaceable();
 
             if (placementState != null && replaceable && placementState.canPlaceAt(world, target)) {
-                if (!world.isAir(target)) {
-                    world.breakBlock(target, true);
-                }
-
+                world.breakBlock(target, true);
                 world.setBlockState(target, placementState);
                 itemStack.subtractAmount(1);
 
