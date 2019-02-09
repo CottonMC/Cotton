@@ -1,12 +1,13 @@
 package io.github.cottonmc.cotton.tweaks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.block.BlockItem;
+import net.minecraft.item.block.WallStandingBlockItem;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +25,13 @@ public class PlaceBlockBehavior implements DispenserBehavior {
             World world = blockPointer.getWorld();
             Direction facing = blockPointer.getBlockState().get(DispenserBlock.FACING);
             BlockPos target = blockPointer.getBlockPos().offset(facing);
+
+            // Swap direction for WallStandingBlockItems (like banners),
+            // so they can be placed on the dispenser
+            if (item instanceof WallStandingBlockItem && facing == Direction.UP) {
+                facing = Direction.DOWN;
+            }
+
             DispenserPlacementContext placementContext = new DispenserPlacementContext(
                 world, itemStack, new BlockHitResult(new Vec3d(0.5, 0.5, 0.5), facing, target, true)
             );
@@ -35,8 +43,9 @@ public class PlaceBlockBehavior implements DispenserBehavior {
                 // even though the block would be broken by BlockItem.place.
                 // Note: this does nothing to air and will only be done to replaceable blocks
                 world.breakBlock(target, true);
-                item.place(placementContext);
-                return itemStack;
+                if (item.place(placementContext) == ActionResult.SUCCESS) {
+                    return itemStack;
+                }
             }
         }
 
