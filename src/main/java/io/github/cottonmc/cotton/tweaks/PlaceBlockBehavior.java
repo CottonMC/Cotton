@@ -24,19 +24,18 @@ public class PlaceBlockBehavior implements DispenserBehavior {
             World world = blockPointer.getWorld();
             Direction facing = blockPointer.getBlockState().get(DispenserBlock.FACING);
             BlockPos target = blockPointer.getBlockPos().offset(facing);
-            BlockState placementState = item.getBlock().getPlacementState(new DispenserPlacementContext(
+            DispenserPlacementContext placementContext = new DispenserPlacementContext(
                 world, itemStack, new BlockHitResult(new Vec3d(0.5, 0.5, 0.5), facing, target, true)
-            ));
-
+            );
+            BlockState placementState = item.getBlock().getPlacementState(placementContext);
             boolean replaceable = world.getBlockState(target).getMaterial().isReplaceable();
 
             if (placementState != null && replaceable && placementState.canPlaceAt(world, target)) {
+                // Calling breakBlock separately here to drop the broken block,
+                // even though the block would be broken by BlockItem.place.
+                // Note: this does nothing to air and will only be done to replaceable blocks
                 world.breakBlock(target, true);
-                world.setBlockState(target, placementState);
-                itemStack.subtractAmount(1);
-
-                // This uses the breaking world event. Placing sounds shouldn't be too different?
-                world.fireWorldEvent(2001, target, Block.getRawIdFromState(placementState));
+                item.place(placementContext);
                 return itemStack;
             }
         }
