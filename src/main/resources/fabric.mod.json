@@ -10,7 +10,7 @@
     "fabric": "*"
   },
   "mixins": {
-    "client": "cotton.client.json",
-    "common": "cotton.common.json"
+    "client": "mixins.cotton.client.json",
+    "common": "mixins.cotton.common.json"
   }
 }
