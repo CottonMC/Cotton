@@ -18,18 +18,19 @@ import java.util.Random;
 @Environment(EnvType.CLIENT)
 @Mixin(MainMenuScreen.class)
 public abstract class MainMenuScreenMixin extends Screen {
-    @Shadow @Final
-    private static Random RANDOM;
-    
-    @Shadow
-    private String splashText;
-    
-    @Shadow @Final
-    private static Identifier SPLASHES_LOC;
-    
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(CallbackInfo ci) {
-        Splashes.loadDefaultSplashes(SPLASHES_LOC);
-        splashText = Splashes.getRandomSplash(RANDOM);
-    }
+    //TODO: splash loading changed in the newest snapshot
+//    @Shadow @Final
+//    private static Random RANDOM;
+//    
+//    @Shadow
+//    private String splashText;
+//
+//    @Shadow @Final
+//    private static Identifier SPLASHES_LOC;
+//
+//    @Inject(method = "<init>", at = @At("RETURN"))
+//    private void init(CallbackInfo ci) {
+//        Splashes.loadDefaultSplashes(SPLASHES_LOC);
+//        splashText = Splashes.getRandomSplash(RANDOM);
+//    }
 }
