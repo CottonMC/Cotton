@@ -30,8 +30,8 @@ public class Cotton implements ModInitializer {
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);
 		logger.info("loaded config");
-		Splashes.initialize();
 		Tweaks.initialize();
+		Splashes.initialize();
 
 	}
 }

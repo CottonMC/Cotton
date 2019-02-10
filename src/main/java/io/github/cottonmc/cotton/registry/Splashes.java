@@ -11,10 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * A registry to allow manipulation of the splash messages on the main menu.
@@ -42,6 +40,8 @@ public class Splashes {
                     "Hello Fabric World!",
                     "NullPointerException",
                     "Say hello to the New Age");
+            addHolidaySplashOnDate("Happy PI day!", 3, 14);
+            addHolidaySplashOnDate("Testing day!", 2, 10);
         }
         Cotton.logger.info("Splashes initialized.");
     }
@@ -88,23 +88,56 @@ public class Splashes {
      * @return A random splash, possibly holiday themed
      */
     public static String getRandomSplash(Random random) {
-        if (!holidaySplashes.isEmpty()) {
-            return Utils.getRandomElement(holidaySplashes);
-        }
-        else {
-            if (Cotton.config.prioritize_custom_splashes) {
+        System.out.println(holidaySplashes.size());
+        if (Cotton.config.prioritize_custom_splashes) {
+            if (holidaySplashes.isEmpty()) {
                 // Roll a dice from 0 to X, and if it lands on 0 (chance is 1/X), use a vanilla splash.
                 // Else, use a modded one.
                 if (random.nextInt(Cotton.config.custom_splash_priority) == 0) {
-                    return Utils.getRandomElement(defaultSplashes);
+                    return vanillaSplashLogic();
                 }
                 else {
                     return Utils.getRandomElement(splashes);
                 }
             }
             else {
+                return Utils.getRandomElement(holidaySplashes);
+            }
+        }
+        else {
+            if (hasVanillaHoliday()) {
+                return getVanillaHolidaySplash();
+            }
+            else {
                 return Utils.getRandomElement(getAllSplashes());
             }
+        }
+    }
+
+    // This tries to match vanilla behaviour. (aka get a vanilla splash if not holiday, else print holiday splash)
+    private static String vanillaSplashLogic() {
+        if (hasVanillaHoliday()) {
+            return getVanillaHolidaySplash();
+        }
+        return Utils.getRandomElement(defaultSplashes);
+    }
+
+    public static boolean hasVanillaHoliday() {
+        return getVanillaHolidaySplash() != null;
+    }
+
+    private static String getVanillaHolidaySplash() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        if (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) == 24) {
+            return "Merry X-mas!";
+        } else if (calendar.get(Calendar.MONTH) + 1 == 1 && calendar.get(Calendar.DATE) == 1) {
+            return "Happy new year!";
+        } else if (calendar.get(Calendar.MONTH) + 1 == 10 && calendar.get(Calendar.DATE) == 31) {
+            return "OOoooOOOoooo! Spooky!";
+        }
+        else {
+            return null; // but we probably fucked up; this is not good.
         }
     }
 
@@ -129,6 +162,22 @@ public class Splashes {
     public static void addHolidaySplash(String splash) {
         if (splash.hashCode() != MISSINGNO) {
             holidaySplashes.add(splash);
+        }
+    }
+
+    /**
+     * Adds a splash to the main menu.
+     *
+     * It will override all non-holiday splashes.
+     *
+     * @param splash The holiday splash to add
+     * @param month The month when the splash should be applied
+     * @param day The day when the splash should be applied
+     * */
+    public static void addHolidaySplashOnDate(String splash, int month, int day) {
+        LocalDate today = LocalDate.now();
+        if (month == today.getMonthValue() && day == today.getDayOfMonth()) {
+            addHolidaySplash(splash);
         }
     }
 
