@@ -10,7 +10,7 @@ buildscript {
 		}
 		maven {
 			url "https://plugins.gradle.org/m2/"
-		}  
+		}
 	}
 	dependencies {
 		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
@@ -47,7 +47,7 @@ group = "io.github.cottonmc"
  *
  * That's a lot of minuses, but the plusses are very big plusses.
  */
-version = "0.0.2+19w05a"
+version = "0.0.2+19w06a"
 
 repositories {
 	mavenCentral()
@@ -60,9 +60,9 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modCompile "net.fabricmc:fabric:0.2.0.89"
-	
+
 	//modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
-	
+
 	//jankson, the json parser we are using to allow comments
 	shadow "blue.endless:jankson:1.1.0"
 	implementation "blue.endless:jankson:1.1.0"
@@ -96,15 +96,15 @@ publishing {
 	publications {
 		maven(MavenPublication) {
 			from components.java
-		
+
 			artifactId = "cotton"
 			version = version+"-SNAPSHOT" //TODO: just for now, to prevent rejections from artifactory
-			
+
 			pom.withXml {
 				def pomFile = asNode()
 				def depsNode = pomFile.get("dependencies")
 				pomFile.remove(depsNode)
-				
+
 				def newDeps = pomFile.appendNode("dependencies")
 				configurations.modCompile.getResolvedConfiguration().getFirstLevelModuleDependencies().each {
 					def artifactNode = newDeps.appendNode("dependency")
@@ -153,7 +153,7 @@ artifactory {
 			}
 			defaults {
 				publications('maven')
-				
+
 				publishArtifacts = true
 				publishPom = true
 			}

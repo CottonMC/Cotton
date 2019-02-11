@@ -1,16 +1,12 @@
 {
   "id": "cotton",
   "name": "Cotton",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "side": "universal",
   "initializers": [
     "io.github.cottonmc.cotton.Cotton"
   ],
   "requires": {
     "fabric": "*"
-  },
-  "mixins": {
-    "client": "mixins.cotton.client.json",
-    "common": "mixins.cotton.common.json"
   }
 }
