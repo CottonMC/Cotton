@@ -4,7 +4,8 @@
   "plugin": "io.github.cottonmc.cotton.CottonMixinPlugin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MainMenuScreenMixin"
+    "MainMenuScreenMixin",
+    "SplashScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

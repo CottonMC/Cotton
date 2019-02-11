@@ -34,4 +34,14 @@ public class CottonConfig {
     @Comment("Tweaks: Enable the shape-based torch placement algorithm. " +
             "Allows you to place torches on more blocks.")
     public boolean enable_custom_torch_placement = true;
+
+    @Comment("Enable recolouring of the loading bar?")
+    public boolean enable_coloured_loading_bar = true;
+
+    @Comment("The colour of the loading bar.")
+    public int loading_bar_colour_red = 2;
+
+    public int loading_bar_colour_green = 40;
+
+    public int loading_bar_colour_blue = 255;
 }
