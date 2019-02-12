@@ -14,6 +14,8 @@ import net.minecraft.util.Identifier;
 public class Cotton implements ModInitializer {
 
 	public static final String MODID = "cotton";
+	public static boolean isDevEnv = Boolean.parseBoolean(System.getProperty("fabric.development", "false"));
+
 
 	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(
 			new Identifier("cotton", "common_tab"), () -> new ItemStack(Blocks.LIGHT_BLUE_WOOL));
@@ -28,6 +30,6 @@ public class Cotton implements ModInitializer {
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);
 		logger.info("loaded config");
-
+		logger.error("OH SHIT; THINGS ARE WORKING!");
 	}
 }

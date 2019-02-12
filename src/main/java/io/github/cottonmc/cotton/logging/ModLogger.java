@@ -1,5 +1,6 @@
 package io.github.cottonmc.cotton.logging;
 
+import io.github.cottonmc.cotton.Cotton;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,15 +45,22 @@ public class ModLogger {
     }
 
     public void log(Level level, String msg, Ansi ansi, Object... data) {
-        log.log(level, getFormattedPrefix()+ansi.format(msg, data));
+        //since Ansi might not work in a normal windows console we only use it in the dev environemnt
+        log.log(level, getFormattedPrefix() + (Cotton.isDevEnv ? ansi.format(msg, data) : String.format(msg, data)));
     }
 
     public void log(Level level, Throwable ex, String msg, Ansi ansi, Object... data) {
-        log.log(level, getFormattedPrefix()+ansi.format(msg, data), ex);
+        //since Ansi might not work in a normal windows console we only use it in the dev environemnt
+        log.log(level, getFormattedPrefix() + (Cotton.isDevEnv ? ansi.format(msg, data) : String.format(msg, data)), ex);
     }
 
     private String getFormattedPrefix(){
-        return this.prefixFormat.format(this.prefix);
+        //since Ansi might not work in a normal windows console we only use it in the dev environemnt
+        if(Cotton.isDevEnv){
+            return this.prefixFormat.format(this.prefix);
+        } else {
+            return this.prefix;
+        }
     }
 
     public void error(String msg, Object... data) {
