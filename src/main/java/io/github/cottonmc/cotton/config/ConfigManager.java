@@ -6,7 +6,7 @@ import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.impl.SyntaxError;
 import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
-import net.fabricmc.loader.FabricLoader;
+import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,7 +39,7 @@ public class ConfigManager {
      */
     public static <T> T loadConfig(Class<T> clazz, String configName){
         try {
-            File file = new File(FabricLoader.INSTANCE.getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
+            File file = new File(((net.fabricmc.loader.FabricLoader) FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
             Jankson jankson = Jankson.builder().build();
 
             //Generate config file if it doesn't exist
@@ -114,7 +114,7 @@ public class ConfigManager {
 
 
         try {
-            File file = new File(FabricLoader.INSTANCE.getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
+            File file = new File(((net.fabricmc.loader.FabricLoader) FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
             if(!file.exists())
                 file.createNewFile();
 
