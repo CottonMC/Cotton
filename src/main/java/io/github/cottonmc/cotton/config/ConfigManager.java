@@ -39,7 +39,7 @@ public class ConfigManager {
      */
     public static <T> T loadConfig(Class<T> clazz, String configName){
         try {
-            File file = new File(((net.fabricmc.loader.FabricLoader) FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
+            File file = new File((FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
             Jankson jankson = Jankson.builder().build();
 
             //Generate config file if it doesn't exist

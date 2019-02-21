@@ -35,7 +35,7 @@ public class CommonBlocks {
 	public static Block register(String name, Block block, BlockItem item) {
 		Identifier id = new Identifier(SHARED_NAMESPACE, name);
 
-		if (!Registry.BLOCK.contains(id)) {
+		if (!Registry.BLOCK.containsId(id)) {
 			Registry.register(Registry.BLOCK, id, block);
 			CommonItems.register(id.getPath(), item);
 			return block;
@@ -53,7 +53,7 @@ public class CommonBlocks {
 	public static Block getBlock(String name){
 		Identifier id = new Identifier(SHARED_NAMESPACE, name);
 
-		if (Registry.BLOCK.contains(id)) {
+		if (Registry.BLOCK.containsId(id)) {
 			return Registry.BLOCK.get(id);
 		}
 		return null;

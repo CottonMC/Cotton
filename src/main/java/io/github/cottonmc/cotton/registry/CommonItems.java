@@ -28,12 +28,12 @@ public class CommonItems {
 			lastLoadedMod = iterator.next();
 		}
 		if(item.getItemGroup() != null) {
-			Cotton.logger.info("Mod \"" + lastLoadedMod.getInfo().getName() + "\" is adding common item \"" + name + "\" to tab \"" + item.getItemGroup().getUntranslatedName()+"\".");
+			Cotton.logger.info("Mod \"" + lastLoadedMod.getInfo().getName() + "\" is adding common item \"" + name + "\" to tab \"" + item.getItemGroup().getTranslationKey()+"\".");
 		} else {
 			Cotton.logger.warn("Mod \"" + lastLoadedMod.getInfo().getName() + "\" is adding common item \"" + name + "\" to no tab.");
 		}
 
-		if (!Registry.ITEM.contains(id)) {
+		if (!Registry.ITEM.containsId(id)) {
 			Registry.register(Registry.ITEM, id, item);
 			return item;
 		}
@@ -50,7 +50,7 @@ public class CommonItems {
 	public static Item getItem(String name){
 		Identifier id = new Identifier(SHARED_NAMESPACE, name);
 
-		if (Registry.ITEM.contains(id)) {
+		if (Registry.ITEM.containsId(id)) {
 			return Registry.ITEM.get(id);
 		}
 		return null;

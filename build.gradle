@@ -47,19 +47,17 @@ group = "io.github.cottonmc"
  *
  * That's a lot of minuses, but the plusses are very big plusses.
  */
-version = "0.0.2+19w06a"
+version = "0.0.2+19w08a"
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:19w06a"
-	mappings "net.fabricmc:yarn:19w06a.3"
-	modCompile "net.fabricmc:fabric-loader:0.3.5.106"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modCompile "net.fabricmc:fabric:0.2.0.89"
+	minecraft "com.mojang:minecraft:19w08a"
+	mappings "net.fabricmc:yarn:19w08a.4"
+	modCompile "net.fabricmc:fabric-loader:0.3.7.108"
+	modCompile "net.fabricmc:fabric:0.2.2.103"
 
 	//modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
 
