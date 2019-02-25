@@ -40,7 +40,7 @@ public class CommonBlocks {
 		if (!Registry.BLOCK.containsId(id)) {
 			Registry.register(Registry.BLOCK, id, block);
 			CommonItems.register(id.getPath(), item);
-			TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("common", name), id.toString());
+			TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("c", name), id.toString());
 			return block;
 		}
 		else {
