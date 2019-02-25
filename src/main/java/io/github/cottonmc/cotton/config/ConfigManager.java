@@ -47,7 +47,6 @@ public class ConfigManager {
                 saveConfig(clazz.newInstance(), configName);
             }
 
-
             try {
                 JsonObject json = jankson.load(file);
                 String cleaned = json.toJson(false,true); //remove comments
@@ -114,7 +113,7 @@ public class ConfigManager {
 
 
         try {
-            File file = new File(((net.fabricmc.loader.FabricLoader) FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
+            File file = new File((FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
             if(!file.exists())
                 file.createNewFile();
 
@@ -124,8 +123,7 @@ public class ConfigManager {
             out.flush();
             out.close();
         } catch (IOException e) {
-            System.out.println("Failed to write to config file");
-            e.printStackTrace();
+           Cotton.logger.warn("Failed to write to config file"+configName+CONFIG_FILE_EXTENSION+": " + e);
         }
     }
 

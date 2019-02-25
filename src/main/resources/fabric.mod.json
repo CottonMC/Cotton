@@ -6,6 +6,9 @@
   "initializers": [
     "io.github.cottonmc.cotton.Cotton"
   ],
+  "mixins": {
+    "common": "cotton.common.json"
+  },
   "requires": {
     "fabric": "*"
   }

@@ -1,6 +1,8 @@
 package io.github.cottonmc.cotton.registry;
 
 import io.github.cottonmc.cotton.Cotton;
+import io.github.cottonmc.cotton.tags.TagEntryManager;
+import io.github.cottonmc.cotton.tags.TagType;
 import net.fabricmc.loader.FabricLoader;
 import net.fabricmc.loader.ModContainer;
 import net.minecraft.block.Block;
@@ -38,6 +40,7 @@ public class CommonBlocks {
 		if (!Registry.BLOCK.containsId(id)) {
 			Registry.register(Registry.BLOCK, id, block);
 			CommonItems.register(id.getPath(), item);
+			TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("common", name), id.toString());
 			return block;
 		}
 		else {
