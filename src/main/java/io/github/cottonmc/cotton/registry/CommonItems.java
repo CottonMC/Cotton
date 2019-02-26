@@ -3,8 +3,8 @@ package io.github.cottonmc.cotton.registry;
 import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.tags.TagEntryManager;
 import io.github.cottonmc.cotton.tags.TagType;
-import net.fabricmc.loader.FabricLoader;
-import net.fabricmc.loader.ModContainer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -24,15 +24,15 @@ public class CommonItems {
 		Identifier id = new Identifier("cotton", name);
 
 		//log some stuff
-		Iterator<ModContainer> iterator = FabricLoader.INSTANCE.getModContainers().iterator();
+		Iterator<ModContainer> iterator = FabricLoader.getInstance().getAllMods().iterator();
 		ModContainer lastLoadedMod = iterator.next();
 		while(iterator.hasNext()){
 			lastLoadedMod = iterator.next();
 		}
 		if(item.getItemGroup() != null) {
-			Cotton.logger.info("Mod \"" + lastLoadedMod.getInfo().getName() + "\" is adding common item \"" + name + "\" to tab \"" + item.getItemGroup().getTranslationKey()+"\".");
+			Cotton.logger.info("Mod \"" + lastLoadedMod.getMetadata().getName() + "\" is adding common item \"" + name + "\" to tab \"" + item.getItemGroup().getTranslationKey()+"\".");
 		} else {
-			Cotton.logger.warn("Mod \"" + lastLoadedMod.getInfo().getName() + "\" is adding common item \"" + name + "\" to no tab.");
+			Cotton.logger.warn("Mod \"" + lastLoadedMod.getMetadata().getName() + "\" is adding common item \"" + name + "\" to no tab.");
 		}
 
 		if (!Registry.ITEM.containsId(id)) {
