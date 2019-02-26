@@ -48,6 +48,7 @@ group = "io.github.cottonmc"
  * That's a lot of minuses, but the plusses are very big plusses.
  */
 version = "0.0.3+19w08a"
+version = version+"-SNAPSHOT" //TODO: just for now, to prevent rejections from artifactory
 
 repositories {
 	mavenCentral()
@@ -96,7 +97,6 @@ publishing {
 			from components.java
 
 			artifactId = "cotton"
-			version = version+"-SNAPSHOT" //TODO: just for now, to prevent rejections from artifactory
 
 			pom.withXml {
 				def pomFile = asNode()
