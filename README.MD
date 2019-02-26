@@ -3,7 +3,7 @@
 - Custom Logger
 
 # Upcoming Features
-- JsonBased OreGeneration. (not done yet)
+- Json-based ore generation. (almost done)
 
 # Ideas discussion (editable)
 
