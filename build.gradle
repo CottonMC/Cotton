@@ -47,7 +47,7 @@ group = "io.github.cottonmc"
  *
  * That's a lot of minuses, but the plusses are very big plusses.
  */
-version = "0.0.2+19w08a"
+version = "0.0.3+19w08a"
 
 repositories {
 	mavenCentral()
@@ -145,7 +145,7 @@ artifactory {
 		contextUrl = 'http://server.bbkr.space:8081/artifactory/'
 		publish {
 			repository {
-				repoKey = "libs-snapshot-local"
+				repoKey = "libs-snapshot"
 				username = artifactoryUsername
 				password = artifactoryPassword
 			}
