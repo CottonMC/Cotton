@@ -145,7 +145,11 @@ artifactory {
 		contextUrl = 'http://server.bbkr.space:8081/artifactory/'
 		publish {
 			repository {
-				repoKey = "libs-snapshot"
+				if (version.contains("SNAPSHOT")) {
+					repoKey = "libs-snapshot"
+				} else {
+					repoKey = "libs-release"
+				}
 				username = artifactoryUsername
 				password = artifactoryPassword
 			}
