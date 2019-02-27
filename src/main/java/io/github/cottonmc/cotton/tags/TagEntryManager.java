@@ -18,18 +18,17 @@ public class TagEntryManager {
 		Jankson jankson = Jankson.builder().build();
 		try {
 			if (!tagFile.getParentFile().exists()) tagFile.getParentFile().mkdirs();
-			if (!tagFile.exists()) tagFile.createNewFile();
 			TagFile tagContents;
-			try {
+			if (!tagFile.exists()) {
+				tagFile.createNewFile();
+				tagContents = new TagFile();
+			} else {
 				JsonObject currentJson = jankson.load(tagFile);
 				tagContents = jankson.fromJson(currentJson, TagFile.class);
-			} catch (SyntaxError e) {
-				Cotton.logger.warn("Tag file for " + tagId.toString() + " seems to be missing or malformed. Generating new file.");
-				Cotton.logger.warn("Error: " + e);
-				//TODO: Write to a `<tagId>.malformed.json` file?
-				tagContents = new TagFile();
 			}
-			tagContents.values.addAll(Arrays.asList(entries));
+			for (String entry : entries) {
+				if (!tagContents.values.contains(entry)) tagContents.values.add(entry);
+			}
 			String result = jankson
 					.toJson(tagContents)
 					.toJson(false, true, 0);
@@ -37,7 +36,7 @@ public class TagEntryManager {
 			out.write(result.getBytes());
 			out.flush();
 			out.close();
-		} catch (IOException e) {
+		} catch (IOException | SyntaxError e) {
 			Cotton.logger.warn("Failed to generate tag " + tagId.toString() + ": " + e);
 		}
 	}
