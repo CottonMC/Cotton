@@ -18,9 +18,12 @@ import java.io.File;
 public class Cotton implements ModInitializer {
 
 	public static final String MODID = "cotton";
+	public static final String SHARED_NAMESPACE = "c";
+
 	public static final boolean isDevEnv = Boolean.parseBoolean(System.getProperty("fabric.development", "false"));
 
 	public static final File DATA_PACK_LOCATION = new File(FabricLoader.getInstance().getGameDirectory(), "datapacks/cotton (generated)/");
+
 	public static File getTagLocation(Identifier tagId) {
 		return new File(DATA_PACK_LOCATION, "data/" + tagId.getNamespace() + "/tags");
 	}

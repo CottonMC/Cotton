@@ -10,7 +10,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class CommonBlocks {
-	public static final String SHARED_NAMESPACE = "c";
 
 	/**Attempts to get a common block by name. If no block with this name was found register the given block and create a BlockItem for it.
 	 * @param name The block name to look for. This is the path and does not include the namespace.
@@ -30,12 +29,12 @@ public class CommonBlocks {
 	 * @return Returns either an already existing block with the specified name or a new one that was register under the given name.
 	 */
 	public static Block register(String name, Block block, BlockItem item) {
-		Identifier id = new Identifier(SHARED_NAMESPACE, name);
+		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
 		if (!Registry.BLOCK.containsId(id)) {
 			Registry.register(Registry.BLOCK, id, block);
 			CommonItems.register(id.getPath(), item);
-			TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("c", name), id.toString());
+			TagEntryManager.registerToTag(TagType.BLOCK, new Identifier(Cotton.SHARED_NAMESPACE, name), id.toString());
 			return block;
 		}
 		else {
@@ -49,7 +48,7 @@ public class CommonBlocks {
 	 * @return Either the block if it is found or null if no such Common Block exists
 	 */
 	public static Block getBlock(String name){
-		Identifier id = new Identifier(SHARED_NAMESPACE, name);
+		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
 		if (Registry.BLOCK.containsId(id)) {
 			return Registry.BLOCK.get(id);
