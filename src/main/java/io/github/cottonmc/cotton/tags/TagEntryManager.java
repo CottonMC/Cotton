@@ -24,7 +24,7 @@ public class TagEntryManager {
 				JsonObject currentJson = jankson.load(tagFile);
 				tagContents = jankson.fromJson(currentJson, TagFile.class);
 			} catch (SyntaxError e) {
-				Cotton.logger.warn("Tag file for " + tagId.toString() + " seems to be malformed. Any existing entries will be lost.");
+				Cotton.logger.warn("Tag file for " + tagId.toString() + " seems to be missing or malformed. Generating new file.");
 				Cotton.logger.warn("Error: " + e);
 				//TODO: Write to a `<tagId>.malformed.json` file?
 				tagContents = new TagFile();
