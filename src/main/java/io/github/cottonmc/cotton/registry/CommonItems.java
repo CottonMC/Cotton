@@ -18,7 +18,7 @@ public class CommonItems {
 
 		if (!Registry.ITEM.containsId(id)) {
 			Registry.register(Registry.ITEM, id, item);
-			TagEntryManager.registerToTag(TagType.ITEM, new Identifier("c", name), id.toString());
+			TagEntryManager.registerToTag(TagType.ITEM, new Identifier(Cotton.SHARED_NAMESPACE, name), id.toString());
 			return item;
 		}
 		else {
