@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 public class CommonItems {
 
-	/** Attempts to get a common item by name. If no item with this name was found register the given item and return it.
+	/**Attempts to get a common item by name. If no item with this name was found register the given item and return it.
 	 * @param name The item name to look for. This is the path and does not include the namespace.
 	 * @param item A item that will be registered if no item with this name was found.
 	 * @return Returns either an already existing item with the specified name or a new one that was register under the given name.
@@ -26,12 +26,12 @@ public class CommonItems {
 		}
 	}
 
-	/** Checks if a Common Item with the given name exists and returns it.
+	/**Checks if a Common Item with the given name exists and returns it.
 	 *
 	 * @param name The name to look for.
-	 * @return Either the item if it is found or null if no such Common Item exists.
+	 * @return Either the item if it is found or null if no such Common Item exists
 	 */
-	public static Item getItem(String name) {
+	public static Item getItem(String name){
 		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
 		if (Registry.ITEM.containsId(id)) {
