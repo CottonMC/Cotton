@@ -36,7 +36,7 @@ targetCompatibility = 1.8
 
 archivesBaseName = ext.projectName;
 group = ext.group;
-version = ext.version + (ext.snapshot) ? "-SNAPSHOT" : "";
+version = ext.version + ((ext.snapshot) ? "-SNAPSHOT" : "");
 
 repositories {
 	mavenCentral()
@@ -99,6 +99,7 @@ publishing {
 			from components.java
 
 			artifactId = project.ext.projectName;
+
 
 			pom.withXml {
 				def pomFile = asNode()
