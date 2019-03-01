@@ -9,7 +9,6 @@ import net.minecraft.util.Identifier;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class TagEntryManager {
 	public static void registerToTag(TagType type, Identifier tagId, String... entries) {
@@ -36,7 +35,8 @@ public class TagEntryManager {
 			out.write(result.getBytes());
 			out.flush();
 			out.close();
-		} catch (IOException | SyntaxError e) {
+		}
+		catch (IOException | SyntaxError e) {
 			Cotton.logger.warn("Failed to generate tag " + tagId.toString() + ": " + e);
 		}
 	}

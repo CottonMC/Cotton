@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 buildscript {
 	repositories {
 		mavenCentral()
@@ -9,200 +7,20 @@ buildscript {
 			url = "http://maven.modmuss50.me/"
 		}
 		maven {
-			url "https://plugins.gradle.org/m2/"
+			url = "https://plugins.gradle.org/m2/"
 		}
 	}
 	dependencies {
-		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
-		classpath "com.github.jengelman.gradle.plugins:shadow:2.0.0"
+		classpath("net.fabricmc:fabric-loom:0.2.0-SNAPSHOT") //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
+		classpath("com.github.jengelman.gradle.plugins:shadow:2.0.0")
+		classpath("org.jfrog.buildinfo:build-info-extractor-gradle:4.9.3")
 	}
 }
 
-plugins {
-	id "com.jfrog.artifactory" version "4.9.0"
-}
-
+apply plugin: "com.jfrog.artifactory"
 apply plugin: "maven-publish"
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: net.fabricmc.loom.LoomGradlePlugin
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 archivesBaseName = "cotton"
-group = "io.github.cottonmc"
 
-/* Let's Talk Versions:
- * --------------------
- * The "1.2.3+18w50a" format is a pretty decent compromise between humans and robots.
- *
- * + It's valid SemVer, so robots can distinguish between 1.2.3 and 1.2.5, and correctly target version ranges e.g. ">1.4"
- * + It still contains the minecraft version to help humans out
- * - The minecraft version is non-semantic in SemVer, so you can't target a minecraft version.
- * - "1.2" lexically comes after "1.10" in lexical order. SemVer bars us from putting leading zeroes to correct this,
- *   like "1.02" is invalid.
- * + "1.2.3+18w49a" comes before "1.2.3+18w50a" in a lexical sort.
- * - ["1.2.2+18w49a", "1.2.2+18w50a", "1.2.3+18w49a", "1.2.3+18w50a"] is the lexical sorting order, I'd kind of prefer
- *   minecraft versions to be the top-level grouping instead of mod versions.
- *
- * That's a lot of minuses, but the plusses are very big plusses.
- */
-version = "0.0.3+19w08a"
-version = version+"-SNAPSHOT" //TODO: just for now, to prevent rejections from artifactory
-
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	minecraft "com.mojang:minecraft:19w08a"
-	mappings "net.fabricmc:yarn:19w08a.4"
-	modCompile "net.fabricmc:fabric-loader:0.3.7.108"
-	modCompile "net.fabricmc:fabric:0.2.2.103"
-
-	//modCompile "io.github.prospector.silk:SilkAPI:1.0.0-25"
-
-	//jankson, the json parser we are using to allow comments
-	shadow "blue.endless:jankson:1.1.0"
-	implementation "blue.endless:jankson:1.1.0"
-}
-
-task sourcesJar(type: Jar) {
-	baseName = archivesBaseName
-	classifier = "sources"
-	from sourceSets.main.allSource
-	from sourceSets.main.resources
-}
-
-shadowJar {
-	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
-	classifier = "shadow"
-	configurations = [project.configurations.shadow]
-}
-
-remapJar {
-	dependsOn shadowJar
-	jar = shadowJar.archivePath
-}
-
-
-
-if(rootProject.file('private.gradle').exists()) { //gives people more ways to configure the project for publish
-	apply from: 'private.gradle'
-}
-
-publishing {
-	publications {
-		maven(MavenPublication) {
-			from components.java
-
-			artifactId = "cotton"
-
-			pom.withXml {
-				def pomFile = asNode()
-				def depsNode = pomFile.get("dependencies")
-				pomFile.remove(depsNode)
-
-				def newDeps = pomFile.appendNode("dependencies")
-				configurations.modCompile.getResolvedConfiguration().getFirstLevelModuleDependencies().each {
-					def artifactNode = newDeps.appendNode("dependency")
-					artifactNode.appendNode('groupId', it.moduleGroup)
-					artifactNode.appendNode('artifactId', it.moduleName)
-					artifactNode.appendNode('version', it.moduleVersion)
-				}
-			}
-			artifacts = [
-				artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow.jar") { //release jar - file location not provided anywhere in loom
-					classifier null
-					builtBy remapJar
-				},
-				artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow-dev.jar") { //release jar - file location not provided anywhere in loom
-					classifier "dev"
-					builtBy remapJar
-				},
-				artifact (tasks.sourcesJar)
-			]
-		}
-	}
-	/* Supply an ext block in private.gradle like so:
-
-	   ext { mavenSnapshotDir="file:///some_local_directory_path" }
-
-	 * and then just run "./gradlew publish" to save the artifacts to the specified directory, in a way that they can be
-	 * served by apache or your favorite httpd and behave like a maven repo. Complete with verification hashes.
-	 */
-	repositories {
-		if (rootProject.ext.has("localMavenUrl")) {
-			maven {
-				url = rootProject.ext.localMavenUrl
-			}
-		}
-	}
-}
-
-artifactory {
-	if (project.hasProperty("artifactoryUsername")) {
-		contextUrl = 'http://server.bbkr.space:8081/artifactory/'
-		publish {
-			repository {
-				if (version.contains("SNAPSHOT")) {
-					repoKey = "libs-snapshot"
-				} else {
-					repoKey = "libs-release"
-				}
-				username = artifactoryUsername
-				password = artifactoryPassword
-			}
-			defaults {
-				publications('maven')
-
-				publishArtifacts = true
-				publishPom = true
-			}
-		}
-	} else {
-		println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
-	}
-}
-
-
-
-
-/*
- * Let's talk about reordering the artifact tasks!
- * -----------------------------------------------
- * Fabric-loom has a default pipeline that meshes *very poorly* with shadow. What shadow creates:
- *
- * :compileJava -> :jar -> :shadowJar
- *
- * What Fabric-loom creates:
- *
- * :compileJava -> :jar -> :remapJar
- * :compileJava -> :apiJar
- *
- * We could reparent :shadowJar after :remapJar, but that means shadowed dependencies can never be remapped, and
- * re-remapping isn't a problem because remapped jars contain no references to yarn classes. So it's always objectively
- * better to reparent :remapJar after :shadowJar.
- *
- * Experimentally, simply trusting that each task will overwrite the empty-classifier jar *in order* results in highly
- * unstable/unreliable builds. So we configure remapJar to remap the artifact from shadowJar. As of the most recent
- * 0.2.0-SNAPSHOT of loom, this is now possible without hacking build order too badly.
- *
- * I'm using the "shadow" classifier for the :shadowJar task, resulting in the following flow:
- * :jar
- *    "foo-1.0.jar"
- * :shadowJar
- *    "foo-1.0-shadow.jar"
- * :remapJar
- *    "foo-1.0-shadow.jar" (overwritten, can't change this behavior)
- *    "foo-1.0-shadow-dev.jar" (can't configure this name, remapJar is truly and entirely unaware of artifact names, versions, and classifiers)
- *
- * Eventually, I envision the remapJar task's "jar" variable changed to Object type, which gets baked down to a File
- * at Task::apply (very late-stage) by sending it through Project::file. This would allow us to use JarTasks like shadowJar directly as
- * inputs to remapJar instead of, in this case, shadowJar.archivePath which is deprecated. This might also let us seed the
- * remap task with the JarTask as its target, since the java tasks appear early, but the target File may change during configuration.
- * Nothing would change in the default/unconfigured behavior.
- */
-
-//The following is probably just me being paranoid
-//tasks.publish.mustRunAfter remapJar
+apply from: "common.gradle"
