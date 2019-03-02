@@ -25,6 +25,29 @@ plugins {
 apply plugin: "maven-publish"
 apply plugin: net.fabricmc.loom.LoomGradlePlugin
 
+
+/*
+ * Extra DSL functions that might be useful from project.gradle
+ */
+public MavenArtifactRepository CottonMC() {
+	MavenArtifactRepository result;
+	buildscript {
+		repositories {
+			result = maven {
+				name = "CottonMC";
+				url  = "http://server.bbkr.space:8081/artifactory/libs-snapshot";
+			}
+		}
+	}
+
+	return result;
+}
+
+/*
+ * End DSL functions for project.gradle
+ */
+
+
 apply from: "project.gradle";
 
 if (ext.needsShadow) {
