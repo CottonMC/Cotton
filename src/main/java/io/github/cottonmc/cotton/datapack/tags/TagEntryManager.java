@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.tags;
+package io.github.cottonmc.cotton.datapack.tags;
 
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonObject;
@@ -9,12 +9,11 @@ import net.minecraft.util.Identifier;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class TagEntryManager {
 	public static void registerToTag(TagType type, Identifier tagId, String... entries) {
 		Cotton.logger.info("Adding objects to tag " + tagId.toString());
-		File tagFile = new File(Cotton.getTagLocation(tagId), type.asString() + "/" + tagId.getPath() + ".json");
+		File tagFile = new File(getTagLocation(tagId), type.asString() + "/" + tagId.getPath() + ".json");
 		Jankson jankson = Jankson.builder().build();
 		try {
 			if (!tagFile.getParentFile().exists()) tagFile.getParentFile().mkdirs();
@@ -39,5 +38,9 @@ public class TagEntryManager {
 		} catch (IOException | SyntaxError e) {
 			Cotton.logger.warn("Failed to generate tag " + tagId.toString() + ": " + e);
 		}
+	}
+
+	public static File getTagLocation(Identifier tagId) {
+		return new File(Cotton.DATA_PACK_LOCATION, "data/" + tagId.getNamespace() + "/tags");
 	}
 }

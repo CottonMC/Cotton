@@ -1,6 +1,6 @@
 package io.github.cottonmc.cotton.mixins;
 
-import io.github.cottonmc.cotton.tags.GlobalResourcePackCreator;
+import io.github.cottonmc.cotton.datapack.GlobalResourcePackCreator;
 import net.minecraft.resource.ResourcePackContainer;
 import net.minecraft.resource.ResourcePackContainerManager;
 import net.minecraft.server.MinecraftServer;

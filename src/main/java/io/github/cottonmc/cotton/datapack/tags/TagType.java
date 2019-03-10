@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.tags;
+package io.github.cottonmc.cotton.datapack.tags;
 
 import net.minecraft.util.StringRepresentable;
 

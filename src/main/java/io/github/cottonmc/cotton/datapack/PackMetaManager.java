@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.tags;
+package io.github.cottonmc.cotton.datapack;
 
 import blue.endless.jankson.Jankson;
 import io.github.cottonmc.cotton.Cotton;

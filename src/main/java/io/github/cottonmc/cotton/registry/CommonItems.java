@@ -1,8 +1,8 @@
 package io.github.cottonmc.cotton.registry;
 
 import io.github.cottonmc.cotton.Cotton;
-import io.github.cottonmc.cotton.tags.TagEntryManager;
-import io.github.cottonmc.cotton.tags.TagType;
+import io.github.cottonmc.cotton.datapack.tags.TagEntryManager;
+import io.github.cottonmc.cotton.datapack.tags.TagType;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;

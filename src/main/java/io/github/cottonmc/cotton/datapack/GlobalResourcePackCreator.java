@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.tags;
+package io.github.cottonmc.cotton.datapack;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.*;

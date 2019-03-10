@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.tags;
+package io.github.cottonmc.cotton.datapack;
 
 public class PackMeta {
 	public int pack_format = 1;

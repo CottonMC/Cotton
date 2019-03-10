@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.tags;
+package io.github.cottonmc.cotton.datapack.tags;
 
 import java.util.ArrayList;
 import java.util.List;
