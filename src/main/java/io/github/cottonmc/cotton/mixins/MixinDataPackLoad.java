@@ -17,11 +17,11 @@ import java.io.File;
 public class MixinDataPackLoad {
 
 	@Shadow
-	private ResourcePackContainerManager<ResourcePackContainer> field_4595;
+	private ResourcePackContainerManager<ResourcePackContainer> resourcePackContainerManager;
 
 	@Inject(method = "method_3800",
 			at = @At(value = "HEAD"))
 		public void method_3800(File file, LevelProperties properties, CallbackInfo info) {
-		field_4595.addCreator(new GlobalResourcePackCreator());
+		resourcePackContainerManager.addCreator(new GlobalResourcePackCreator());
 	}
 }

@@ -1,8 +1,9 @@
 package io.github.cottonmc.cotton.datapack.loot;
 
 import blue.endless.jankson.Jankson;
+import blue.endless.jankson.JsonObject;
+import blue.endless.jankson.JsonPrimitive;
 import io.github.cottonmc.cotton.Cotton;
-import io.github.cottonmc.cotton.datapack.loot.objects.LootTableCondition;
 import io.github.cottonmc.cotton.datapack.loot.objects.LootTableEntry;
 import io.github.cottonmc.cotton.datapack.loot.objects.LootTablePool;
 import net.minecraft.util.Identifier;
@@ -20,7 +21,8 @@ public class LootTableManager {
 	 */
 	public static void registerBasicBlockDropTable(Identifier id) {
 		LootTableEntry selfEntry = new LootTableEntry("minecraft:item", id.toString());
-		LootTableCondition standardCondition = new LootTableCondition("minecraft:survives_explosion");
+		JsonObject standardCondition = new JsonObject();
+		standardCondition.put("condition", new JsonPrimitive("minecraft:survives_explosion"));
 		LootTablePool mainPool = new LootTablePool(1);
 		mainPool.entries.add(selfEntry);
 		mainPool.conditions.add(standardCondition);
