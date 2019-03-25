@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigManager {
 
-    private static final String CONFIG_FILE_EXTENSION = ".conf";
+    private static final String CONFIG_FILE_EXTENSION = ".json5";
 
     /**Loads a .config file from the config folder and parses it to a POJO.
      *

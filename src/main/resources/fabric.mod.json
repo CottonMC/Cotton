@@ -11,5 +11,6 @@
   },
   "requires": {
     "fabric": "*"
-  }
+  },
+  "description": "Common materials for inter-compatibility and ease of use."
 }
