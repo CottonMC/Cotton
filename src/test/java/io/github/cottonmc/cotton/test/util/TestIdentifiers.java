@@ -89,4 +89,30 @@ public class TestIdentifiers {
 		assertThrows(IllegalArgumentException.class, () -> Identifiers.remove(base, 2, 1),
 			"Start index > end index did not cause exception!");
 	}
+
+	@Test
+	void getPathSegment() {
+		Identifier base = new Identifier("foo:bar/baz/qux");
+		assertEquals("bar", Identifiers.transformer(base).getPathSegment(0));
+		assertEquals("baz", Identifiers.transformer(base).getPathSegment(1));
+		assertEquals("qux", Identifiers.transformer(base).getPathSegment(2));
+
+		assertThrows(IndexOutOfBoundsException.class, () -> Identifiers.transformer(base).getPathSegment(-1));
+	}
+
+	@Test
+	void segmentIndexOf() {
+		Identifier base = new Identifier("foo:bar/baz/bar");
+		assertEquals(0, Identifiers.transformer(base).segmentIndexOf("bar"));
+		assertEquals(1, Identifiers.transformer(base).segmentIndexOf("baz"));
+		assertEquals(-1, Identifiers.transformer(base).segmentIndexOf("qux"));
+	}
+
+	@Test
+	void lastSegmentIndexOf() {
+		Identifier base = new Identifier("foo:bar/baz/bar");
+		assertEquals(2, Identifiers.transformer(base).lastSegmentIndexOf("bar"));
+		assertEquals(1, Identifiers.transformer(base).lastSegmentIndexOf("baz"));
+		assertEquals(-1, Identifiers.transformer(base).lastSegmentIndexOf("qux"));
+	}
 }
