@@ -63,6 +63,9 @@ version = ext.version + ((ext.snapshot) ? "-SNAPSHOT" : "");
 
 repositories {
 	mavenCentral()
+	maven {
+		url "http://server.bbkr.space:8081/artifactory/libs-snapshot"
+	}
 }
 
 dependencies {
@@ -75,8 +78,11 @@ dependencies {
 	if (project.ext.silkMod!=null) {
 		modCompile "io.github.prospector.silk:SilkAPI:"+project.ext.silkMod;
 	}
+	if (project.ext.cotton!=null) {
+		modCompile "io.github.cottonmc:cotton:"+project.ext.cotton
+	}
 	if (project.ext.jankson!=null) {
-		if (needsShadow) {
+		if (project.ext.needsShadow) {
 			//Jankson will be shadowed
 			shadow "blue.endless:jankson:"+project.ext.jankson;
 			implementation "blue.endless:jankson:"+project.ext.jankson;
@@ -138,16 +144,17 @@ publishing {
 					artifactNode.appendNode('version', it.moduleVersion)
 				}
 			}
+			def artifactEnding = (project.ext.needsShadow) ? "-shadow" : "";
 			artifacts = [
-				artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow.jar") { //release jar - file location not provided anywhere in loom
-					classifier null
-					builtBy remapJar
-				},
-				artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow-dev.jar") { //release jar - file location not provided anywhere in loom
-					classifier "dev"
-					builtBy remapJar
-				},
-				artifact (tasks.sourcesJar)
+					artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}" + artifactEnding + ".jar") { //release jar - file location not provided anywhere in loom
+						classifier null
+						builtBy remapJar
+					},
+					artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}" + artifactEnding + ".jar") { //release jar - file location not provided anywhere in loom
+						classifier "dev"
+						builtBy remapJar
+					},
+					artifact (tasks.sourcesJar)
 			]
 		}
 	}

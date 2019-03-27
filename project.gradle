@@ -1,7 +1,7 @@
 ext {
 	projectName = "cotton";
 	group = "io.github.cottonmc";
-	version = "0.0.6+19w12b";
+	version = "0.0.7+19w12b";
 	snapshot = true;
 
 	minecraft = "19w12b";
@@ -10,6 +10,7 @@ ext {
 	fabricMod = "0.2.5.114";
 	silkMod = null;
 	jankson = "1.1.1"; //If needsShadow is false, jankson will not be included!
+	cotton = null;
 
 	needsShadow = true;
 } 

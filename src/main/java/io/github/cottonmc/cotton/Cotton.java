@@ -2,10 +2,10 @@ package io.github.cottonmc.cotton;
 
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
-import io.github.cottonmc.cotton.datapack.loot.LootTableManager;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.datapack.PackMetaManager;
+import io.github.cottonmc.cotton.registry.CommonTags;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -39,6 +39,7 @@ public class Cotton implements ModInitializer {
 		config = ConfigManager.loadConfig(CottonConfig.class);
 		logger.info("Loaded config.");
 		PackMetaManager.saveMeta();
+		CommonTags.init();
 		//TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
 		//TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
 		//LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
