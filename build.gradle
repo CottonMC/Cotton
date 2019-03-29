@@ -92,6 +92,9 @@ dependencies {
 			System.out.println("#################################################################");
 		}
 	}
+	
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
 }
 
 task sourcesJar(type: Jar) {
@@ -197,4 +200,8 @@ artifactory {
 	} else {
 		println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
 	}
+}
+
+test {
+	useJUnitPlatform()
 }
