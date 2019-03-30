@@ -14,6 +14,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +28,8 @@ public final class FluidProperty extends AbstractProperty<FluidProperty.Wrapper>
 	private static final Set<Wrapper> VANILLA_FLUID_SET = Sets.newHashSet(FluidProperty.WATER, FluidProperty.LAVA, FluidProperty.EMPTY);
 	public static final FluidProperty VANILLA_FLUIDS = new FluidProperty("fluid", () -> VANILLA_FLUID_SET);
 	public static final FluidProperty ANY_FLUID = new FluidProperty("fluid");
+
+	private static final Pattern PROP_PATTERN = Pattern.compile("(?<count>\\d+$)");
 
 	private final Supplier<Collection<Wrapper>> fluids;
 
@@ -49,7 +53,7 @@ public final class FluidProperty extends AbstractProperty<FluidProperty.Wrapper>
 			throw new IllegalArgumentException("input must not be empty or null!");
 
 		try {
-			Identifier id = new Identifier(str);
+			Identifier id = propToId(str);
 			if (Registry.FLUID.containsId(id)) {
 				Wrapper fluid = new Wrapper(Registry.FLUID.get(id));
 				if (getValues().contains(fluid))
@@ -61,11 +65,21 @@ public final class FluidProperty extends AbstractProperty<FluidProperty.Wrapper>
 		return Optional.empty();
 	}
 
+	public static Identifier propToId(String str) {
+		Matcher matcher = PROP_PATTERN.matcher(str);
+
+		int namespaceLength = Integer.parseInt(matcher.group());
+		return new Identifier(str.substring(0, namespaceLength), str.substring(namespaceLength+1));
+	}
+
+	public static String idToProp(Identifier id) {
+		return id.toString().replace(':', '_') + "_" + id.getNamespace().length();
+	}
+
 	@Override
 	public String getValueAsString(Wrapper var1) {
-		// Requires MixinStateFactory
 		Identifier id = Registry.FLUID.getId(var1.get());
-		return id.toString();
+		return idToProp(id);
 	}
 
 	@Override
@@ -107,7 +121,8 @@ public final class FluidProperty extends AbstractProperty<FluidProperty.Wrapper>
 
 		@Override
 		public String toString() {
-			return Registry.FLUID.getId(get()).toString();
+			Identifier id = Registry.FLUID.getId(get());
+			return idToProp(id);
 		}
 	}
 }

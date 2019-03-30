@@ -4,7 +4,6 @@ import io.github.cottonmc.cotton.behavior.CauldronBehavior;
 import io.github.cottonmc.cotton.behavior.CauldronUtils;
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
-import io.github.cottonmc.cotton.impl.BucketFluidAccessor;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.datapack.PackMetaManager;
@@ -60,7 +59,7 @@ public class Cotton implements ModInitializer {
 		//example cauldron behavior code - lets you make obsidian in a cauldron
 		CauldronBehavior.registerBehavior(
 				(ctx) -> ctx.getStack().getItem() == Items.WATER_BUCKET
-						&& ctx.getCauldronFluid() == Fluids.LAVA
+						&& FluidTags.LAVA.contains(ctx.getCauldronFluid())
 						&& ctx.getCauldronLevel() == 3 && !ctx.getWorld().isClient(),
 				(ctx) -> {
 					PlayerEntity player = ctx.getPlayer();
@@ -77,7 +76,6 @@ public class Cotton implements ModInitializer {
 					}
 
 					ctx.getWorld().playSound(null, ctx.getPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCK, 1.0f, 1.0f);
-
 				}
 		);
 	}

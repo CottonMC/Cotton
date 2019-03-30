@@ -4,7 +4,6 @@ import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.behavior.CauldronBehavior;
 import io.github.cottonmc.cotton.behavior.CauldronContext;
 import io.github.cottonmc.cotton.behavior.CauldronUtils;
-import io.github.cottonmc.cotton.impl.BucketFluidAccessor;
 import io.github.cottonmc.cotton.util.FluidProperty;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -16,7 +15,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.IntegerProperty;
 import net.minecraft.tag.FluidTags;
@@ -145,7 +143,7 @@ public abstract class MixinCauldronBehavior extends Block implements FluidDraina
 	@Override
 	public boolean canFillWithFluid(BlockView view, BlockPos pos, BlockState state, Fluid fluid) {
 		//TODO: remove once we've got non-vanilla fluid compat
-		if (FluidProperty.VANILLA_FLUIDS.getValues().contains(new FluidProperty.Wrapper(fluid))) return false;
+		if (!FluidProperty.VANILLA_FLUIDS.getValues().contains(new FluidProperty.Wrapper(fluid))) return false;
 		return CauldronUtils.canPlaceFluid(state, new FluidProperty.Wrapper(fluid));
 	}
 
