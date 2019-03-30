@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "mixins.cotton.refmap.json",
   "mixins": [
-    "MixinDataPackLoad"
+    "MixinDataPackLoad",
+    "MixinCauldronBehavior"
   ],
   "injectors": {
     "defaultRequire": 1
