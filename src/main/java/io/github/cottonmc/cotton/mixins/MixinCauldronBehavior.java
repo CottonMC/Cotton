@@ -44,7 +44,7 @@ public abstract class MixinCauldronBehavior extends Block implements FluidDraina
 	@Shadow
 	@Final
 	public static IntegerProperty LEVEL;
-	private static final FluidProperty FLUID = FluidProperty.VANILLA_FLUIDS;
+	private static final FluidProperty FLUID = FluidProperty.ANY_FLUID;
 
 	MixinCauldronBehavior(Settings settings) {
 		super(settings);
