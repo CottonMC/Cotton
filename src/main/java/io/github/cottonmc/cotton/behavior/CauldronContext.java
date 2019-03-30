@@ -68,6 +68,6 @@ public class CauldronContext {
 	}
 
 	public Fluid getCauldronFluid() {
-		return state.get(FluidProperty.VANILLA_FLUIDS).getFluid();
+		return state.get(FluidProperty.ANY_FLUID).getFluid();
 	}
 }
