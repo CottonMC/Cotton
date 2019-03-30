@@ -5,7 +5,10 @@
   "refmap": "mixins.cotton.refmap.json",
   "mixins": [
     "MixinDataPackLoad",
-    "MixinCauldronBehavior"
+    "MixinCauldronBehavior",
+    "MixinStateFactory",
+    "MixinEntity",
+    "MixinBucketItem"
   ],
   "injectors": {
     "defaultRequire": 1

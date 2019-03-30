@@ -1,9 +1,11 @@
 package io.github.cottonmc.cotton.behavior;
 
 import blue.endless.jankson.annotation.Nullable;
+import io.github.cottonmc.cotton.util.FluidProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -63,5 +65,9 @@ public class CauldronContext {
 
 	public ItemStack getStack() {
 		return stack;
+	}
+
+	public Fluid getCauldronFluid() {
+		return state.get(FluidProperty.VANILLA_FLUIDS).getFluid();
 	}
 }
