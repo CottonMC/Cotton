@@ -29,8 +29,6 @@ public final class FluidProperty extends AbstractProperty<FluidProperty.Wrapper>
 	public static final FluidProperty VANILLA_FLUIDS = new FluidProperty("fluid", () -> VANILLA_FLUID_SET);
 	public static final FluidProperty ANY_FLUID = new FluidProperty("fluid");
 
-	private static final Pattern PROP_PATTERN = Pattern.compile("(?<count>\\d+$)");
-
 	private final Supplier<Collection<Wrapper>> fluids;
 
 	public FluidProperty(String var1, Supplier<Collection<Wrapper>> fluids) {
@@ -66,10 +64,15 @@ public final class FluidProperty extends AbstractProperty<FluidProperty.Wrapper>
 	}
 
 	public static Identifier propToId(String str) {
-		Matcher matcher = PROP_PATTERN.matcher(str);
-
-		int namespaceLength = Integer.parseInt(matcher.group());
-		return new Identifier(str.substring(0, namespaceLength), str.substring(namespaceLength+1));
+		int underscoreIndex = str.lastIndexOf('_');
+		if (underscoreIndex == -1) return new Identifier("minecraft", "empty");
+		int namespaceLength = 0;
+		try {
+			namespaceLength = Integer.parseInt(str.substring(underscoreIndex + 1));
+		} catch (NumberFormatException e) {
+			return new Identifier("minecraft", "empty");
+		}
+		return new Identifier(str.substring(0, namespaceLength), str.substring(namespaceLength+1, underscoreIndex));
 	}
 
 	public static String idToProp(Identifier id) {
