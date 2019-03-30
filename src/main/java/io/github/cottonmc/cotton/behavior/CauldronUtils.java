@@ -12,7 +12,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 public class CauldronUtils {
-	private static final FluidProperty FLUID = FluidProperty.VANILLA_FLUIDS;
+	private static final FluidProperty FLUID = FluidProperty.ANY_FLUID;
 	private static final IntegerProperty LEVEL = CauldronBlock.LEVEL;
 
 	public static boolean canPlaceFluid(BlockState state, FluidProperty.Wrapper fluid) {
@@ -43,5 +43,16 @@ public class CauldronUtils {
 		}
 
 		return Fluids.EMPTY;
+	}
+
+	public static boolean tryDrainFluid(IWorld world, BlockPos pos, BlockState state) {
+		int level = state.get(LEVEL);
+
+		if (level > 0) {
+			world.setBlockState(pos, state.with(LEVEL, level - 1), 3);
+			setFluidFromLevel(world, pos);
+			return true;
+		}
+		return false;
 	}
 }
