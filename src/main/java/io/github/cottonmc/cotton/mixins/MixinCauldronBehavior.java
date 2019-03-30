@@ -1,13 +1,12 @@
 package io.github.cottonmc.cotton.mixins;
 
+import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.behavior.CauldronBehavior;
 import io.github.cottonmc.cotton.behavior.CauldronContext;
+import io.github.cottonmc.cotton.behavior.CauldronUtils;
 import io.github.cottonmc.cotton.impl.BucketFluidAccessor;
 import io.github.cottonmc.cotton.util.FluidProperty;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CauldronBlock;
-import net.minecraft.block.FluidDrainable;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.BaseFluid;
@@ -24,13 +23,12 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -44,7 +42,7 @@ import java.util.function.Predicate;
  * (that's why this is using only vanilla fluids). We should be able to use
  * the fluid renderer to render any fluid in the future. */
 @Mixin(CauldronBlock.class)
-public abstract class MixinCauldronBehavior extends Block implements FluidDrainable {
+public abstract class MixinCauldronBehavior extends Block implements FluidDrainable, FluidFillable {
 	@Shadow
 	@Final
 	public static IntegerProperty LEVEL;
@@ -83,7 +81,7 @@ public abstract class MixinCauldronBehavior extends Block implements FluidDraina
 
 	@Inject(method = "setLevel", at = @At("HEAD"), cancellable = true)
 	private void setLevel(World world, BlockPos pos, BlockState state, int level, CallbackInfo info) {
-		if (!canPlaceFluid(state, FluidProperty.WATER))
+		if (!CauldronUtils.canPlaceFluid(state, FluidProperty.WATER))
 			info.cancel();
 	}
 
@@ -93,13 +91,13 @@ public abstract class MixinCauldronBehavior extends Block implements FluidDraina
 	}
 
 	@Inject(at = @At("HEAD"), method = "activate", cancellable = true)
-	private void onActivateHead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<Boolean> info) {
+	private void onActivateHead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<Boolean> cir) {
 		ItemStack stack = player.getStackInHand(hand);
 
 		// Skip the vanilla bucket code
 		if (stack.getItem() == Items.BUCKET) {
-			info.setReturnValue(false);
-			info.cancel();
+			cir.setReturnValue(false);
+			cir.cancel();
 			return;
 		}
 
@@ -109,69 +107,25 @@ public abstract class MixinCauldronBehavior extends Block implements FluidDraina
 			if (pred.test(ctx)) {
 				CauldronBehavior behavior = CauldronBehavior.BEHAVIORS.get(pred);
 				behavior.interact(ctx);
-				info.setReturnValue(true);
+				cir.setReturnValue(true);
 				return;
 			}
 		}
 
 		// Item destruction with lava
 		// Must be on HEAD, otherwise item cleaning etc is done and lava turns into water
+		// Must also not be a registered cauldron behavior, otherwise it'd override anything anyone else would wanna do with lava
 		int lavaLevel = state.get(FLUID).getFluid().matches(FluidTags.LAVA) ? state.get(LEVEL) : 0;
 
-		if (lavaLevel == 0 || stack.getItem() instanceof BucketItem)
+		if (lavaLevel == 0 || stack.getItem() instanceof BucketItem || !Cotton.config.cauldronTrashCan)
 			return;
 
 		stack.subtractAmount(1);
 		world.playSound(player, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCK, 1f, 1f);
 		world.setBlockState(pos, state.with(LEVEL, lavaLevel - 1));
-		setFluidFromLevel(world, pos);
-		info.setReturnValue(true);
-		info.cancel();
-	}
-
-	@Inject(at = @At("RETURN"), method = "activate", cancellable = true)
-	private void onActivateReturn(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<Boolean> info) {
-		ItemStack stack = player.getStackInHand(hand);
-		int var11 = state.get(LEVEL);
-		Item item = stack.getItem();
-		if (!info.getReturnValue() && item instanceof BucketItem && ((BucketFluidAccessor) item).cotton_getFluid() != Fluids.EMPTY &&
-				canPlaceFluid(state, new FluidProperty.Wrapper(((BucketFluidAccessor) item).cotton_getFluid()))) {
-			if (var11 < 3 && !world.isClient) {
-				if (!player.abilities.creativeMode) {
-					player.setStackInHand(hand, new ItemStack(Items.BUCKET));
-				}
-
-				player.increaseStat(Stats.FILL_CAULDRON);
-				placeFluid(world, pos, state, 3, new FluidProperty.Wrapper(((BucketFluidAccessor) item).cotton_getFluid()));
-				if (((BucketFluidAccessor) item).cotton_getFluid().matches(FluidTags.LAVA)) {
-					world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY_LAVA, SoundCategory.BLOCK, 1.0F, 1.0F);
-				} else {
-					world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCK, 1.0F, 1.0F);
-				}
-			}
-
-			info.setReturnValue(true);
-		}
-	}
-
-	@Unique
-	private boolean canPlaceFluid(BlockState state, FluidProperty.Wrapper fluid) {
-		Fluid blockFluid = state.get(FLUID).getFluid();
-		Fluid bucketFluid = fluid.getFluid();
-
-		return blockFluid.matchesType(bucketFluid) || blockFluid == Fluids.EMPTY;
-	}
-
-	@Unique
-	private void placeFluid(World var1, BlockPos var2, BlockState var3, int var4, FluidProperty.Wrapper fluid) {
-		var1.setBlockState(var2, var3.with(LEVEL, MathHelper.clamp(var4, 0, 3)).with(FLUID, fluid), 2);
-		var1.updateHorizontalAdjacent(var2, (Block) (Object) this);
-	}
-
-	@Unique
-	private void setFluidFromLevel(IWorld world, BlockPos pos) {
-		BlockState state = world.getBlockState(pos);
-		world.setBlockState(pos, state.with(FLUID, state.get(LEVEL) == 0 ? FluidProperty.EMPTY : state.get(FLUID)), 3);
+		CauldronUtils.setFluidFromLevel(world, pos);
+		cir.setReturnValue(true);
+		cir.cancel();
 	}
 
 	@Override
@@ -181,11 +135,24 @@ public abstract class MixinCauldronBehavior extends Block implements FluidDraina
 
 		if (level == 3) {
 			world.setBlockState(pos, state.with(LEVEL, 0), 3);
-			setFluidFromLevel(world, pos);
+			CauldronUtils.setFluidFromLevel(world, pos);
 			return fluid;
 		}
 
 		return Fluids.EMPTY;
+	}
+
+	@Override
+	public boolean canFillWithFluid(BlockView view, BlockPos pos, BlockState state, Fluid fluid) {
+		//TODO: remove once we've got non-vanilla fluid compat
+		if (FluidProperty.VANILLA_FLUIDS.getValues().contains(new FluidProperty.Wrapper(fluid))) return false;
+		return CauldronUtils.canPlaceFluid(state, new FluidProperty.Wrapper(fluid));
+	}
+
+	@Override
+	public boolean tryFillWithFluid(IWorld world, BlockPos pos, BlockState state, FluidState fluidState) {
+		CauldronUtils.placeFluid(world.getWorld(), pos, state, 3, new FluidProperty.Wrapper(fluidState.getFluid()));
+		return true;
 	}
 
 	@Override

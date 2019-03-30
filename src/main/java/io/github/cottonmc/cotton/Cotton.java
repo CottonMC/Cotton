@@ -1,7 +1,10 @@
 package io.github.cottonmc.cotton;
 
+import io.github.cottonmc.cotton.behavior.CauldronBehavior;
+import io.github.cottonmc.cotton.behavior.CauldronUtils;
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
+import io.github.cottonmc.cotton.impl.BucketFluidAccessor;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.datapack.PackMetaManager;
@@ -10,9 +13,16 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.*;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.io.File;
 
@@ -33,15 +43,42 @@ public class Cotton implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		//setup
 		logger.setPrefixFormat(Ansi.Blue);
+		PackMetaManager.saveMeta();
 
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);
 		logger.info("Loaded config.");
-		PackMetaManager.saveMeta();
+
+		//example datapack manager code
 		CommonTags.init();
-		//TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
-		//TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
-		//LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
+//		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
+//		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
+//		LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
+
+		//example cauldron behavior code - lets you make obsidian in a cauldron
+		CauldronBehavior.registerBehavior(
+				(ctx) -> ctx.getStack().getItem() == Items.WATER_BUCKET
+						&& ctx.getCauldronFluid() == Fluids.LAVA
+						&& ctx.getCauldronLevel() == 3 && !ctx.getWorld().isClient(),
+				(ctx) -> {
+					PlayerEntity player = ctx.getPlayer();
+					World world = ctx.getWorld();
+					BlockPos pos = ctx.getPos();
+					if (!player.abilities.creativeMode) {
+						player.setStackInHand(ctx.getHand(), new ItemStack(Items.BUCKET));
+						player.increaseStat(Stats.USE_CAULDRON);
+						CauldronUtils.tryEmptyFluid(world, pos, ctx.getState());
+						ItemStack obsidian = new ItemStack(Items.OBSIDIAN);
+						if (!player.inventory.insertStack(obsidian)) {
+							player.dropItem(obsidian, false);
+						}
+					}
+
+					ctx.getWorld().playSound(null, ctx.getPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCK, 1.0f, 1.0f);
+
+				}
+		);
 	}
 }

@@ -16,4 +16,7 @@ public class CottonConfig {
             + "Intended for pack devs dealing with mods not using common tags.")
     public boolean fillCommonTags = false;
 
+    @Comment("Make it so that right-clicking a cauldron that has lava in it will void a non-bucket item in your hand.")
+    public boolean cauldronTrashCan = false;
+
 }
