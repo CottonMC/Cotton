@@ -6,7 +6,6 @@
   "mixins": [
     "MixinDataPackLoad",
     "MixinCauldronBehavior",
-    "MixinStateFactory",
     "MixinEntity",
     "MixinBucketItem"
   ],
