@@ -28,7 +28,7 @@ public class RecipeUtil {
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			Cotton.logger.warn("Failed to remove loot table " + id.toString() + ": " + e);
+			Cotton.logger.warn("Failed to remove recipe " + id.toString() + ": " + e);
 		}
 	}
 

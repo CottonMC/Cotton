@@ -61,6 +61,11 @@ archivesBaseName = ext.projectName;
 group = ext.group;
 version = ext.version + ((ext.snapshot) ? "-SNAPSHOT" : "");
 
+
+minecraft {
+	refmapName = 'mixins.cotton.refmap.json'
+}
+
 repositories {
 	mavenCentral()
 	maven {
