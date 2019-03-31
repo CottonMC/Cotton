@@ -4,6 +4,8 @@ import io.github.cottonmc.cotton.behavior.CauldronBehavior;
 import io.github.cottonmc.cotton.behavior.CauldronUtils;
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
+import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
+import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.datapack.PackMetaManager;
@@ -44,6 +46,7 @@ public class Cotton implements ModInitializer {
 		//setup
 		logger.setPrefixFormat(Ansi.Blue);
 		PackMetaManager.saveMeta();
+		CottonRecipes.init();
 
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);
@@ -54,6 +57,7 @@ public class Cotton implements ModInitializer {
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
 //		LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
+		RecipeUtil.removeRecipe(new Identifier("crafting_table"));
 
 		//example cauldron behavior code - lets you make obsidian in a cauldron
 		CauldronBehavior.registerBehavior(
