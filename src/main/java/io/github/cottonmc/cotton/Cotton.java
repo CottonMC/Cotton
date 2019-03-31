@@ -57,29 +57,29 @@ public class Cotton implements ModInitializer {
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
 //		LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
-		RecipeUtil.removeRecipe(new Identifier("crafting_table"));
+//		RecipeUtil.removeRecipe(new Identifier("crafting_table"));
 
 		//example cauldron behavior code - lets you make obsidian in a cauldron
-		CauldronBehavior.registerBehavior(
-				(ctx) -> ctx.getStack().getItem() == Items.WATER_BUCKET
-						&& FluidTags.LAVA.contains(ctx.getCauldronFluid())
-						&& ctx.getCauldronLevel() == 3 && !ctx.getWorld().isClient(),
-				(ctx) -> {
-					PlayerEntity player = ctx.getPlayer();
-					World world = ctx.getWorld();
-					BlockPos pos = ctx.getPos();
-					if (!player.abilities.creativeMode) {
-						player.setStackInHand(ctx.getHand(), new ItemStack(Items.BUCKET));
-						player.increaseStat(Stats.USE_CAULDRON);
-						CauldronUtils.tryEmptyFluid(world, pos, ctx.getState());
-						ItemStack obsidian = new ItemStack(Items.OBSIDIAN);
-						if (!player.inventory.insertStack(obsidian)) {
-							player.dropItem(obsidian, false);
-						}
-					}
-
-					ctx.getWorld().playSound(null, ctx.getPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCK, 1.0f, 1.0f);
-				}
-		);
+//		CauldronBehavior.registerBehavior(
+//				(ctx) -> ctx.getStack().getItem() == Items.WATER_BUCKET
+//						&& FluidTags.LAVA.contains(ctx.getCauldronFluid())
+//						&& ctx.getCauldronLevel() == 3 && !ctx.getWorld().isClient(),
+//				(ctx) -> {
+//					PlayerEntity player = ctx.getPlayer();
+//					World world = ctx.getWorld();
+//					BlockPos pos = ctx.getPos();
+//					if (!player.abilities.creativeMode) {
+//						player.setStackInHand(ctx.getHand(), new ItemStack(Items.BUCKET));
+//						player.increaseStat(Stats.USE_CAULDRON);
+//						CauldronUtils.tryEmptyFluid(world, pos, ctx.getState());
+//						ItemStack obsidian = new ItemStack(Items.OBSIDIAN);
+//						if (!player.inventory.insertStack(obsidian)) {
+//							player.dropItem(obsidian, false);
+//						}
+//					}
+//
+//					ctx.getWorld().playSound(null, ctx.getPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCK, 1.0f, 1.0f);
+//				}
+//		);
 	}
 }
