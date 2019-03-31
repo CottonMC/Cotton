@@ -33,7 +33,7 @@ public abstract class MixinEntity {
 		if (!info.getReturnValue()) {
 			BlockState state = world.getBlockState(getBlockPos());
 			boolean insideLavaCauldron = state.getBlock() instanceof CauldronBlock &&
-					state.get(FluidProperty.VANILLA_FLUIDS).getFluid() == Fluids.LAVA;
+					state.get(FluidProperty.ANY_FLUID).getFluid() == Fluids.LAVA;
 			boolean insideLavaFluidState = state.getFluidState().getFluid() == Fluids.LAVA;
 			info.setReturnValue(insideLavaCauldron || insideLavaFluidState);
 		}
@@ -46,7 +46,7 @@ public abstract class MixinEntity {
 		BlockState state = world.getBlockState(pos);
 
 		if (state.getBlock() instanceof CauldronBlock) {
-			Fluid fluid = state.get(FluidProperty.VANILLA_FLUIDS).getFluid();
+			Fluid fluid = state.get(FluidProperty.ANY_FLUID).getFluid();
 
 			if (fluid instanceof BaseFluid)
 				return ((BaseFluid) fluid).getStill().getDefaultState();
