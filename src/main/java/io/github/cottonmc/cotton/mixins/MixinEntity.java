@@ -1,5 +1,6 @@
 package io.github.cottonmc.cotton.mixins;
 
+import io.github.cottonmc.cotton.cauldron.StoneCauldronBlock;
 import io.github.cottonmc.cotton.util.FluidProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CauldronBlock;
@@ -32,7 +33,7 @@ public abstract class MixinEntity {
 	private void isTouchingLava(CallbackInfoReturnable<Boolean> info) {
 		if (!info.getReturnValue()) {
 			BlockState state = world.getBlockState(getBlockPos());
-			boolean insideLavaCauldron = state.getBlock() instanceof CauldronBlock &&
+			boolean insideLavaCauldron = state.getBlock() instanceof StoneCauldronBlock &&
 					state.get(FluidProperty.ANY_FLUID).getFluid() == Fluids.LAVA;
 			boolean insideLavaFluidState = state.getFluidState().getFluid() == Fluids.LAVA;
 			info.setReturnValue(insideLavaCauldron || insideLavaFluidState);
@@ -45,7 +46,7 @@ public abstract class MixinEntity {
 		// it would result in a waterlogged-like look
 		BlockState state = world.getBlockState(pos);
 
-		if (state.getBlock() instanceof CauldronBlock) {
+		if (state.getBlock() instanceof StoneCauldronBlock) {
 			Fluid fluid = state.get(FluidProperty.ANY_FLUID).getFluid();
 
 			if (fluid instanceof BaseFluid)

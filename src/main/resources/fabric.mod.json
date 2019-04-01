@@ -4,7 +4,8 @@
   "version": "0.1.2",
   "side": "universal",
   "initializers": [
-    "io.github.cottonmc.cotton.Cotton"
+    "io.github.cottonmc.cotton.Cotton",
+    "io.github.cottonmc.cotton.CottonClient"
   ],
   "mixins": {
     "common": "cotton.common.json"

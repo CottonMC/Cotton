@@ -1,11 +1,13 @@
-package io.github.cottonmc.cotton.behavior;
+package io.github.cottonmc.cotton.cauldron;
 
 import blue.endless.jankson.annotation.Nullable;
 import io.github.cottonmc.cotton.util.FluidProperty;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -68,6 +70,7 @@ public class CauldronContext {
 	}
 
 	public Fluid getCauldronFluid() {
+		if (state.getBlock() == Blocks.CAULDRON) return state.get(CauldronBlock.LEVEL) == 0? Fluids.EMPTY : Fluids.WATER;
 		return state.get(FluidProperty.ANY_FLUID).getFluid();
 	}
 }

@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.behavior;
+package io.github.cottonmc.cotton.cauldron;
 
 import java.util.HashMap;
 import java.util.Map;

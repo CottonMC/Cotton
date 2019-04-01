@@ -1,11 +1,11 @@
 {
-    "ambientocclusion": false,
+    "ambientocclusion": true,
     "textures": {
-        "particle": "block/cauldron_side",
-        "top": "block/cauldron_top",
-        "bottom": "block/cauldron_bottom",
-        "side": "block/cauldron_side",
-        "inside": "block/cauldron_inner",
+        "particle": "cotton:block/stone_cauldron_side",
+        "top": "cotton:block/stone_cauldron_top",
+        "bottom": "cotton:block/stone_cauldron_bottom",
+        "side": "cotton:block/stone_cauldron_side",
+        "inside": "cotton:block/stone_cauldron_inner",
         "water": "block/lava_still"
     },
     "elements": [

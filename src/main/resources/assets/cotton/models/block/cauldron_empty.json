@@ -5,8 +5,7 @@
         "top": "cotton:block/stone_cauldron_top",
         "bottom": "cotton:block/stone_cauldron_bottom",
         "side": "cotton:block/stone_cauldron_side",
-        "inside": "cotton:block/stone_cauldron_inner",
-        "water": "block/lava_still"
+        "inside": "cotton:block/stone_cauldron_inner"
     },
     "elements": [
         {   "from": [ 0, 3, 0 ],
@@ -150,13 +149,6 @@
                 "south": { "texture": "#side" },
                 "west":  { "texture": "#side" },
                 "east":  { "texture": "#side" }
-            }
-        },
-        {   "from": [ 2, 15, 2 ],
-            "to": [ 14, 15, 14 ],
-            "shade": false,
-            "faces": {
-                "up": { "texture": "#water" }
             }
         }
     ]

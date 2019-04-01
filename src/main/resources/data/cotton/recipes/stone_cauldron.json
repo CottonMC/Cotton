@@ -1,0 +1,23 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "# #",
+    "# #",
+    "|_|"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stone"
+    },
+    "_": {
+      "item": "minecraft:smooth_stone_slab"
+    },
+    "|": {
+      "item": "minecraft:stone_wall"
+    }
+  },
+  "result": {
+    "item": "cotton:stone_cauldron",
+    "count": 1
+  }
+}

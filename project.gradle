@@ -1,14 +1,14 @@
 ext {
 	projectName = "cotton";
 	group = "io.github.cottonmc";
-	version = "0.2.1+19w13b";
+	version = "0.3.0+19w13b";
 	snapshot = true;
 
 	minecraft = "19w13b";
 	mappings = "19w13b.1";
 	loader = "0.3.7.109";
 	fabricMod = "0.2.6.117";
-	silkMod = null;
+	silkMod = null; // change if we ever decide to make the stone cauldron a BE
 	jankson = "1.1.1"; //If needsShadow is false, jankson will not be included!
 	cotton = null;
 
