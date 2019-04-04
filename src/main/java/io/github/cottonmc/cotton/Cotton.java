@@ -1,24 +1,24 @@
 package io.github.cottonmc.cotton;
 
-import io.github.cottonmc.cotton.block.CottonBlocks;
+import io.github.cottonmc.cotton.cauldron.Cauldron;
 import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
-import io.github.cottonmc.cotton.cauldron.CauldronUtils;
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
 import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
-import io.github.cottonmc.cotton.impl.BucketFluidAccessor;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.datapack.PackMetaManager;
 import io.github.cottonmc.cotton.registry.CommonTags;
-import io.github.cottonmc.cotton.util.FluidProperty;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -49,7 +49,6 @@ public class Cotton implements ModInitializer {
 		//setup
 		logger.setPrefixFormat(Ansi.Blue);
 		PackMetaManager.saveMeta();
-		CottonBlocks.init();
 		CottonRecipes.init();
 
 		//example config and logger code
@@ -63,22 +62,33 @@ public class Cotton implements ModInitializer {
 //		LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
 //		RecipeUtil.removeRecipe(new Identifier("crafting_table"));
 
-		//example cauldron behavior code - lets you fill a stone cauldron with fluid
-		CauldronBehavior.registerBehavior(
-				(ctx) -> ctx.getStack().getItem() instanceof BucketItem
-						&& ctx.getStack().getItem() != Items.BUCKET
-						&& CauldronUtils.canPlaceFluid(ctx.getState(), new FluidProperty.Wrapper(((BucketFluidAccessor)ctx.getStack().getItem()).cotton_getFluid()))
-						&& ctx.getCauldronLevel() == 3 && !ctx.getWorld().isClient(),
-				(ctx) -> {
-					PlayerEntity player = ctx.getPlayer();
-					World world = ctx.getWorld();
-					BlockPos pos = ctx.getPos();
-					player.increaseStat(Stats.USE_CAULDRON);
-					FluidProperty.Wrapper fluid = new FluidProperty.Wrapper(((BucketFluidAccessor)ctx.getStack().getItem()).cotton_getFluid());
-					CauldronUtils.placeFluid(world, pos, ctx.getState(), 3, fluid);
-					if (!player.abilities.creativeMode) player.setStackInHand(ctx.getHand(), new ItemStack(Items.BUCKET));
-					ctx.getWorld().playSound(null, ctx.getPos(), fluid.getFluid() == Fluids.LAVA ? SoundEvents.ITEM_BUCKET_EMPTY_LAVA : SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCK, 1.0f, 1.0f);
-				}
-		);
+		//example cauldron behavior code - turns a sponge into a wet sponge
+//		CauldronBehavior.registerBehavior(
+//				(ctx) -> ctx.getStack().getItem() == Items.SPONGE
+//						&& FluidTags.WATER.contains(ctx.getFluid())
+//						&& ctx.getLevel() == 3
+//						&& ctx.getPreviousItems().isEmpty()
+//						&& !ctx.getWorld().isClient(),
+//				(ctx) -> {
+//					PlayerEntity player = ctx.getPlayer();
+//					World world = ctx.getWorld();
+//					BlockPos pos = ctx.getPos();
+//					ItemStack stack = ctx.getStack();
+//					if (!player.abilities.creativeMode) {
+//						ItemStack sponge = new ItemStack(Items.WET_SPONGE);
+//						player.increaseStat(Stats.USE_CAULDRON);
+//						stack.subtractAmount(1);
+//						if (stack.isEmpty()) {
+//							player.setStackInHand(ctx.getHand(), sponge);
+//						} else if (!player.inventory.insertStack(sponge)) {
+//							player.dropItem(sponge, false);
+//						} else if (player instanceof ServerPlayerEntity) {
+//							((ServerPlayerEntity)player).method_14204(player.playerContainer);
+//						}
+//					}
+//					ctx.getWorld().playSound(null, ctx.getPos(), SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCK, 1.0f, 1.0f);
+//					((Cauldron)ctx.getState().getBlock()).drain(world, pos, ctx.getState(), Fluids.WATER, 3);
+//				}
+//		);
 	}
 }

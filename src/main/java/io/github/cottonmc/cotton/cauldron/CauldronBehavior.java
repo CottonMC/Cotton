@@ -13,9 +13,9 @@ public interface CauldronBehavior {
 	}
 
 	/**
-	 * Interact with a cauldron, given the specific context
-	 * @param ctx the {@link CauldronContext} to interact using
+	 * Perform a reaction, given the specific context
+	 * @param ctx the {@link CauldronContext} to react using
 	 */
-	void interact(CauldronContext ctx);
+	void react(CauldronContext ctx);
 
 }
