@@ -26,6 +26,6 @@
     "fabric": "*"
   },
   "custom": {
-	  "modmenu:api": true
+    "modmenu:api": true
   }
 }
