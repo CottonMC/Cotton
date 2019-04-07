@@ -1,16 +1,28 @@
 {
+  "schemaVersion": 1,
   "id": "cotton",
+  "version": "$version",
+
   "name": "Cotton",
-  "version": "0.4.0",
-  "side": "universal",
-  "initializers": [
-    "io.github.cottonmc.cotton.Cotton"
+  "icon": "assets/cotton/icon.png",
+  "description": "Common materials for inter-compatibility and ease of use.",
+  "licence": "MIT",
+  "contact": {
+    "maven": "http://server.bbkr.space:8081/artifactory/libs-snapshot/io/github/cottonmc/cotton/",
+    "sources": "https://github.com/CottonMC/coton"
+  },
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.cottonmc.cotton.Cotton"
+    ]
+  },
+  "mixins": [
+    "cotton.common.json"
   ],
-  "mixins": {
-    "common": "cotton.common.json"
-  },
   "requires": {
+    "fabricloader": ">=0.4.0",
     "fabric": "*"
-  },
-  "description": "Common materials for inter-compatibility and ease of use."
+  }
 }

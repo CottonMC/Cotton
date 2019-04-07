@@ -102,6 +102,17 @@ dependencies {
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
 }
 
+processResources {
+    inputs.property "version", project.ext.version;
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json";
+		expand version: project.ext.version;
+	}
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json";
+	}
+}
+
 task sourcesJar(type: Jar) {
 	baseName = archivesBaseName
 	classifier = "sources"

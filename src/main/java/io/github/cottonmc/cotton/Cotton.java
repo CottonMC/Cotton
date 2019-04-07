@@ -1,7 +1,5 @@
 package io.github.cottonmc.cotton;
 
-import io.github.cottonmc.cotton.cauldron.Cauldron;
-import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.config.CottonConfig;
 import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
@@ -13,19 +11,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.io.File;
 
