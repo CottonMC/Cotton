@@ -29,11 +29,13 @@ import static net.minecraft.util.JsonHelper.*;
  *     "ingredient": {
  *         "item": "minecraft:iron_ore"
  *     },
+ *     "processtime": 200,
+ *     "experience": 0.35,
  *     "result": {
  *         "item": "example:iron_dust",
  *         "count": 2
  *     },
- *     "bonus_loot_table": "example:iron_ore_to_dust_bonuses"
+ *     "bonus": "example:iron_ore_to_dust_bonuses"
  * }
  *
  * @see CrushingRecipe for an example implementation
@@ -133,9 +135,9 @@ public abstract class ProcessingRecipe implements Recipe<Inventory> {
 
 			ItemStack output = ShapedRecipe.getItemStack(getObject(jsonObject, "result"));
 			float exp = getFloat(jsonObject, "experience", 0.0F);
-			int processTime = getInt(jsonObject, "processing_time", this.defaultProcessTime);
+			int processTime = getInt(jsonObject, "processtime", this.defaultProcessTime);
 
-			String bonusLoot = getString(jsonObject, "bonus_loot_table", null);
+			String bonusLoot = getString(jsonObject, "bonus", null);
 			Identifier bonusLootId = bonusLoot == null ? null : Identifier.create(bonusLoot);
 
 			return factory.create(id, input, output, exp, processTime, bonusLootId);
