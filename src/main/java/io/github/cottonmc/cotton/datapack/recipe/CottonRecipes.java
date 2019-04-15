@@ -13,7 +13,7 @@ public class CottonRecipes {
 	public static final RecipeSerializer<NullRecipe> NULL_SERIALIZER = register("null", new SpecialRecipeSerializer<>(NullRecipe::new));
 
 	public static final RecipeType<CrushingRecipe> CRUSHING_RECIPE = register("crushing");
-	public static final RecipeSerializer<CrushingRecipe> CRUSHING_SERIALIZER = register("crushing", new CookingWithBonusRecipe.Serializer<>(CrushingRecipe::new, 100));
+	public static final RecipeSerializer<CrushingRecipe> CRUSHING_SERIALIZER = register("crushing", new ProcessingRecipe.Serializer<>(CrushingRecipe::new, 100));
 
 	public static <T extends Recipe<?>> RecipeType<T> register(String id) {
 		return Registry.register(Registry.RECIPE_TYPE, new Identifier(Cotton.SHARED_NAMESPACE, id), new RecipeType<T>() {

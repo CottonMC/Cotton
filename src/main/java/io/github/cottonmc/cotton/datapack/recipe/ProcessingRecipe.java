@@ -1,14 +1,16 @@
 package io.github.cottonmc.cotton.datapack.recipe;
 
 import com.google.gson.JsonObject;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.cooking.CookingRecipe;
 import net.minecraft.recipe.crafting.ShapedRecipe;
+import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
+import net.minecraft.world.World;
 import net.minecraft.world.loot.LootManager;
 import net.minecraft.world.loot.context.LootContext;
 
@@ -36,17 +38,58 @@ import static net.minecraft.util.JsonHelper.*;
  *
  * @see CrushingRecipe for an example implementation
  */
-public abstract class CookingWithBonusRecipe extends CookingRecipe {
+public abstract class ProcessingRecipe implements Recipe<Inventory> {
 
-	private final Identifier bonusLootTable;
+	protected final Identifier id;
+	protected final Ingredient input;
+	protected final ItemStack output;
+	protected final float exp;
+	protected final int processTime;
+	protected final Identifier bonusLootTable;
 
-	public CookingWithBonusRecipe(RecipeType<?> type, Identifier id, String group, Ingredient input, ItemStack output, float exp, int cookingTime, Identifier bonusLootTable) {
-		super(type, id, group, input, output, exp, cookingTime);
+	public ProcessingRecipe(Identifier id, Ingredient input, ItemStack output, float exp, int processTime, Identifier bonusLootTable) {
+		this.id = id;
+		this.input = input;
+		this.output = output;
+		this.exp = exp;
+		this.processTime = processTime;
 		this.bonusLootTable = bonusLootTable;
+	}
+
+	@Override
+	public Identifier getId() {
+		return id;
+	}
+
+	public Ingredient getInput() {
+		return input;
+	}
+
+	@Override
+	public ItemStack getOutput() {
+		return output;
+	}
+
+	public float getExperience() {
+		return exp;
+	}
+
+	public int getProcessTime() {
+		return processTime;
 	}
 
 	public Identifier getBonusLootTable() {
 		return bonusLootTable;
+	}
+
+	@Override
+	public boolean matches(Inventory inventory, World world) {
+		return input.method_8093(inventory.getInvStack(0));
+	}
+
+	@Override
+	public ItemStack craft(Inventory inventory) {
+		return output.copy();
 	}
 
 	public List<ItemStack> craftBonus(LootManager lootManager, LootContext lootContext) {
@@ -55,25 +98,33 @@ public abstract class CookingWithBonusRecipe extends CookingRecipe {
 		return lootManager.getSupplier(bonusLootTable).getDrops(lootContext);
 	}
 
-	@FunctionalInterface
-	public interface Factory<R extends CookingWithBonusRecipe> {
-		R create(Identifier id, String group, Ingredient input, ItemStack output, float exp, int cookingTime, Identifier bonusLootTable);
+	@Override
+	public boolean fits(int w, int h) {
+		return w >= 1 && h >= 1;
 	}
 
-	public static class Serializer<R extends CookingWithBonusRecipe> implements RecipeSerializer<R> {
+	@Override
+	public DefaultedList<Ingredient> getPreviewInputs() {
+		return DefaultedList.create(1, input);
+	}
+
+	@FunctionalInterface
+	public interface Factory<R extends ProcessingRecipe> {
+		R create(Identifier id, Ingredient input, ItemStack output, float exp, int processTime, Identifier bonusLootTable);
+	}
+
+	public static class Serializer<R extends ProcessingRecipe> implements RecipeSerializer<R> {
 
 		private final Factory<R> factory;
-		private final int defaultCookTime;
+		private final int defaultProcessTime;
 
-		public Serializer(Factory<R> factory, int defaultCookTime) {
+		public Serializer(Factory<R> factory, int defaultProcessTime) {
 			this.factory = factory;
-			this.defaultCookTime = defaultCookTime;
+			this.defaultProcessTime = defaultProcessTime;
 		}
 
 		@Override
 		public R read(Identifier id, JsonObject jsonObject) {
-			String group = getString(jsonObject, "group", "");
-
 			Ingredient input = Ingredient.fromJson(
 					hasArray(jsonObject, "ingredient")
 							? getArray(jsonObject, "ingredient")
@@ -82,33 +133,31 @@ public abstract class CookingWithBonusRecipe extends CookingRecipe {
 
 			ItemStack output = ShapedRecipe.getItemStack(getObject(jsonObject, "result"));
 			float exp = getFloat(jsonObject, "experience", 0.0F);
-			int cookTime = getInt(jsonObject, "cookingtime", this.defaultCookTime);
+			int processTime = getInt(jsonObject, "processing_time", this.defaultProcessTime);
 
 			String bonusLoot = getString(jsonObject, "bonus_loot_table", null);
 			Identifier bonusLootId = bonusLoot == null ? null : Identifier.create(bonusLoot);
 
-			R r = factory.create(id, group, input, output, exp, cookTime, bonusLootId);
-			return r;
+			return factory.create(id, input, output, exp, processTime, bonusLootId);
 		}
 
 		@Override
 		public R read(Identifier id, PacketByteBuf buffer) {
-			String group = buffer.readString(32767);
 			Ingredient input = Ingredient.fromPacket(buffer);
 			ItemStack output = buffer.readItemStack();
 			float exp = buffer.readFloat();
-			int cookTime = buffer.readVarInt();
+			int processTime = buffer.readInt();
 			Identifier bonusLoot = buffer.readBoolean() ? buffer.readIdentifier() : null;
-			return factory.create(id, group, input, output, exp, cookTime, bonusLoot);
+
+			return factory.create(id, input, output, exp, processTime, bonusLoot);
 		}
 
 		@Override
 		public void write(PacketByteBuf buffer, R recipe) {
-			buffer.writeString(recipe.group);
 			recipe.input.write(buffer);
 			buffer.writeItemStack(recipe.output);
-			buffer.writeFloat(recipe.experience);
-			buffer.writeVarInt(recipe.cookTime);
+			buffer.writeFloat(recipe.exp);
+			buffer.writeInt(recipe.processTime);
 
 			Identifier bonusLoot = recipe.getBonusLootTable();
 			buffer.writeBoolean(bonusLoot != null);
