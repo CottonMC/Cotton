@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigManager {
 
-    private static final String CONFIG_FILE_EXTENSION = ".json5";
+    public static final String DEFAULT_EXTENSION = ".json5";
 
     /**Loads a .config file from the config folder and parses it to a POJO.
      *
@@ -23,10 +23,11 @@ public class ConfigManager {
      */
     public static <T> T loadConfig(Class<T> clazz) {
         String configName;
-        if(clazz.isAnnotationPresent(ConfigFile.class)){
-            configName = clazz.getAnnotation(ConfigFile.class).name();
+        if (clazz.isAnnotationPresent(ConfigFile.class)) {
+            ConfigFile annotation = clazz.getAnnotation(ConfigFile.class);
+            configName = annotation.name() + annotation.extension();
         } else {
-            configName = clazz.getSimpleName();
+            configName = clazz.getSimpleName() + DEFAULT_EXTENSION;
         }
         return loadConfig(clazz, configName);
     }
@@ -39,7 +40,7 @@ public class ConfigManager {
      */
     public static <T> T loadConfig(Class<T> clazz, String configName){
         try {
-            File file = new File((FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
+            File file = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(configName).toFile();
             Jankson jankson = Jankson.builder().build();
 
             //Generate config file if it doesn't exist
@@ -53,7 +54,7 @@ public class ConfigManager {
 
                 T result = jankson.fromJson(json, clazz);
 
-                //check if the config file is outdate. If so overwrite it
+                //check if the config file is outdated. If so overwrite it
                 JsonElement jsonElementNew = jankson.toJson(clazz.newInstance());
                 if(jsonElementNew instanceof JsonObject){
                     JsonObject jsonNew = (JsonObject) jsonElementNew;
@@ -65,21 +66,21 @@ public class ConfigManager {
                 return result;
             }
             catch (IOException e) {
-                Cotton.logger.warn("Failed to load config File "+configName+CONFIG_FILE_EXTENSION+": ", e);
+                Cotton.logger.warn("Failed to load config File %s: %s", configName, e);
             }
         }
         catch (SyntaxError syntaxError) {
-            Cotton.logger.warn("Failed to load config File "+configName+CONFIG_FILE_EXTENSION+": ", syntaxError);
+            Cotton.logger.warn("Failed to load config File %s: %s", configName, syntaxError);
         } catch (IllegalAccessException | InstantiationException e) {
-            Cotton.logger.warn("Failed to create new config file for "+configName+CONFIG_FILE_EXTENSION+": ", e);
+            Cotton.logger.warn("Failed to create new config file for %s: %s", configName, e);
         }
 
         //Something obviously went wrong, create placeholder config
-        Cotton.logger.warn("Creating placeholder config for "+configName+CONFIG_FILE_EXTENSION+"...");
+        Cotton.logger.warn("Creating placeholder config for %s...", configName);
         try {
             return clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            Cotton.logger.warn("Failed to create placeholder config for "+configName+CONFIG_FILE_EXTENSION+": ",e);
+            Cotton.logger.warn("Failed to create placeholder config for %s: %s", configName, e);
         }
 
         //this is ... unfortunate
@@ -93,10 +94,11 @@ public class ConfigManager {
      */
     public static void saveConfig(Object object){
         String configName;
-        if(object.getClass().isAnnotationPresent(ConfigFile.class)){
-            configName = object.getClass().getAnnotation(ConfigFile.class).name();
+        if (object.getClass().isAnnotationPresent(ConfigFile.class)) {
+            ConfigFile annotation = object.getClass().getAnnotation(ConfigFile.class);
+            configName = annotation.name() + annotation.extension();
         } else {
-            configName = object.getClass().getSimpleName();
+            configName = object.getClass().getSimpleName() + DEFAULT_EXTENSION;
         }
         saveConfig(object,configName);
     }
@@ -113,7 +115,7 @@ public class ConfigManager {
 
 
         try {
-            File file = new File((FabricLoader.getInstance()).getConfigDirectory().toString()+"/"+configName+CONFIG_FILE_EXTENSION);
+            File file = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(configName).toFile();
             if(!file.exists())
                 file.createNewFile();
 
@@ -123,7 +125,7 @@ public class ConfigManager {
             out.flush();
             out.close();
         } catch (IOException e) {
-           Cotton.logger.warn("Failed to write to config file"+configName+CONFIG_FILE_EXTENSION+": " + e);
+           Cotton.logger.warn("Failed to write to config file %s: %s", configName, e);
         }
     }
 
