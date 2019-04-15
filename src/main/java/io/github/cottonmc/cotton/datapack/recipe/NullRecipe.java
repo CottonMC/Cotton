@@ -28,7 +28,7 @@ public class NullRecipe extends SpecialCraftingRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
-		return null;
+	public RecipeSerializer<NullRecipe> getSerializer() {
+		return CottonRecipes.NULL_SERIALIZER;
 	}
 }
