@@ -4,8 +4,8 @@ import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.datapack.tags.TagEntryManager;
 import io.github.cottonmc.cotton.datapack.tags.TagType;
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.block.BlockItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
