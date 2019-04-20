@@ -9,7 +9,8 @@
   "licence": "MIT",
   "contact": {
     "maven": "http://server.bbkr.space:8081/artifactory/libs-snapshot/io/github/cottonmc/cotton/",
-    "sources": "https://github.com/CottonMC/cotton"
+    "sources": "https://github.com/CottonMC/cotton",
+    "issues": "https://github.com/CottonMC/cotton/issues"
   },
 
   "environment": "*",
