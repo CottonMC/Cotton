@@ -19,9 +19,8 @@ public class MixinDataPackLoad {
 	@Shadow
 	private ResourcePackContainerManager<ResourcePackContainer> resourcePackContainerManager;
 
-	@Inject(method = "method_3800",
-			at = @At(value = "HEAD"))
-		public void addGlobalDataPacks(File file, LevelProperties properties, CallbackInfo info) {
+	@Inject(method = "loadWorldDataPacks", at = @At(value = "HEAD"))
+	public void addGlobalDataPacks(File file, LevelProperties properties, CallbackInfo info) {
 		resourcePackContainerManager.addCreator(new GlobalResourcePackCreator());
 	}
 }

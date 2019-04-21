@@ -14,7 +14,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
-		classpath "com.github.jengelman.gradle.plugins:shadow:2.0.0" //Don't update to Shadow 5.0.0 until we update the gradle wrapper to Gradle 5+
+		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0" //Don't update to Shadow 5.0.0 until we update the gradle wrapper to Gradle 5+
 	}
 }
 
@@ -24,29 +24,6 @@ plugins {
 
 apply plugin: "maven-publish"
 apply plugin: net.fabricmc.loom.LoomGradlePlugin
-
-
-/*
- * Extra DSL functions that might be useful from project.gradle
- */
-public MavenArtifactRepository CottonMC() {
-	MavenArtifactRepository result;
-	buildscript {
-		repositories {
-			result = maven {
-				name = "CottonMC";
-				url  = "http://server.bbkr.space:8081/artifactory/libs-snapshot";
-			}
-		}
-	}
-
-	return result;
-}
-
-/*
- * End DSL functions for project.gradle
- */
-
 
 apply from: "project.gradle";
 
@@ -70,6 +47,9 @@ repositories {
 	mavenCentral()
 	maven {
 		url "http://server.bbkr.space:8081/artifactory/libs-snapshot"
+	}
+	maven {
+		url = "https://maven.fabricmc.net/"
 	}
 }
 

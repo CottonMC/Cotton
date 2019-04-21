@@ -3,11 +3,13 @@ ext {
 	group = "io.github.cottonmc";
 	version = "0.6.0+1.14";
 	snapshot = true;
-
-	minecraft = "1.14 Pre-Release 5";
-	mappings = "1.14 Pre-Release 5+build.2";
-	loader = "0.4.1+build.127";
-	fabricMod = "0.2.7+build.125";
+	
+	minecraft = "1.14 Pre-Release 5"
+	mappings = "1.14 Pre-Release 5+build.4"
+	loader = "0.4.2+build.131"
+	
+	fabricMod = "0.2.7+build.126"
+	
 	silkMod = null;
 	jankson = "1.1.1"; //If needsShadow is false, jankson will not be included!
 	cotton = null;
@@ -16,7 +18,6 @@ ext {
 } 
 
 repositories {
-	//CottonMC();
 }
 
 dependencies {
