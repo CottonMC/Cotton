@@ -1,7 +1,7 @@
 ext {
 	projectName = "cotton";
 	group = "io.github.cottonmc";
-	version = "0.6.0+1.14";
+	version = "0.6.1+1.14";
 	snapshot = true;
 	
 	minecraft = "1.14 Pre-Release 5"
