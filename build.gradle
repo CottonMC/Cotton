@@ -14,7 +14,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
-		classpath "com.github.jengelman.gradle.plugins:shadow:2.0.0" //Don't update to Shadow 5.0.0 until we update the gradle wrapper to Gradle 5+
+		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0"
 	}
 }
 
