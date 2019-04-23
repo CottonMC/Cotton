@@ -13,7 +13,6 @@ import net.minecraft.util.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CommonTags {
 	//auto-fillable tags for common decorative/functional blocks
 	public static final Tag<Item> GLASS_BLOCKS = register("glass_blocks");

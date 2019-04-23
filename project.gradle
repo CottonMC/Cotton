@@ -4,11 +4,11 @@ ext {
 	version = "0.6.1+1.14";
 	snapshot = true;
 	
-	minecraft = "1.14 Pre-Release 5"
-	mappings = "1.14 Pre-Release 5+build.4"
+	minecraft = "1.14"
+	mappings = "1.14+build.1"
 	loader = "0.4.2+build.131"
 	
-	fabricMod = "0.2.7+build.126"
+	fabricMod = "0.2.7+build.127"
 	
 	silkMod = null;
 	jankson = "1.1.1"; //If needsShadow is false, jankson will not be included!
