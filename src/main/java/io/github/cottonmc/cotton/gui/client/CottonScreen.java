@@ -88,12 +88,6 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 	 * in order to implement our own button protocol and more advanced features.
 	 */
 	
-	@Override
-	public boolean keyReleased(int int_1, int int_2, int int_3) {
-		// TODO Auto-generated method stub
-		return super.keyReleased(int_1, int_2, int_3);
-	}
-	
 	
 	@Override
 	public boolean charTyped(char typedChar, int keyCode) {
@@ -108,7 +102,7 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 		int containerX = (int)mouseX-left;
 		int containerY = (int)mouseY-top;
 		if (containerX<0 || containerY<0 || containerX>=width || containerY>=height) return result;
-		//lastResponder = container.doMouseDown(containerX, containerY, mouseButton);
+		lastResponder = container.doMouseDown(containerX, containerY, mouseButton);
 		return result;
 	}
 	
@@ -118,9 +112,9 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 		int containerX = (int)mouseX-left;
 		int containerY = (int)mouseY-top;
 		if (containerX<0 || containerY<0 || containerX>=width || containerY>=height) return result;
-		/*
+		
 		WWidget responder = container.doMouseUp(containerX, containerY, mouseButton);
-		if (responder!=null && responder==lastResponder) container.doClick(containerX, containerY, mouseButton);*/
+		if (responder!=null && responder==lastResponder) container.doClick(containerX, containerY, mouseButton);
 		lastResponder = null;
 		return result;
 	}
@@ -132,7 +126,7 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 		int containerX = (int)mouseX-left;
 		int containerY = (int)mouseY-top;
 		if (containerX<0 || containerY<0 || containerX>=width || containerY>=height) return result;
-		//container.doMouseDrag(containerX, containerY, mouseButton);
+		container.doMouseDrag(containerX, containerY, mouseButton);
 		return result;
 	}
 	

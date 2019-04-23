@@ -9,6 +9,7 @@ import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import io.github.cottonmc.cotton.gui.widget.WPanel;
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel;
+import io.github.cottonmc.cotton.gui.widget.WWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -272,6 +273,26 @@ public abstract class CottonScreenController extends CraftingContainer<Inventory
 		}
 		
 		return inserted;
+	}
+	
+	@Nullable
+	public WWidget doMouseUp(int x, int y, int state) {
+		if (rootPanel!=null) return rootPanel.onMouseUp(x, y, state);
+		return null;
+	}
+	
+	@Nullable
+	public WWidget doMouseDown(int x, int y, int button) {
+		if (rootPanel!=null) return rootPanel.onMouseDown(x, y, button);
+		return null;
+	}
+	
+	public void doMouseDrag(int x, int y, int button) {
+		if (rootPanel!=null) rootPanel.onMouseDrag(x, y, button);
+	}
+	
+	public void doClick(int x, int y, int button) {
+		if (rootPanel!=null) rootPanel.onClick(x, y, button);
 	}
 	
 	/**
