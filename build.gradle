@@ -13,7 +13,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "net.fabricmc:fabric-loom:0.2.0-SNAPSHOT" //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
+		classpath "net.fabricmc:fabric-loom:0.2.1-20190421.164320-44" //Don't backdate before 0.2.0; features in this version prevent messy workarounds!
 		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0"
 	}
 }

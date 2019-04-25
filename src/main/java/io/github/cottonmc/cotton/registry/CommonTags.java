@@ -43,7 +43,7 @@ public class CommonTags {
 					else glass_blocks.add(id.toString());
 				}
 				if (id.getPath().contains("terracotta")) terracotta.add(id.toString());
-				if (id.getPath().contains("carpet")) carpets.add(id.toString());
+				if (id.getPath().contains("carpet") && !id.getPath().contains("bomb")) carpets.add(id.toString());
 				if (id.getPath().contains("pressure_plate")) pressure_plates.add(id.toString());
 			}
 
