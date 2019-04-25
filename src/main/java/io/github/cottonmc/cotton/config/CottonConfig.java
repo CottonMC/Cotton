@@ -1,8 +1,8 @@
 package io.github.cottonmc.cotton.config;
 
 import blue.endless.jankson.Comment;
-import blue.endless.jankson.JsonObject;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,14 @@ public class CottonConfig {
 	@Comment("Make it so that right-clicking a cauldron that has lava in it will void a non-bucket item in your hand.")
 	public boolean cauldronTrashCan = false;
 
-	@Comment("{'identifier': 'minecraft:coal_from_smelting'} will remove the specific vanilla smelting recipe for coal. {'item': 'minecraft:chest'} will remove *all* recipes that create vanilla chests.")
-	public ArrayList<JsonObject> recipesToRemove = new ArrayList<>();
-
+	@Comment("Specifies specific recipies to remove from the game.")
+	public ArrayList<String> removeRecipesByIdentifier = new ArrayList<>();
+	
+	@Comment("Item identifiers specified here will prevent any recipe for one of that item.")
+	public ArrayList<String> removeRecipesByItem = new ArrayList<>();
+	
+	@Override
+	public String toString() {
+		return "id:"+removeRecipesByIdentifier+" item:"+removeRecipesByItem;
+	}
 }
