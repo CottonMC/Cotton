@@ -27,7 +27,7 @@ public class RecipeUtil {
 		//System.out.println("Removals: "+config.recipesToRemove);
 		for(String idString : config.removeRecipesByIdentifier) {
 			//Identifier id = new Identifier(idString);
-			Cotton.logger.info("Removing any recipe with identifier \""+idString+"\"");
+			//Cotton.logger.info("Removing any recipe with identifier \""+idString+"\"");
 			removalsByIdentifier.add(idString);
 		}
 		
@@ -36,7 +36,7 @@ public class RecipeUtil {
 			Item item = Registry.ITEM.getOrEmpty(id).orElse(Items.AIR);
 			if (item!=Items.AIR) {
 				
-				Cotton.logger.info("Removing any recipe resulting in Item "+ itemIdString);
+				//Cotton.logger.info("Removing any recipe resulting in Item "+ itemIdString);
 				removeRecipeFor(new ItemStack(item));
 			}
 		}

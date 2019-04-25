@@ -5,8 +5,8 @@ ext {
 	snapshot = true;
 	
 	minecraft = "1.14"
-	mappings = "1.14+build.1"
-	loader = "0.4.2+build.131"
+	mappings = "1.14+build.3"
+	loader = "0.4.3+build.134"
 	
 	fabricMod = "0.2.7+build.127"
 	
