@@ -24,7 +24,7 @@ public class CottonConfig {
 	public ArrayList<String> removeRecipesByIdentifier = new ArrayList<>();
 	
 	@Comment("Item identifiers specified here will prevent any recipe for one of that item.")
-	public ArrayList<String> removeRecipesByItem = new ArrayList<>();
+	public ArrayList<ItemStack> removeRecipesByItem = new ArrayList<>();
 	
 	@Override
 	public String toString() {

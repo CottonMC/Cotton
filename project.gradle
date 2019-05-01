@@ -11,7 +11,7 @@ ext {
 	fabricMod = "0.2.7+build.127"
 	
 	silkMod = null;
-	jankson = "1.1.1"; //If needsShadow is false, jankson will not be included!
+	jankson = "1.1.2"; //If needsShadow is false, jankson will not be included!
 	cotton = null;
 
 	needsShadow = true;

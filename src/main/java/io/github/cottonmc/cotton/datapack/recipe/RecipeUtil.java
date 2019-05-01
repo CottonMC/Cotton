@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.JsonPrimitive;
 
@@ -24,21 +25,12 @@ public class RecipeUtil {
 	private final static List<Predicate<Recipe<?>>> recipesForRemoval = new ArrayList<>();
 	
 	public static void init(CottonConfig config) {
-		//System.out.println("Removals: "+config.recipesToRemove);
 		for(String idString : config.removeRecipesByIdentifier) {
-			//Identifier id = new Identifier(idString);
-			//Cotton.logger.info("Removing any recipe with identifier \""+idString+"\"");
 			removalsByIdentifier.add(idString);
 		}
 		
-		for(String itemIdString : config.removeRecipesByItem) {
-			Identifier id = new Identifier(itemIdString);
-			Item item = Registry.ITEM.getOrEmpty(id).orElse(Items.AIR);
-			if (item!=Items.AIR) {
-				
-				//Cotton.logger.info("Removing any recipe resulting in Item "+ itemIdString);
-				removeRecipeFor(new ItemStack(item));
-			}
+		for(ItemStack stack : config.removeRecipesByItem) {
+			removeRecipeFor(stack);
 		}
 	}
 	
@@ -46,29 +38,11 @@ public class RecipeUtil {
 	/** Marks a recipe to block from RecipeManager. This must be done before resource load! */
 	public static void removeRecipe(Identifier id) {
 		recipesForRemoval.add(new IdentifierRemovalPredicate(id));
-		/*
-		File recipeFile = new File(getRecipeLocation(id), id.getPath() + ".json");
-		try {
-			if (!recipeFile.getParentFile().exists()) recipeFile.getParentFile().mkdirs();
-			if (!recipeFile.exists()) recipeFile.createNewFile();
-			String result = "{ \"type\": \"cotton:null\" }";
-			FileOutputStream out = new FileOutputStream(recipeFile, false);
-			out.write(result.getBytes());
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			Cotton.logger.warn("Failed to remove recipe " + id.toString() + ": " + e);
-		}*/
 	}
 	
 	public static void removeRecipeFor(ItemStack product) {
 		recipesForRemoval.add(new ProductRemovalPredicate(product));
 	}
-	/*
-	public static File getRecipeLocation(Identifier id) {
-		return new File(Cotton.DATA_PACK_LOCATION, "data/" + id.getNamespace() + "/recipes");
-
-	}*/
 	
 	public static Iterable<Predicate<Recipe<?>>> getRecipesForRemoval() {
 		return recipesForRemoval;
@@ -103,7 +77,6 @@ public class RecipeUtil {
 	}
 	
 	public static ItemStack getItemStack(JsonObject json) {
-		System.out.println("Converting "+json+" into ItemStack");
 		String itemIdString = json.get(String.class, "item");
 		Item item = (Item)Registry.ITEM.getOrEmpty(new Identifier(itemIdString)).orElse(Items.AIR);
 		ItemStack stack = new ItemStack(item);
@@ -113,18 +86,24 @@ public class RecipeUtil {
 				stack.setAmount(count);
 			}
 		}
-		System.out.println("Success: "+stack);
 		return stack;
 	}
 	
-	public static JsonObject saveItemStack(ItemStack stack) {
-		System.out.println("Converting "+stack+" into Json");
+	public static ItemStack getItemStackPrimitive(Object obj) {
+		String itemIdString = obj.toString();
+		Item item = (Item)Registry.ITEM.getOrEmpty(new Identifier(itemIdString)).orElse(Items.AIR);
+		ItemStack stack = new ItemStack(item);
+		return stack;
+	}
+	
+	public static JsonElement saveItemStack(ItemStack stack) {
+		JsonPrimitive id = new JsonPrimitive(Registry.ITEM.getId(stack.getItem()).toString());
+		if (stack.getAmount()==1) return id;
+	
 		JsonObject result = new JsonObject();
 		result.put("item", new JsonPrimitive(Registry.ITEM.getId(stack.getItem()).toString()));
-		if (stack.getAmount()!=1) {
-			result.put("count", new JsonPrimitive(stack.getAmount()));
-		}
-		System.out.println("SUCCESS: "+result);
+		result.put("count", new JsonPrimitive(stack.getAmount()));
 		return result;
+		
 	}
 }

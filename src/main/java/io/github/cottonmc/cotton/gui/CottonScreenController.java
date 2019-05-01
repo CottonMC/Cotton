@@ -319,6 +319,16 @@ public abstract class CottonScreenController extends CraftingContainer<Inventory
 			if (b instanceof InventoryProvider) {
 				return ((InventoryProvider)b).getInventory(state, world, pos);
 			}
+			
+			BlockEntity be = world.getBlockEntity(pos);
+			if (be!=null) {
+				if (be instanceof InventoryProvider) {
+					return ((InventoryProvider)be).getInventory(state, world, pos);
+				} else if (be instanceof Inventory) {
+					return (Inventory)be;
+				}
+			}
+			
 			return EmptyInventory.INSTANCE;
 		}).orElse(EmptyInventory.INSTANCE);
 	}

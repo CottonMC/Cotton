@@ -9,7 +9,6 @@ import io.github.cottonmc.cotton.config.annotations.ConfigFile;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,6 +21,7 @@ public class ConfigManager {
 	public static Jankson getBaseJankson() {
 		Jankson baseJankson = Jankson.builder()
 				.registerTypeAdapter(ItemStack.class, RecipeUtil::getItemStack)
+				.registerPrimitiveTypeAdapter(ItemStack.class, RecipeUtil::getItemStackPrimitive)
 				.registerSerializer(ItemStack.class, (t, marshaller)->{ return RecipeUtil.saveItemStack(t); })
 				.build();
 		return baseJankson;
@@ -65,12 +65,12 @@ public class ConfigManager {
 			try {
 				JsonObject json = jankson.load(file);
 				//String cleaned = json.toJson(false,true); //remove comments
-				System.out.println("json:"+json.toString());
+				//System.out.println("json:"+json.toString());
 				
 				T result = jankson.getMarshaller().marshall(clazz, json);
 				
 				//T result = jankson.fromJson(json, clazz);
-				System.out.println(result);
+				//System.out.println(result);
 
 				//check if the config file is outdate. If so overwrite it
 				JsonElement jsonElementNew = jankson.toJson(clazz.newInstance());
