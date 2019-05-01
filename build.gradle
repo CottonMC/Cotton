@@ -1,175 +1,128 @@
-//import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 buildscript {
 	repositories {
-		mavenCentral()
-		jcenter()
-		maven {
-			name = "Fabric"
-			url = "http://maven.modmuss50.me/"
-		}
 		maven {
 			url "https://plugins.gradle.org/m2/"
 		}
 	}
 	dependencies {
-		classpath "net.fabricmc:fabric-loom:0.2.1-20190421.164320-44"
-		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0"
+		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0";
 	}
 }
 
 plugins {
+	id 'fabric-loom' version '0.2.2-SNAPSHOT'
+	id 'maven-publish'
 	id "com.jfrog.artifactory" version "4.9.0"
 }
 
-apply plugin: "maven-publish"
-apply plugin: net.fabricmc.loom.LoomGradlePlugin
+apply plugin: "com.github.johnrengelman.shadow"
 
-apply from: "project.gradle";
-
-if (ext.needsShadow) {
-	apply plugin: "com.github.johnrengelman.shadow"
-}
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-archivesBaseName = ext.projectName;
-group = ext.group;
-version = ext.version + ((ext.snapshot) ? "-SNAPSHOT" : "");
-
-
-minecraft {
-	refmapName = 'mixins.cotton.refmap.json'
-}
-
-repositories {
-	mavenCentral()
-	maven {
-		url "http://server.bbkr.space:8081/artifactory/libs-snapshot"
-	}
-	maven {
-		url = "https://maven.fabricmc.net/"
-	}
-}
-
-dependencies {
-	minecraft "com.mojang:minecraft:"+project.ext.minecraft;
-	mappings "net.fabricmc:yarn:"+project.ext.mappings;
-	modCompile "net.fabricmc:fabric-loader:"+project.ext.loader;
-	if (project.ext.fabricMod!=null) {
-		modCompile "net.fabricmc:fabric:"+project.ext.fabricMod;
-	}
-	if (project.ext.silkMod!=null) {
-		modCompile "io.github.prospector.silk:SilkAPI:"+project.ext.silkMod;
-	}
-	if (project.ext.cotton!=null) {
-		modCompile "io.github.cottonmc:cotton:"+project.ext.cotton
-	}
-	if (project.ext.jankson!=null) {
-		if (project.ext.needsShadow) {
-			//Jankson will be shadowed
-			shadow "blue.endless:jankson:"+project.ext.jankson;
-			implementation "blue.endless:jankson:"+project.ext.jankson;
-		} else {
-			System.out.println("#################################################################");
-			System.out.println("# Shadow is disabled. Jankson will be ommitted from this build! #");
-			System.out.println("#################################################################");
-		}
-	}
-	
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
-}
-
-processResources {
-    inputs.property "version", project.ext.version;
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json";
-		expand version: project.ext.version;
-	}
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json";
-	}
-}
-
-task sourcesJar(type: Jar) {
-	baseName = archivesBaseName
-	classifier = "sources"
-	from sourceSets.main.allSource
-	from sourceSets.main.resources
-}
-
-if (ext.needsShadow) {
-	shadowJar {
-		if (project.ext.jankson!=null) {
-			relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson';
-		}
-		
-		classifier = "shadow"
-		configurations = [project.configurations.shadow]
-	}
-
-	//If we're using shadow, we need to let remap know it's remapping the shadowJar
-	remapJar {
-		dependsOn shadowJar
-		jar = shadowJar.archivePath
-	}
-}
-
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 if(rootProject.file('private.gradle').exists()) { //Publishing details
 	apply from: 'private.gradle'
 }
 
+archivesBaseName = project.archives_base_name
+version = project.mod_version+"-SNAPSHOT"
+group = project.maven_group
+
+minecraft {
+}
+
+repositories {
+	mavenCentral();
+}
+
+dependencies {
+	//to change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modCompile "net.fabricmc:fabric:${project.fabric_version}"
+
+	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive=false; }
+	implementation ("blue.endless:jankson:1.1.2") { transitive = false; };
+	shadow ("blue.endless:jankson:1.1.2") { transitive = false; };
+
+	testImplementation ("org.junit.jupiter:junit-jupiter-api:5.4.1") //{ transitive=false; };
+	testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.4.1") //{ transitive=false; };
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
+		expand "version": project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
+	}
+}
+
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = "sources"
+	from sourceSets.main.allSource
+}
+
+shadowJar {
+	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson';
+	classifier = "shadow"
+	configurations = [project.configurations.shadow]
+}
+
+remapJar {
+	dependsOn shadowJar
+	jar = shadowJar.archivePath
+}
+
+jar {
+	from "LICENSE"
+}
+
+// configure the maven publication
 publishing {
 	publications {
 		maven(MavenPublication) {
-			from components.java
-
-			artifactId = project.ext.projectName;
-
-
-			pom.withXml {
-				def pomFile = asNode()
-				def depsNode = pomFile.get("dependencies")
-				pomFile.remove(depsNode)
-
-				def newDeps = pomFile.appendNode("dependencies")
-				configurations.modCompile.getResolvedConfiguration().getFirstLevelModuleDependencies().each {
-					def artifactNode = newDeps.appendNode("dependency")
-					artifactNode.appendNode('groupId', it.moduleGroup)
-					artifactNode.appendNode('artifactId', it.moduleName)
-					artifactNode.appendNode('version', it.moduleVersion)
-				}
+			// add all the jars that should be included when publishing to maven
+			//artifact(jar) {
+			//	builtBy remapJar
+			//}
+			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow.jar") { //release jar - file location not provided anywhere in loom
+				classifier null
+				builtBy remapJar
 			}
-			def artifactEnding = (project.ext.needsShadow) ? "-shadow" : "";
-			artifacts = [
-					artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}" + artifactEnding + ".jar") { //release jar - file location not provided anywhere in loom
-						classifier null
-						builtBy remapJar
-					},
-					artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}" + artifactEnding + ".jar") { //release jar - file location not provided anywhere in loom
-						classifier "dev"
-						builtBy remapJar
-					},
-					artifact (tasks.sourcesJar)
-			]
+
+			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow-dev.jar") { //release jar - file location not provided anywhere in loom
+				classifier "dev"
+				builtBy remapJar
+			}
+
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
 		}
 	}
-	/* Supply an ext block in private.gradle like so:
 
-	   ext { mavenSnapshotDir="file:///some_local_directory_path" }
-
-	 * and then just run "./gradlew publish" to save the artifacts to the specified directory, in a way that they can be
-	 * served by apache or your favorite httpd and behave like a maven repo. Complete with verification hashes.
-	 */
+	// select the repositories you want to publish to
 	repositories {
-		if (rootProject.ext.has("localMavenUrl")) {
-			maven {
-				url = rootProject.ext.localMavenUrl
-			}
-		}
+		// uncomment to publish to the local maven
+		// mavenLocal()
 	}
 }
 

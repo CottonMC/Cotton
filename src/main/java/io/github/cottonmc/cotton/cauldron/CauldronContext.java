@@ -1,6 +1,7 @@
 package io.github.cottonmc.cotton.cauldron;
 
-import blue.endless.jankson.annotation.Nullable;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;

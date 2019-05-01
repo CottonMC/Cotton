@@ -14,12 +14,12 @@ ext {
 	jankson = "1.1.2"; //If needsShadow is false, jankson will not be included!
 	cotton = null;
 
-	needsShadow = true;
+	needsShadow = false;//true;
 } 
 
 repositories {
 }
 
 dependencies {
-	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive=false; }
 }
