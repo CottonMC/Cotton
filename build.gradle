@@ -29,6 +29,7 @@ version = project.mod_version+"-SNAPSHOT"
 group = project.maven_group
 
 minecraft {
+	refmapName = 'mixins.cotton.refmap.json'
 }
 
 repositories {
