@@ -223,6 +223,9 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 	
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
+		// Render the background shadow
+		this.renderBackground();
+
 		this.drawBackground(partialTicks, mouseX, mouseY);
 		
 		super.render(mouseX, mouseY, partialTicks);
