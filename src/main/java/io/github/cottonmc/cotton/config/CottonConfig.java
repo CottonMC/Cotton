@@ -2,6 +2,7 @@ package io.github.cottonmc.cotton.config;
 
 import blue.endless.jankson.Comment;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -25,9 +26,4 @@ public class CottonConfig {
 	
 	@Comment("Item identifiers specified here will prevent any recipe for one of that item.")
 	public ArrayList<ItemStack> removeRecipesByItem = new ArrayList<>();
-	
-	@Override
-	public String toString() {
-		return "id:"+removeRecipesByIdentifier+" item:"+removeRecipesByItem;
-	}
 }

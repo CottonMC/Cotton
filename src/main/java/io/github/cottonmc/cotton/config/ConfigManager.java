@@ -6,8 +6,8 @@ import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.impl.SyntaxError;
 import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
-import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 import java.io.File;
@@ -20,9 +20,14 @@ public class ConfigManager {
 
 	public static Jankson getBaseJankson() {
 		Jankson baseJankson = Jankson.builder()
-				.registerTypeAdapter(ItemStack.class, RecipeUtil::getItemStack)
-				.registerPrimitiveTypeAdapter(ItemStack.class, RecipeUtil::getItemStackPrimitive)
-				.registerSerializer(ItemStack.class, (t, marshaller)->{ return RecipeUtil.saveItemStack(t); })
+				.registerTypeAdapter(ItemStack.class, MinecraftSerializers::getItemStack)
+				.registerPrimitiveTypeAdapter(ItemStack.class, MinecraftSerializers::getItemStackPrimitive)
+				.registerSerializer(ItemStack.class, (t, marshaller)->{ return MinecraftSerializers.saveItemStack(t); })
+				
+				.registerTypeAdapter(BlockState.class, MinecraftSerializers::getBlockState)
+				.registerPrimitiveTypeAdapter(BlockState.class, MinecraftSerializers::getBlockStatePrimitive)
+				.registerSerializer(BlockState.class, (t, marshaller)->{ return MinecraftSerializers.saveBlockState(t); })
+				
 				.build();
 		return baseJankson;
 	}
