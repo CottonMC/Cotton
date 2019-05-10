@@ -6,8 +6,8 @@ import io.github.cottonmc.cotton.gui.widget.WWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
-import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.util.Nameable;
 
 public class CottonScreen<T extends CottonScreenController> extends ContainerScreen<T> {
@@ -16,7 +16,7 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 	protected WWidget lastResponder = null;
 	
 	public CottonScreen(T container, PlayerEntity player) {
-		super(container, player.inventory, new TranslatableTextComponent(""));
+		super(container, player.inventory, new StringTextComponent(""));
 		this.container = container;
 		width = 18*9;
 		height = 18*9;
@@ -204,6 +204,8 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 		if (container instanceof Nameable) {
 			TextComponent name = ((Nameable)container).getDisplayName();
 			font.draw(name.getFormattedText(), left, top, container.getTitleColor());
+		} else if (getTitle() != null) {
+			font.draw(getTitle().getFormattedText(), left, top, container.getTitleColor());
 		}
 	}
 	
