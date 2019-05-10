@@ -24,7 +24,7 @@ public class MixinRecipeManager {
 	@Shadow
 	public static int SUFFIX_LENGTH;
 	
-	@ModifyVariable(method="apply", at=@At(value="INVOKE_ASSIGN", target="Ljava/util/Collection;iterator()Ljava/util/Iterator;", ordinal=0))
+	@ModifyVariable(method="apply", at=@At(value="INVOKE_ASSIGN", target="Ljava/util/Collection;iterator()Ljava/util/Iterator;", ordinal=0, remap=false))
 	public Iterator<Identifier> filterIterator(Iterator<Identifier> iterator) {
 		ArrayList<Identifier> replacement = new ArrayList<>();
 		while(iterator.hasNext()) {
