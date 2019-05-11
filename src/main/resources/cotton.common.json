@@ -6,7 +6,8 @@
   "mixins": [
     "MixinDataPackLoad",
     "MixinCauldronBehavior",
-    "MixinBucketItem"
+    "MixinBucketItem",
+    "MixinRecipeManager"
   ],
   "injectors": {
     "defaultRequire": 1
