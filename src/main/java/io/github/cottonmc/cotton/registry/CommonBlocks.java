@@ -31,7 +31,7 @@ public class CommonBlocks {
 	public static Block register(String name, Block block, BlockItem item) {
 		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
-		if (Cotton.containsId(id)) {
+		if (Registry.BLOCK.getOrEmpty(id).isPresent()) {
 			Registry.register(Registry.BLOCK, id, block);
 			CommonItems.register(id.getPath(), item);
 			TagEntryManager.registerToTag(TagType.BLOCK, new Identifier(Cotton.SHARED_NAMESPACE, name), id.toString());
@@ -50,7 +50,7 @@ public class CommonBlocks {
 	public static Block getBlock(String name){
 		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
-		if (Cotton.containsId(id)) {
+		if (Registry.BLOCK.getOrEmpty(id).isPresent()) {
 			return Registry.BLOCK.get(id);
 		}
 		return null;

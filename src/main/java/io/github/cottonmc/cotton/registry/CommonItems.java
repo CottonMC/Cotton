@@ -16,7 +16,7 @@ public class CommonItems {
 	public static Item register(String name, Item item) {
 		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
-		if (Cotton.containsId(id)) {
+		if (Registry.BLOCK.getOrEmpty(id).isPresent()) {
 			Registry.register(Registry.ITEM, id, item);
 			TagEntryManager.registerToTag(TagType.ITEM, new Identifier(Cotton.SHARED_NAMESPACE, name), id.toString());
 			return item;
@@ -34,7 +34,7 @@ public class CommonItems {
 	public static Item getItem(String name){
 		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
-		if (Cotton.containsId(id)) {
+		if (Registry.BLOCK.getOrEmpty(id).isPresent()) {
 			return Registry.ITEM.get(id);
 		}
 		return null;

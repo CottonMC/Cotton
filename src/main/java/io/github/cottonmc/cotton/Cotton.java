@@ -7,7 +7,6 @@ import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
-import io.github.cottonmc.cotton.mixins.MixinSimpleRegistry;
 import io.github.cottonmc.cotton.registry.CommonTags;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -16,7 +15,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.io.File;
 
@@ -34,11 +32,6 @@ public class Cotton implements ModInitializer {
 
 	public static final ModLogger logger = new ModLogger(MODID, "COTTON");
 	public static CottonConfig config;
-
-    /** this is needed since containsId is client-only */
-    public static boolean containsId(Identifier id) {
-        return ((MixinSimpleRegistry) Registry.BLOCK).getEntries().containsKey(id);
-    }
 
     @Override
 	public void onInitialize() {
