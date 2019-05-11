@@ -1,8 +1,8 @@
 ext {
-	projectName = "cotton";
-	group = "io.github.cottonmc";
-	version = "0.6.1+1.14";
-	snapshot = true;
+	projectName = "cotton"
+	group = "io.github.cottonmc"
+	version = "0.6.2+1.14"
+	snapshot = true
 	
 	minecraft = "1.14"
 	mappings = "1.14+build.1"
@@ -10,11 +10,11 @@ ext {
 	
 	fabricMod = "0.2.7+build.127"
 	
-	silkMod = null;
-	jankson = "1.1.1"; //If needsShadow is false, jankson will not be included!
-	cotton = null;
+	silkMod = null
+	jankson = "1.1.1" //If needsShadow is false, jankson will not be included!
+	cotton = null
 
-	needsShadow = true;
+	needsShadow = true
 } 
 
 repositories {
