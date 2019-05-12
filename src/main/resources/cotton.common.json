@@ -9,6 +9,12 @@
     "MixinBucketItem",
     "MixinRecipeManager"
   ],
+  "client": [
+    "MixinCottonInitializerClient"
+  ],
+  "server": [
+    "MixinCottonInitializerServer"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

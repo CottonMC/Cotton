@@ -7,5 +7,5 @@ package io.github.cottonmc.cotton;
  * Add entrypoints under the category "cotton".
  */
 public interface CottonInitializer {
-	void initialize();
+	void onCottonInit();
 }
