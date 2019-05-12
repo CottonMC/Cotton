@@ -1,5 +1,7 @@
 # Cotton
 
+[![Maven metadata URL](https://img.shields.io/maven-metadata/v/http/server.bbkr.space:8081/artifactory/libs-snapshot/io/github/cottonmc/cotton/maven-metadata.xml.svg)](http://server.bbkr.space:8081/artifactory/libs-snapshot/io/github/cottonmc/cotton)
+
 ## Features:
 - Config Files
 - Custom Logger
