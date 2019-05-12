@@ -64,12 +64,10 @@ public class ConfigManager {
                 }
 
                 return result;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Cotton.logger.warn("Failed to load config File %s: %s", configName, e);
             }
-        }
-        catch (SyntaxError syntaxError) {
+        } catch (SyntaxError syntaxError) {
             Cotton.logger.warn("Failed to load config File %s: %s", configName, syntaxError);
         } catch (IllegalAccessException | InstantiationException e) {
             Cotton.logger.warn("Failed to create new config file for %s: %s", configName, e);
