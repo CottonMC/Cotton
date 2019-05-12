@@ -28,8 +28,6 @@ public class MixinCauldronBehavior implements Cauldron {
 
 	@Inject(at = @At("HEAD"), method = "activate", cancellable = true)
 	private void onActivateHead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<Boolean> cir) {
-		ItemStack stack = player.getStackInHand(hand);
-		
 		// Run Cauldron Behaviors - this is the code to imitate when implementing on your own block
 		CauldronContext ctx = new CauldronContext(world, pos, state, state.get(CauldronBlock.LEVEL), state.get(CauldronBlock.LEVEL) == 0 ? Fluids.EMPTY : Fluids.WATER, DefaultedList.create(ItemStack.EMPTY), player, hand, player.getStackInHand(hand));
 		for (Predicate<CauldronContext> pred : CauldronBehavior.BEHAVIORS.keySet()) {

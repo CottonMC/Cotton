@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MinecraftDedicatedServer.class)
 public class MixinCottonInitializerServer {
 
-	@Inject(method = "setupServer", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 0))
+	@Inject(method = "setupServer", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 0, remap = false))
 	public void runCottonInit(CallbackInfoReturnable cir) {
 		FabricLoader.getInstance().getEntrypoints("cotton", CottonInitializer.class).forEach(CottonInitializer::onCottonInit);
 	}
