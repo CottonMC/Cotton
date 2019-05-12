@@ -1,6 +1,5 @@
 package io.github.cottonmc.cotton.datapack.recipe;
 
-import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.config.CottonConfig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
@@ -30,7 +29,19 @@ public class RecipeUtil {
 	
 	/** Marks a recipe to block from RecipeManager. This must be done before resource load! */
 	public static void removeRecipe(Identifier id) {
-		recipesForRemoval.add(new IdentifierRemovalPredicate(id));
+		removalsByIdentifier.add(id.toString());
+	}
+	
+	public static void reinstateRecipe(Identifier id) {
+		removalsByIdentifier.remove(id.toString());
+	}
+	
+	public static void removeRecipe(String id) {
+		removalsByIdentifier.add(id);
+	}
+	
+	public static void reinstateRecipe(String id) {
+		removalsByIdentifier.remove(id);
 	}
 	
 	public static void removeRecipeFor(ItemStack product) {
@@ -43,18 +54,6 @@ public class RecipeUtil {
 	
 	public static Set<String> getIdentifiersForRemoval() {
 		return removalsByIdentifier;
-	}
-	
-	private static class IdentifierRemovalPredicate implements Predicate<Recipe<?>> {
-		private final Identifier id;
-		private IdentifierRemovalPredicate(Identifier id) {
-			this.id = id;
-		}
-		
-		@Override
-		public boolean test(Recipe<?> t) {
-			return t.getId().equals(id);
-		}
 	}
 	
 	private static class ProductRemovalPredicate implements Predicate<Recipe<?>> {
