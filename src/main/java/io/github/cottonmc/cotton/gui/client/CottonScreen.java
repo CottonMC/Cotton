@@ -51,6 +51,10 @@ public class CottonScreen<T extends CottonScreenController> extends ContainerScr
 	public void reposition() {
 		WPanel basePanel = container.getRootPanel();
 		if (basePanel!=null) {
+			// Validating the root panel will recreate the WItemSlot's peers,
+			// so this will remove the current ones.
+			container.slotList.clear();
+
 			basePanel.validate(container);
 			
 			containerWidth = basePanel.getWidth();
