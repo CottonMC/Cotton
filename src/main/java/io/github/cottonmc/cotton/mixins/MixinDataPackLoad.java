@@ -17,10 +17,10 @@ import java.io.File;
 public class MixinDataPackLoad {
 
 	@Shadow
-	private ResourcePackContainerManager<ResourcePackContainer> resourcePackContainerManager;
+	private ResourcePackContainerManager<ResourcePackContainer> dataPackContainerManager;
 
 	@Inject(method = "loadWorldDataPacks", at = @At(value = "HEAD"))
 	public void addGlobalDataPacks(File file, LevelProperties properties, CallbackInfo info) {
-		resourcePackContainerManager.addCreator(new GlobalResourcePackCreator());
+		dataPackContainerManager.addCreator(new GlobalResourcePackCreator());
 	}
 }
