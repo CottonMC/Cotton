@@ -1,20 +1,19 @@
 package io.github.cottonmc.cotton.gui.widget;
 
 import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
-import net.minecraft.text.StringTextComponent;
-import net.minecraft.text.TextComponent;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 public class WLabel extends WWidget {
-	protected final TextComponent text;
+	protected final Component text;
 	protected final int color;
 
 	public static final int DEFAULT_TEXT_COLOR = 0x404040;
 
 	public WLabel(String text, int color) {
-		this(new StringTextComponent(text), color);
+		this(new TextComponent(text), color);
 	}
 	
-	public WLabel(TextComponent text, int color) {
+	public WLabel(Component text, int color) {
 		this.text = text;
 		this.color = color;
 	}

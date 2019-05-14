@@ -1,8 +1,8 @@
 package io.github.cottonmc.cotton.datapack.tags;
 
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.StringIdentifiable;
 
-public enum TagType implements StringRepresentable {
+public enum TagType implements StringIdentifiable {
 	BLOCK("blocks"), ITEM("items"), FLUID("fluids"), ENTITY_TYPE("entity_types");
 
 	private final String name;

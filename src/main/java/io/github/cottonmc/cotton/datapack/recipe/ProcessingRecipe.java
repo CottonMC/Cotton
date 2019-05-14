@@ -138,7 +138,7 @@ public abstract class ProcessingRecipe implements Recipe<Inventory> {
 			int processTime = getInt(jsonObject, "processtime", this.defaultProcessTime);
 
 			String bonusLoot = getString(jsonObject, "bonus", null);
-			Identifier bonusLootId = bonusLoot == null ? null : Identifier.create(bonusLoot);
+			Identifier bonusLootId = bonusLoot == null ? null : new Identifier(bonusLoot);
 
 			return factory.create(id, input, output, exp, processTime, bonusLootId);
 		}
