@@ -5,7 +5,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0";
+		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0"
 	}
 }
 
@@ -33,7 +33,7 @@ minecraft {
 }
 
 repositories {
-	mavenCentral();
+	mavenCentral()
 }
 
 dependencies {
@@ -45,9 +45,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive=false; }
-	implementation ("blue.endless:jankson:1.1.2") { transitive = false; };
-	shadow ("blue.endless:jankson:1.1.2") { transitive = false; };
+	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
+	implementation ("blue.endless:jankson:1.1.2") { transitive = false }
+	shadow ("blue.endless:jankson:1.1.2") { transitive = false }
 
 	testImplementation ("org.junit.jupiter:junit-jupiter-api:5.4.1") //{ transitive=false; };
 	testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.4.1") //{ transitive=false; };
@@ -82,7 +82,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 shadowJar {
-	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson';
+	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
 	classifier = "shadow"
 	configurations = [project.configurations.shadow]
 }

@@ -25,7 +25,7 @@ public class Cotton implements ModInitializer {
 
 	public static final boolean isDevEnv = Boolean.parseBoolean(System.getProperty("fabric.development", "true"));
 
-	public static final File DATA_PACK_LOCATION = new File(FabricLoader.getInstance().getGameDirectory(), "datapacks/cotton (generated)/");
+	public static final File DATA_PACK_LOCATION = new File(FabricLoader.getInstance().getGameDirectory(), "datapacks/cotton_generated");
 
 	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(
 			new Identifier("cotton", "common_tab"), () -> new ItemStack(Blocks.LIGHT_BLUE_WOOL));
