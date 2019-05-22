@@ -18,10 +18,7 @@ public class CottonConfig {
 			+ "Intended for pack devs dealing with mods not using common tags.")
 	public boolean fillCommonTags = false;
 
-	@Comment("Make it so that right-clicking a cauldron that has lava in it will void a non-bucket item in your hand.")
-	public boolean cauldronTrashCan = false;
-
-	@Comment("Specifies specific recipies to remove from the game.")
+	@Comment("Specifies specific recipes to remove from the game.")
 	public ArrayList<String> removeRecipesByIdentifier = new ArrayList<>();
 	
 	@Comment("Item identifiers specified here will prevent any recipe for one of that item.")
