@@ -11,7 +11,7 @@ import java.util.List;
 @ConfigFile(name="CottonConfig")
 public class CottonConfig {
 
-	@Comment("A list of mod ids, in order of preference for resource loading.")
+	@Comment("(NOT WORKING) A list of mod ids, in order of preference for resource loading.")
 	public List<String> namespace_preference_order = new ArrayList<>();
 
 	@Comment("Fill common tags automatically with modded items. This may add unintended items.\n"
