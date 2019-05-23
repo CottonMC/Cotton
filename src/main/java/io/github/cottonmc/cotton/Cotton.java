@@ -36,7 +36,8 @@ public class Cotton implements ModInitializer {
     @Override
 	public void onInitialize() {
 		//setup
-		logger.setPrefixFormat(Ansi.Blue);
+		//TODO: uncomment once we have a way to check if a console supports ANSI
+//		logger.setPrefixFormat(Ansi.Blue);
 		PackMetaManager.saveMeta();
 		CottonRecipes.init();
 

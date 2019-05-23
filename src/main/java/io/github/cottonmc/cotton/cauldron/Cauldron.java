@@ -1,9 +1,13 @@
 package io.github.cottonmc.cotton.cauldron;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public interface Cauldron {
 
@@ -38,4 +42,14 @@ public interface Cauldron {
 	 * @return Whether the cauldron will accept that fluid currently.
 	 */
 	boolean canAcceptFluid(World world, BlockPos pos, BlockState state, Fluid fluid);
+
+	/**
+	 * Populate a cauldron context with information about fluid state and previous items.
+	 * @param world The world the cauldron is in.
+	 * @param pos The position the cauldro is at.
+	 * @param player The player activating the behavior, or null if there is no player.
+	 * @param stack The ItemStack used in the context.
+	 * @return The fully-populated context.
+	 */
+	CauldronContext createContext(World world, BlockPos pos, @Nullable PlayerEntity player, ItemStack stack);
 }

@@ -25,6 +25,7 @@ public class CommonTags {
 	public static final Tag<Item> MUSHROOMS = register("mushrooms");
 	public static final Tag<Item> RAW_MEAT = register("raw_meat");
 	public static final Tag<Item> COOKED_MEAT = register("cooked_meat");
+	public static final Tag<Item> PLANTABLES = register("plantables");
 
 	public static void init() {
 		if (Cotton.config.fillCommonTags) {

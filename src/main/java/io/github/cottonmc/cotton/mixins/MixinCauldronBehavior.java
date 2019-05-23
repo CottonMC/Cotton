@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 @Mixin(CauldronBlock.class)
@@ -61,5 +62,14 @@ public class MixinCauldronBehavior implements Cauldron {
 	@Override
 	public boolean canAcceptFluid(World world, BlockPos pos, BlockState state, Fluid fluid) {
 		return FluidTags.WATER.contains(fluid);
+	}
+
+	@Override
+	public CauldronContext createContext(World world, BlockPos pos, @Nullable PlayerEntity player, ItemStack stack) {
+		Hand hand;
+		if (player == null) hand = null;
+		else hand = player.getActiveHand();
+		BlockState state = world.getBlockState(pos);
+		return new CauldronContext(world, pos, state, state.get(CauldronBlock.LEVEL), state.get(CauldronBlock.LEVEL) == 0 ? Fluids.EMPTY : Fluids.WATER, DefaultedList.create(ItemStack.EMPTY), player, hand, stack) ;
 	}
 }
