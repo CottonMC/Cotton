@@ -4,13 +4,13 @@ import io.github.cottonmc.cotton.gui.CottonScreenController;
 import io.github.cottonmc.cotton.gui.widget.WPanel;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.ContainerScreen;
+import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Nameable;
 
-public class CottonScreen<T extends CottonScreenController> extends ContainerScreen<T> {
+public class CottonScreen<T extends CottonScreenController> extends AbstractContainerScreen<T> {
 	protected CottonScreenController container;
 	public static final int PADDING = 8;
 	protected WWidget lastResponder = null;
