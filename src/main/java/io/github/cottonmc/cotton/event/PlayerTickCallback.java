@@ -8,24 +8,24 @@ import net.minecraft.util.profiler.Profiler;
 public interface PlayerTickCallback {
 	public static final Event<PlayerTickCallback> EVENT = EventFactory.createArrayBacked(PlayerTickCallback.class,
 			(listeners) -> {
-				if (EventFactory.isProfilingEnabled()) {
+//				if (EventFactory.isProfilingEnabled()) {
+//					return (player) -> {
+//						Profiler profiler = player.getServer().getProfiler();
+//						profiler.push("fabricPlayerTick");
+//						for (PlayerTickCallback event : listeners) {
+//							profiler.push(EventFactory.getHandlerName(event));
+//							event.tick(player);
+//							profiler.pop();
+//						}
+//						profiler.pop();
+//					};
+//				} else {
 					return (player) -> {
-						Profiler profiler = player.getServer().getProfiler();
-						profiler.push("fabricPlayerTick");
-						for (PlayerTickCallback event : listeners) {
-							profiler.push(EventFactory.getHandlerName(event));
-							event.tick(player);
-							profiler.pop();
-						}
-						profiler.pop();
-					};
-				} else {
-					return (player) -> {
 						for (PlayerTickCallback event : listeners) {
 							event.tick(player);
 						}
 					};
-				}
+//				}
 			}
 	);
 
