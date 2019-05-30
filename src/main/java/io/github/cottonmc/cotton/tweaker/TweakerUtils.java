@@ -141,6 +141,11 @@ public class TweakerUtils {
 		return PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
 	}
 
+	/**
+	 * Get an array of string ids for items in a given tag.
+	 * @param tagId The id of the tag to get items for.
+	 * @return An array of items in the tag.
+	 */
 	public static String[] getItemsInTag(String tagId) {
 		Tag<Item> tag = ItemTags.getContainer().get(new Identifier(tagId));
 		if (tag == null) return new String[0];
