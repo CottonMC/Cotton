@@ -46,7 +46,7 @@ public class TweakerLoader implements SimpleResourceReloadListener {
 	public CompletableFuture<Void> apply(Object o, ResourceManager manager, Profiler profiler, Executor executor) {
 		return CompletableFuture.runAsync(() -> {
 			for (Tweaker tweaker : Tweaker.TWEAKERS) {
-				tweaker.prepareReload();
+				tweaker.prepareReload(manager);
 			}
 			int loaded = 0;
 			for (Identifier tweaker : TWEAKERS.keySet()) {

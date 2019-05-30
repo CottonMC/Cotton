@@ -8,7 +8,8 @@
     "MixinCauldronBehavior",
     "MixinBucketItem",
     "MixinRecipeManager",
-    "MixinPlayerEntity"
+    "MixinPlayerEntity",
+    "MixinResourceManagerImpl"
   ],
   "client": [
     "MixinCottonInitializerClient"

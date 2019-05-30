@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -27,7 +28,7 @@ public class CauldronTweaker implements Tweaker {
 	 * Used during data pack loading to clear the behavior list.
 	 * DO NOT CALL THIS YOURSELF, EVER. IT WILL WIPE ALL DATA PACK BEHAVIORS.
 	 */
-	public void prepareReload() {
+	public void prepareReload(ResourceManager manager) {
 		INSTANCE.behaviors.clear();
 	}
 

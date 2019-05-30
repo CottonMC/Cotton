@@ -1,15 +1,27 @@
 package io.github.cottonmc.cotton.tweaker;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.cottonmc.cotton.Cotton;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtil;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+/**
+ * Various utilities for writing tweakers, due to the obfuscation of minecraft code.
+ */
 public class TweakerUtils {
 	/**
 	 * Get a registered item inside a script.
@@ -76,5 +88,53 @@ public class TweakerUtils {
 			if (!stack.isEmpty()) return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Create an item stack from an item id.
+	 * @param id The id of the item to get.
+	 * @param amount The amount of the item in the stack.
+	 * @return An item stack of the specified item and amount.
+	 */
+	public static ItemStack createItemStack(String id, int amount) {
+		return new ItemStack(getItem(id), amount);
+	}
+
+	/**
+	 * Create an item stack from an item.
+	 * @param item The item to have a stack of.
+	 * @param amount The amount of the item in the stack.
+	 * @return An item stack of the specified item and amount.
+	 */
+	public static ItemStack createItemStack(Item item, int amount) {
+		return new ItemStack(item, amount);
+	}
+
+	/**
+	 * Add NBT to an item stack.
+	 * @param stack The stack to add NBT to.
+	 * @param nbt The string version of NBT to add.
+	 * @return The stack with added NBT.
+	 */
+	public static ItemStack addNbtToStack(ItemStack stack, String nbt) {
+		StringNbtReader reader = new StringNbtReader(new StringReader(nbt));
+		try {
+			CompoundTag tag = reader.parseCompoundTag();
+			stack.setTag(tag);
+		} catch (CommandSyntaxException e) {
+			Cotton.logger.error("Error adding NBT to stack: " + e.getMessage());
+		}
+		return stack;
+	}
+
+	/**
+	 * Get a potion of the specified type.
+	 * @param id The id of the potion to get.
+	 * @see <a href="https://minecraft.gamepedia.com/Potion#Data_values">Potion data values</a>
+	 * @return an ItemStack of the desired potion
+	 */
+	public static ItemStack getPotion(String id) {
+		Potion potion = Potion.byId(id);
+		return PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
 	}
 }

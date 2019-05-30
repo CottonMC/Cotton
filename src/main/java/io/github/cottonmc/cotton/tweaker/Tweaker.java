@@ -1,5 +1,7 @@
 package io.github.cottonmc.cotton.tweaker;
 
+import net.minecraft.resource.ResourceManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public interface Tweaker {
 	/**
 	 * Called whenever the /reload command is run, before scripts are applied.
 	 * Use this time to empty out any lists or maps you need to.
+	 * @param manager The ResourceManager reloading tweakers.
 	 */
-	void prepareReload();
+	void prepareReload(ResourceManager manager);
 }
