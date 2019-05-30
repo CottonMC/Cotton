@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,11 +21,13 @@ import net.minecraft.util.Identifier;
 @Mixin(RecipeManager.class)
 public class MixinRecipeManager {
 	@Shadow
+	@Final
 	public static int PREFIX_LENGTH;
 	@Shadow
+	@Final
 	public static int SUFFIX_LENGTH;
 	
-	@ModifyVariable(method="apply", at=@At(value="INVOKE_ASSIGN", target="Ljava/util/Collection;iterator()Ljava/util/Iterator;", ordinal=0, remap=false))
+	@ModifyVariable(method = "apply", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Collection;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
 	public Iterator<Identifier> filterIterator(Iterator<Identifier> iterator) {
 		ArrayList<Identifier> replacement = new ArrayList<>();
 		while(iterator.hasNext()) {
@@ -42,7 +45,7 @@ public class MixinRecipeManager {
 		return replacement.iterator();
 	}
 	
-	@Inject(method="add", at=@At("HEAD"), cancellable = true)
+	@Inject(method = "add", at = @At("HEAD"), cancellable = true)
 	public void mixinAdd(Recipe<?> recipe, CallbackInfo info) {
 		for(Predicate<Recipe<?>> predicate : RecipeUtil.getRecipesForRemoval()) {
 			if (predicate.test(recipe)) {

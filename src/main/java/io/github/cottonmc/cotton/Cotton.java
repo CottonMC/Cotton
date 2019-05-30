@@ -8,12 +8,17 @@ import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.registry.CommonTags;
+import io.github.cottonmc.cotton.tweaker.CauldronTweaker;
+import io.github.cottonmc.cotton.tweaker.Tweaker;
+import io.github.cottonmc.cotton.tweaker.TweakerLoader;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
@@ -40,6 +45,8 @@ public class Cotton implements ModInitializer {
 //		logger.setPrefixFormat(Ansi.Blue);
 		PackMetaManager.saveMeta();
 		CottonRecipes.init();
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TweakerLoader());
+		Tweaker.addTweaker(CauldronTweaker.INSTANCE);
 
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);

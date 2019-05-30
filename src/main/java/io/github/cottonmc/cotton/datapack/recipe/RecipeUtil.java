@@ -26,7 +26,6 @@ public class RecipeUtil {
 		}
 	}
 	
-	
 	/** Marks a recipe to block from RecipeManager. This must be done before resource load! */
 	public static void removeRecipe(Identifier id) {
 		removalsByIdentifier.add(id.toString());
