@@ -33,12 +33,20 @@ public class RecipeTweaker implements Tweaker {
 					return;
 				}
 			}
+			Cotton.logger.error("No recipe manager was found! Tweaker cannot register recipes!");
 			throw new IllegalStateException("No recipe manager was found! Tweaker cannot register recipes!");
 		}
+		Cotton.logger.error("No reload listeners accessor found! Tweaker cannot register recipes!");
+		throw new IllegalStateException("No reload listeners accessor found! Tweaker cannot register recipes!");
+	}
+
+	@Override
+	public String getApplyMessage() {
+		return recipeCount + " " + (recipeCount == 1? "recipe" : "recipes");
 	}
 
 	/**
-	 * Generate a recipe ID
+	 * Generate a recipe ID. Call this from Java tweaker classes.
 	 * @param output The output stack of the recipe.
 	 * @return A unique identifier for the recipe.
 	 */
@@ -53,7 +61,20 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addRecipe(Recipe<?> recipe) {
 		INSTANCE.recipeCount++;
-		INSTANCE.manager.add(recipe);
+		try {
+			INSTANCE.manager.add(recipe);
+		} catch (Exception e) {
+			Cotton.logger.error("Failed to add recipe from tweaker - " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Get a recipe from an item stack. Call this from java tweaker classes.
+	 * @param stack The item stack to make an ingredient for.
+	 * @return The wrapped ingredient of the stack.
+	 */
+	public static Ingredient ingredientForStack(ItemStack stack) {
+		return Ingredient.ofStacks(stack);
 	}
 
 	public static void addShaped(String[] inputs, ItemStack output, int x, int y) {
@@ -70,13 +91,17 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addShaped(String[] inputs, ItemStack output, int x, int y, String group){
 		Identifier recipeId = getRecipeId(output);
-		DefaultedList<Ingredient> ingredients = DefaultedList.create();
-			for (int i = 0; i < Math.min(inputs.length, x*y); i++) {
-			String id = inputs[i];
-			if (id.equals("")) continue;
-			ingredients.add(i, RecipeParser.processIngredient(id));
+		try {
+			DefaultedList<Ingredient> ingredients = DefaultedList.create();
+			for (int i = 0; i < Math.min(inputs.length, x * y); i++) {
+				String id = inputs[i];
+				if (id.equals("")) continue;
+				ingredients.add(i, RecipeParser.processIngredient(id));
+			}
+			addRecipe(new ShapedRecipe(recipeId, group, x, y, ingredients, output));
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing shaped recipe - " + e.getMessage());
 		}
-		addRecipe(new ShapedRecipe(recipeId, group, x, y, ingredients, output));
 	}
 
 	public static void addShaped(String[] pattern, Map<String, String> dictionary, ItemStack output) {
@@ -99,7 +124,7 @@ public class RecipeTweaker implements Tweaker {
 			int y = pattern.length;
 			DefaultedList<Ingredient> ingredients = RecipeParser.getIngredients(pattern, map, x, y);
 			addRecipe(new ShapedRecipe(recipeId, group, x, y, ingredients, output));
-		} catch (TweakerSyntaxException e) {
+		} catch (Exception e) {
 			Cotton.logger.error("Error parsing shaped recipe - " + e.getMessage());
 		}
 	}
@@ -116,6 +141,7 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addShapeless(String[] inputs, ItemStack output, String group) {
 		Identifier recipeId = getRecipeId(output);
+		try {
 		DefaultedList<Ingredient> ingredients = DefaultedList.create();
 		for (int i = 0; i < Math.min(inputs.length, 9); i++) {
 			String id = inputs[i];
@@ -123,6 +149,9 @@ public class RecipeTweaker implements Tweaker {
 			ingredients.add(i, RecipeParser.processIngredient(id));
 		}
 		addRecipe(new ShapelessRecipe(recipeId, group, output, ingredients));
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing shapeless recipe - " + e.getMessage());
+		}
 	}
 
 	public static void addSmelting(String input, ItemStack output, int ticks, float xp) {
@@ -139,8 +168,12 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addSmelting(String input, ItemStack output, int cookTime, float xp, String group) {
 		Identifier recipeId = getRecipeId(output);
-		Ingredient ingredient = RecipeParser.processIngredient(input);
-		addRecipe(new SmeltingRecipe(recipeId, group, ingredient, output, xp, cookTime));
+		try {
+			Ingredient ingredient = RecipeParser.processIngredient(input);
+			addRecipe(new SmeltingRecipe(recipeId, group, ingredient, output, xp, cookTime));
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing smelting recipe - " + e.getMessage());
+		}
 	}
 
 	public static void addBlasting(String input, ItemStack output, int ticks, float xp) {
@@ -157,8 +190,12 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addBlasting(String input, ItemStack output, int cookTime, float xp, String group) {
 		Identifier recipeId = getRecipeId(output);
+		try {
 		Ingredient ingredient = RecipeParser.processIngredient(input);
 		addRecipe(new BlastingRecipe(recipeId, group, ingredient, output, xp, cookTime));
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing blasting recipe - " + e.getMessage());
+		}
 	}
 
 	public static void addSmoking(String input, ItemStack output, int ticks, float xp) {
@@ -175,8 +212,12 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addSmoking(String input, ItemStack output, int cookTime, float xp, String group) {
 		Identifier recipeId = getRecipeId(output);
-		Ingredient ingredient = RecipeParser.processIngredient(input);
-		addRecipe(new SmokingRecipe(recipeId, group, ingredient, output, xp, cookTime));
+		try {
+			Ingredient ingredient = RecipeParser.processIngredient(input);
+			addRecipe(new SmokingRecipe(recipeId, group, ingredient, output, xp, cookTime));
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing smokig recipe - " + e.getMessage());
+		}
 	}
 
 	public static void addCampfire(String input, ItemStack output, int ticks, float xp) {
@@ -193,8 +234,12 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addCampfire(String input, ItemStack output, int cookTime, float xp, String group) {
 		Identifier recipeId = getRecipeId(output);
+		try {
 		Ingredient ingredient = RecipeParser.processIngredient(input);
 		addRecipe(new CampfireCookingRecipe(recipeId, group, ingredient, output, xp, cookTime));
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing campfire recipe - " + e.getMessage());
+		}
 	}
 
 	public static void addStonecutting(String input, ItemStack output) {
@@ -209,8 +254,12 @@ public class RecipeTweaker implements Tweaker {
 	 */
 	public static void addStonecutting(String input, ItemStack output, String group) {
 		Identifier recipeId = getRecipeId(output);
-		Ingredient ingredient = RecipeParser.processIngredient(input);
-		addRecipe(new StonecuttingRecipe(recipeId, group, ingredient, output));
+		try {
+			Ingredient ingredient = RecipeParser.processIngredient(input);
+			addRecipe(new StonecuttingRecipe(recipeId, group, ingredient, output));
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing stonecutter recipe - " + e.getMessage());
+		}
 	}
 
 

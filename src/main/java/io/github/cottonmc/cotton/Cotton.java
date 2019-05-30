@@ -9,6 +9,7 @@ import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.registry.CommonTags;
 import io.github.cottonmc.cotton.tweaker.CauldronTweaker;
+import io.github.cottonmc.cotton.tweaker.RecipeTweaker;
 import io.github.cottonmc.cotton.tweaker.Tweaker;
 import io.github.cottonmc.cotton.tweaker.TweakerLoader;
 import net.fabricmc.api.ModInitializer;
@@ -47,6 +48,7 @@ public class Cotton implements ModInitializer {
 		CottonRecipes.init();
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TweakerLoader());
 		Tweaker.addTweaker(CauldronTweaker.INSTANCE);
+		Tweaker.addTweaker(RecipeTweaker.INSTANCE);
 
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);

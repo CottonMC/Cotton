@@ -2,6 +2,8 @@ package io.github.cottonmc.cotton.tweaker;
 
 import com.google.common.collect.Sets;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
@@ -19,16 +21,22 @@ public class RecipeParser {
 
 	/**
 	 * Get an Ingredient from a string item or tag id.
-	 * @param input The id to use, with a # at the front if it's a tag
+	 * @param input The id to use, with a # at the front if it's a tag or & at the front if it's a potion.
 	 * @return the Ingredient for the given id
 	 */
-	public static Ingredient processIngredient(String input) {
+	public static Ingredient processIngredient(String input) throws TweakerSyntaxException {
 		if (input.indexOf('#') == 0) {
 			String tag = input.substring(1);
 			Tag<Item> itemTag = ItemTags.getContainer().get(new Identifier(tag));
+			if (itemTag == null) throw new TweakerSyntaxException("Failed to get item tag for input: " + input);
 			return Ingredient.fromTag(itemTag);
+		} else if (input.indexOf('&') == 0) {
+			ItemStack stack = TweakerUtils.getPotion(input.substring(1));
+			if (stack.isEmpty()) throw new TweakerSyntaxException("Failed to get potion for input: " + input);
+			return Ingredient.ofStacks(stack);
 		} else {
 			Item item = TweakerUtils.getItem(input);
+			if (item == Items.AIR) throw new TweakerSyntaxException("Failed to get item for input: " + input);
 			return Ingredient.ofItems(item);
 		}
 	}

@@ -13,7 +13,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
+import net.minecraft.potion.Potions;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.tag.ItemTags;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -130,10 +133,22 @@ public class TweakerUtils {
 	 * Get a potion of the specified type.
 	 * @param id The id of the potion to get.
 	 * @see <a href="https://minecraft.gamepedia.com/Potion#Data_values">Potion data values</a>
-	 * @return an ItemStack of the desired potion
+	 * @return an ItemStack of the desired potion, or an empty stack if the potion doesn't exist.
 	 */
 	public static ItemStack getPotion(String id) {
 		Potion potion = Potion.byId(id);
+		if (potion == Potions.EMPTY) return ItemStack.EMPTY;
 		return PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
+	}
+
+	public static String[] getItemsInTag(String tagId) {
+		Tag<Item> tag = ItemTags.getContainer().get(new Identifier(tagId));
+		if (tag == null) return new String[0];
+		Object[] items = tag.values().toArray();
+		String[] res = new String[items.length];
+		for (int i = 0; i < items.length; i++) {
+			res[i] = Registry.ITEM.getId((Item)items[i]).toString();
+		}
+		return res;
 	}
 }

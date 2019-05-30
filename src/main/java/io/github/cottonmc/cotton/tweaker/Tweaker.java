@@ -22,4 +22,10 @@ public interface Tweaker {
 	 * @param manager The ResourceManager reloading tweakers.
 	 */
 	void prepareReload(ResourceManager manager);
+
+	/**
+	 * Called after all scripts have been run, to log what tweakers have been applied.
+	 * @return The number of applied tweaks and the description of what type of tweak it is, ex. "12 recipes"
+	 */
+	String getApplyMessage();
 }

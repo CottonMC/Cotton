@@ -12,9 +12,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -69,8 +67,27 @@ public class TweakerLoader implements SimpleResourceReloadListener {
 				}
 				loaded++;
 			}
-			Cotton.logger.info("Loaded %s tweakers", loaded);
+			List<String> applied = new ArrayList<>();
+			for (Tweaker tweaker : Tweaker.TWEAKERS) {
+				applied.add(tweaker.getApplyMessage());
+			}
+			String confirm = formatApplied(applied);
+			Cotton.logger.info("Applied %s tweaker %s, including %s", loaded, (loaded == 1? "script" : "scripts"), confirm);
 		});
+	}
+
+	public String formatApplied(List<String> messages) {
+		StringBuilder ret = new StringBuilder();
+		for (int i = 0; i < messages.size(); i++) {
+			String message = messages.get(i);
+			ret.append(message);
+			if (i < messages.size() - 1) {
+				if (messages.size() <= 2) ret.append(" ");
+				else ret.append(", ");
+			}
+			if (i == messages.size() - 2) ret.append("and ");
+		}
+		return ret.toString();
 	}
 
 	@Override

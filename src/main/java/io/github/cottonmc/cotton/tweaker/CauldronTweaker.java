@@ -32,6 +32,11 @@ public class CauldronTweaker implements Tweaker {
 		INSTANCE.behaviors.clear();
 	}
 
+	@Override
+	public String getApplyMessage() {
+		return behaviors.size() + " cauldron " + (behaviors.size() == 1? "behavior" : "behaviors");
+	}
+
 	/**
 	 * Register a new cauldron behavior.
 	 * Construct new classes and pass them functions for these. Each are passed a {@link CauldronContext}.
