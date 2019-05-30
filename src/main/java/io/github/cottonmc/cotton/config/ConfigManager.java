@@ -7,6 +7,8 @@ import blue.endless.jankson.impl.SyntaxError;
 import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
 
 import java.io.File;
 import java.io.FileOutputStream;

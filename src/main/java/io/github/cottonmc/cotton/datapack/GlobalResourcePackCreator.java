@@ -30,7 +30,7 @@ public class GlobalResourcePackCreator implements ResourcePackCreator {
 
 			for(File file : files) {
 				String name = "global/" + file.getName();
-				T container = ResourcePackContainer.of(name, false, this.createResourcePack(file), factory, ResourcePackContainer.SortingDirection.TOP);
+				T container = ResourcePackContainer.of(name, false, this.createResourcePack(file), factory, ResourcePackContainer.InsertionPosition.TOP);
 				if (container != null) {
 					packMap.put(name, container);
 				}

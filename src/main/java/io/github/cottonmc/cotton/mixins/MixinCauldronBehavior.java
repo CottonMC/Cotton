@@ -3,13 +3,13 @@ package io.github.cottonmc.cotton.mixins;
 import io.github.cottonmc.cotton.cauldron.Cauldron;
 import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
+import io.github.cottonmc.cotton.tweaker.CauldronTweaker;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Hand;
@@ -21,27 +21,24 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 @Mixin(CauldronBlock.class)
 public class MixinCauldronBehavior implements Cauldron {
 
-	@Inject(at = @At("HEAD"), method = "activate", cancellable = true)
+	@Inject(method = "activate", at = @At("HEAD"), cancellable = true)
 	private void onActivateHead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<Boolean> cir) {
-		ItemStack stack = player.getStackInHand(hand);
-
-		// Skip the vanilla bucket code
-		if (stack.getItem() == Items.BUCKET) {
-			cir.setReturnValue(false);
-			cir.cancel();
-			return;
-		}
-
 		// Run Cauldron Behaviors - this is the code to imitate when implementing on your own block
 		CauldronContext ctx = new CauldronContext(world, pos, state, state.get(CauldronBlock.LEVEL), state.get(CauldronBlock.LEVEL) == 0 ? Fluids.EMPTY : Fluids.WATER, DefaultedList.create(ItemStack.EMPTY), player, hand, player.getStackInHand(hand));
-		for (Predicate<CauldronContext> pred : CauldronBehavior.BEHAVIORS.keySet()) {
+		Map<Predicate<CauldronContext>, CauldronBehavior> allBehaviors = new HashMap<>(CauldronBehavior.BEHAVIORS);
+		// This adds support for Tweaker cauldron behaviors
+		allBehaviors.putAll(CauldronTweaker.INSTANCE.behaviors);
+		for (Predicate<CauldronContext> pred : allBehaviors.keySet()) {
 			if (pred.test(ctx)) {
-				CauldronBehavior behavior = CauldronBehavior.BEHAVIORS.get(pred);
+				CauldronBehavior behavior = allBehaviors.get(pred);
 				behavior.react(ctx);
 				cir.setReturnValue(true);
 				return;
@@ -70,5 +67,14 @@ public class MixinCauldronBehavior implements Cauldron {
 	@Override
 	public boolean canAcceptFluid(World world, BlockPos pos, BlockState state, Fluid fluid) {
 		return FluidTags.WATER.contains(fluid);
+	}
+
+	@Override
+	public CauldronContext createContext(World world, BlockPos pos, @Nullable PlayerEntity player, ItemStack stack) {
+		Hand hand;
+		if (player == null) hand = null;
+		else hand = player.getActiveHand();
+		BlockState state = world.getBlockState(pos);
+		return new CauldronContext(world, pos, state, state.get(CauldronBlock.LEVEL), state.get(CauldronBlock.LEVEL) == 0 ? Fluids.EMPTY : Fluids.WATER, DefaultedList.create(ItemStack.EMPTY), player, hand, stack) ;
 	}
 }

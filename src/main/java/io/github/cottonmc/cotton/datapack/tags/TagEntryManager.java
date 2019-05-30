@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class TagEntryManager {
 	public static void registerToTag(TagType type, Identifier tagId, String... entries) {
-		Cotton.logger.info("Adding objects to tag " + tagId.toString());
+		if (Cotton.isDevEnv) Cotton.logger.info("Adding objects to tag " + tagId.toString());
 		File tagFile = new File(getTagLocation(tagId), type.asString() + "/" + tagId.getPath() + ".json");
 		Jankson jankson = Jankson.builder().build();
 		try {

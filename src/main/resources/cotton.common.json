@@ -6,7 +6,16 @@
   "mixins": [
     "MixinDataPackLoad",
     "MixinCauldronBehavior",
-    "MixinBucketItem"
+    "MixinBucketItem",
+    "MixinRecipeManager",
+    "MixinPlayerEntity",
+    "MixinResourceManagerImpl"
+  ],
+  "client": [
+    "MixinCottonInitializerClient"
+  ],
+  "server": [
+    "MixinCottonInitializerServer"
   ],
   "injectors": {
     "defaultRequire": 1

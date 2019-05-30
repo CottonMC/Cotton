@@ -2,10 +2,13 @@
 /build
 /bin
 /.gradle
-/minecraft
 /out
-/run
 /classes
+
+# Run stuff
+/minecraft
+/run
+/logs
 
 # IDE nonsense that could go in source control but really shouldn't
 .classpath

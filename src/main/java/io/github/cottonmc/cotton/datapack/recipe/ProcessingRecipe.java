@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.crafting.ShapedRecipe;
+import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
@@ -138,7 +138,7 @@ public abstract class ProcessingRecipe implements Recipe<Inventory> {
 			int processTime = getInt(jsonObject, "processtime", this.defaultProcessTime);
 
 			String bonusLoot = getString(jsonObject, "bonus", null);
-			Identifier bonusLootId = bonusLoot == null ? null : Identifier.create(bonusLoot);
+			Identifier bonusLootId = bonusLoot == null ? null : new Identifier(bonusLoot);
 
 			return factory.create(id, input, output, exp, processTime, bonusLootId);
 		}

@@ -4,8 +4,8 @@ import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.datapack.tags.TagEntryManager;
 import io.github.cottonmc.cotton.datapack.tags.TagType;
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.block.BlockItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -31,7 +31,7 @@ public class CommonBlocks {
 	public static Block register(String name, Block block, BlockItem item) {
 		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
-		if (!Registry.BLOCK.containsId(id)) {
+		if (!Registry.BLOCK.getOrEmpty(id).isPresent()) {
 			Registry.register(Registry.BLOCK, id, block);
 			CommonItems.register(id.getPath(), item);
 			TagEntryManager.registerToTag(TagType.BLOCK, new Identifier(Cotton.SHARED_NAMESPACE, name), id.toString());
@@ -50,7 +50,7 @@ public class CommonBlocks {
 	public static Block getBlock(String name){
 		Identifier id = new Identifier(Cotton.SHARED_NAMESPACE, name);
 
-		if (Registry.BLOCK.containsId(id)) {
+		if (!Registry.BLOCK.getOrEmpty(id).isPresent()) {
 			return Registry.BLOCK.get(id);
 		}
 		return null;
