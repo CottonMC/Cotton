@@ -24,85 +24,85 @@ import java.util.stream.Stream;
  * A virtual data pack that is not represented by actual files.
  */
 public class VirtualDataPack extends AbstractFileResourcePack {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private final Set<String> namespaces;
-    private final Map<String, Supplier<InputStream>> contents;
-    private final String id;
+	private static final Logger LOGGER = LogManager.getLogger();
+	private final Set<String> namespaces;
+	private final Map<String, Supplier<InputStream>> contents;
+	private final String id;
 
-    /**
-     * The constructor.
-     *
-     * @param id an identifier for this data pack (does not have to be unique)
-     * @param namespaces the namespaces that this pack provides
-     * @param contents the contents as a [resource path]=>[input stream supplier] map
-     */
-    public VirtualDataPack(String id, Set<String> namespaces, Map<String, Supplier<InputStream>> contents) {
-        super(null);
-        this.id = id;
-        namespaces.forEach(namespace -> {
-            if (!Identifier.isValid(namespace + ":test"))
-                throw new InvalidIdentifierException("Invalid namespace: " + namespace);
-        });
-        this.namespaces = namespaces;
-        this.contents = contents;
-    }
+	/**
+	 * The constructor.
+	 *
+	 * @param id         an identifier for this data pack (does not have to be unique)
+	 * @param namespaces the namespaces that this pack provides
+	 * @param contents   the contents as a [resource path]=>[input stream supplier] map
+	 */
+	public VirtualDataPack(String id, Set<String> namespaces, Map<String, Supplier<InputStream>> contents) {
+		super(null);
+		this.id = id;
+		namespaces.forEach(namespace -> {
+			if (!Identifier.isValid(namespace + ":test"))
+				throw new InvalidIdentifierException("Invalid namespace: " + namespace);
+		});
+		this.namespaces = namespaces;
+		this.contents = contents;
+	}
 
-    @Override
-    protected InputStream openFile(String s) throws IOException {
-        if (contents.containsKey(s)) return contents.get(s).get();
-        else throw new FileNotFoundException("Unknown file in virtual resource pack: " + s);
-    }
+	@Override
+	protected InputStream openFile(String s) throws IOException {
+		if (contents.containsKey(s)) return contents.get(s).get();
+		else throw new FileNotFoundException("Unknown file in virtual resource pack: " + s);
+	}
 
-    @Override
-    protected boolean containsFile(String s) {
-        return contents.containsKey(s);
-    }
+	@Override
+	protected boolean containsFile(String s) {
+		return contents.containsKey(s);
+	}
 
-    @Override
-    public Collection<Identifier> findResources(ResourceType type, String path, int depth, Predicate<String> predicate) {
-        List<Identifier> ids = new ArrayList<>();
-        Set<String> contentKeys = contents.keySet();
+	@Override
+	public Collection<Identifier> findResources(ResourceType type, String path, int depth, Predicate<String> predicate) {
+		List<Identifier> ids = new ArrayList<>();
+		Set<String> contentKeys = contents.keySet();
 
-        for (String namespace : getNamespaces(type)) {
-            String prefix = String.format("%s/%s/%s", type.getName(), namespace, path);
-            Stream<String> matchingKeys = contentKeys.stream().filter(s -> s.startsWith(prefix));
-            matchingKeys.map(s -> s.split("/"))
-                    .filter(split -> predicate.test(split[split.length - 1]))
-                    .forEach(split -> {
-                        try {
-                            ids.add(new Identifier(namespace, String.join("/", ArrayUtils.subarray(split, 2, split.length))));
-                        } catch (InvalidIdentifierException e) {
-                            LOGGER.error("Invalid identifier found in virtual resource pack", e);
-                        }
-                    });
-        }
+		for (String namespace : getNamespaces(type)) {
+			String prefix = String.format("%s/%s/%s", type.getName(), namespace, path);
+			Stream<String> matchingKeys = contentKeys.stream().filter(s -> s.startsWith(prefix));
+			matchingKeys.map(s -> s.split("/"))
+					.filter(split -> predicate.test(split[split.length - 1]))
+					.forEach(split -> {
+						try {
+							ids.add(new Identifier(namespace, String.join("/", ArrayUtils.subarray(split, 2, split.length))));
+						} catch (InvalidIdentifierException e) {
+							LOGGER.error("Invalid identifier found in virtual resource pack", e);
+						}
+					});
+		}
 
-        return ids;
-    }
+		return ids;
+	}
 
-    @Override
-    public Set<String> getNamespaces(ResourceType resourceType) {
-        return namespaces;
-    }
+	@Override
+	public Set<String> getNamespaces(ResourceType resourceType) {
+		return namespaces;
+	}
 
-    @Override
-    public void close() {}
+	@Override
+	public void close() {}
 
-    @Override
-    public String getName() {
-        return String.format("%s (virtual)", id);
-    }
+	@Override
+	public String getName() {
+		return String.format("%s (virtual)", id);
+	}
 
-    String getId(int index) {
-        return String.format("virtual/%d_%s", index, id);
-    }
+	String getId(int index) {
+		return String.format("virtual/%d_%s", index, id);
+	}
 
-    @Nullable
-    @Override
-    public <T> T parseMetadata(ResourceMetadataReader<T> reader) {
-        return reader.fromJson(DataFixUtils.make(new JsonObject(), object -> {
-            object.addProperty("pack_format", 1);
-            object.addProperty("description", "Virtual data pack generated by Cotton.");
-        }));
-    }
+	@Nullable
+	@Override
+	public <T> T parseMetadata(ResourceMetadataReader<T> reader) {
+		return reader.fromJson(DataFixUtils.make(new JsonObject(), object -> {
+			object.addProperty("pack_format", 1);
+			object.addProperty("description", "Virtual data pack generated by Cotton.");
+		}));
+	}
 }

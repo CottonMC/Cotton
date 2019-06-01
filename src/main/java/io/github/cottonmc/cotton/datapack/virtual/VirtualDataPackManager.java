@@ -11,21 +11,21 @@ import java.util.Map;
  * Manages virtual data packs. See {@link #addPack(VirtualDataPack)} for registering packs.
  */
 public enum VirtualDataPackManager implements ResourcePackCreator {
-    INSTANCE;
+	INSTANCE;
 
-    private final List<VirtualDataPack> packs = new ArrayList<>();
+	private final List<VirtualDataPack> packs = new ArrayList<>();
 
-    @Override
-    public <T extends ResourcePackContainer> void registerContainer(Map<String, T> map, ResourcePackContainer.Factory<T> factory) {
-        int i = 0;
-        for (VirtualDataPack pack : packs) {
-            String id = pack.getId(i++);
-            T container = ResourcePackContainer.of(id, false, () -> pack, factory, ResourcePackContainer.InsertionPosition.TOP);
-            if (container != null) {
-                map.put(id, container);
-            }
-        }
-    }
+	@Override
+	public <T extends ResourcePackContainer> void registerContainer(Map<String, T> map, ResourcePackContainer.Factory<T> factory) {
+		int i = 0;
+		for (VirtualDataPack pack : packs) {
+			String id = pack.getId(i++);
+			T container = ResourcePackContainer.of(id, false, () -> pack, factory, ResourcePackContainer.InsertionPosition.TOP);
+			if (container != null) {
+				map.put(id, container);
+			}
+		}
+	}
 
 	/**
 	 * Adds a virtual data pack to the manager.
@@ -33,6 +33,6 @@ public enum VirtualDataPackManager implements ResourcePackCreator {
 	 * @param pack the pack
 	 */
 	public void addPack(VirtualDataPack pack) {
-        packs.add(pack);
-    }
+		packs.add(pack);
+	}
 }
