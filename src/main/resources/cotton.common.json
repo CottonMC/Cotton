@@ -12,7 +12,8 @@
     "MixinResourceManagerImpl"
   ],
   "client": [
-    "MixinCottonInitializerClient"
+    "MixinCottonInitializerClient",
+    "MixinClientDataLoad"
   ],
   "server": [
     "MixinCottonInitializerServer"

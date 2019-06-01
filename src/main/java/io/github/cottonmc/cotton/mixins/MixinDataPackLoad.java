@@ -1,9 +1,10 @@
 package io.github.cottonmc.cotton.mixins;
 
 import io.github.cottonmc.cotton.datapack.GlobalResourcePackCreator;
-import io.github.cottonmc.cotton.datapack.virtual.VirtualDataPackManager;
+import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePackManager;
 import net.minecraft.resource.ResourcePackContainer;
 import net.minecraft.resource.ResourcePackContainerManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.LevelProperties;
 import org.spongepowered.asm.mixin.Final;
@@ -25,6 +26,6 @@ public class MixinDataPackLoad {
 	@Inject(method = "loadWorldDataPacks", at = @At(value = "HEAD"))
 	public void addGlobalDataPacks(File file, LevelProperties properties, CallbackInfo info) {
 		dataPackContainerManager.addCreator(new GlobalResourcePackCreator());
-		dataPackContainerManager.addCreator(VirtualDataPackManager.INSTANCE);
+		dataPackContainerManager.addCreator(VirtualResourcePackManager.INSTANCE.getCreatorForType(ResourceType.SERVER_DATA));
 	}
 }
