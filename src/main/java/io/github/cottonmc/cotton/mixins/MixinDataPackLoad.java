@@ -1,6 +1,7 @@
 package io.github.cottonmc.cotton.mixins;
 
 import io.github.cottonmc.cotton.datapack.GlobalResourcePackCreator;
+import io.github.cottonmc.cotton.datapack.virtual.VirtualDataPackManager;
 import net.minecraft.resource.ResourcePackContainer;
 import net.minecraft.resource.ResourcePackContainerManager;
 import net.minecraft.server.MinecraftServer;
@@ -24,5 +25,6 @@ public class MixinDataPackLoad {
 	@Inject(method = "loadWorldDataPacks", at = @At(value = "HEAD"))
 	public void addGlobalDataPacks(File file, LevelProperties properties, CallbackInfo info) {
 		dataPackContainerManager.addCreator(new GlobalResourcePackCreator());
+		dataPackContainerManager.addCreator(VirtualDataPackManager.INSTANCE);
 	}
 }
