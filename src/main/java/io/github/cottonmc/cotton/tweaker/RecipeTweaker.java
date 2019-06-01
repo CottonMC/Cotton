@@ -1,6 +1,7 @@
 package io.github.cottonmc.cotton.tweaker;
 
 import io.github.cottonmc.cotton.Cotton;
+import io.github.cottonmc.cotton.impl.RecipeMapAccessor;
 import io.github.cottonmc.cotton.impl.ReloadListenersAccessor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.*;
@@ -17,6 +18,7 @@ public class RecipeTweaker implements Tweaker {
 	public static final RecipeTweaker INSTANCE = new RecipeTweaker();
 	private RecipeManager manager;
 	private int recipeCount;
+	private int removeCount;
 
 	/**
 	 * Used during data pack loading to set up recipe adding.
@@ -25,6 +27,7 @@ public class RecipeTweaker implements Tweaker {
 	@Override
 	public void prepareReload(ResourceManager manager) {
 		recipeCount = 0;
+		removeCount = 0;
 		if (manager instanceof ReloadListenersAccessor) {
 			List<ResourceReloadListener> listeners = ((ReloadListenersAccessor)manager).cotton_getListeners();
 			for (ResourceReloadListener listener : listeners) {
@@ -42,7 +45,7 @@ public class RecipeTweaker implements Tweaker {
 
 	@Override
 	public String getApplyMessage() {
-		return recipeCount + " " + (recipeCount == 1? "recipe" : "recipes");
+		return recipeCount + " " + (recipeCount == 1? "recipe" : "recipes" + " (" + removeCount + " removed)");
 	}
 
 	/**
@@ -53,6 +56,20 @@ public class RecipeTweaker implements Tweaker {
 	public static Identifier getRecipeId(ItemStack output) {
 		String resultName = Registry.ITEM.getId(output.getItem()).getPath();
 		return new Identifier(Cotton.MODID, "tweaked/"+resultName+"-"+INSTANCE.recipeCount);
+	}
+
+	public static void removeRecipe(String id) {
+		Identifier recipeId = new Identifier(id);
+		Map<RecipeType<?>, Map<Identifier, Recipe<?>>> recipeMap = ((RecipeMapAccessor)INSTANCE.manager).getRecipeMap();
+		for (RecipeType<?> type : recipeMap.keySet()) {
+			Map<Identifier, Recipe<?>> map = recipeMap.get(type);
+			if (map.containsKey(recipeId)) {
+				map.remove(recipeId);
+				INSTANCE.removeCount++;
+				return;
+			}
+		}
+		Cotton.logger.error("Could not find recipe to remove: " + id);
 	}
 
 	/**
@@ -77,28 +94,49 @@ public class RecipeTweaker implements Tweaker {
 		return Ingredient.ofStacks(stack);
 	}
 
-	public static void addShaped(String[] inputs, ItemStack output, int x, int y) {
-		addShaped(inputs, output, x, y, "");
+	public static void addShaped(String[][] inputs, ItemStack output) {
+		addShaped(inputs, output, "");
 	}
 
 	/**
-	 * Register a shaped crafting recipe from an array of inputs.
-	 * @param inputs The input item or tag ids required in order: left to right, top to bottom.
+	 * Add a shaped recipe from a 2D array of inputs, like a standard CraftTweaker recipe.
+	 * @param inputs the 2D array (array of arrays) of inputs to use.
 	 * @param output The output of the recipe.
-	 * @param x How many columns the recipe needs.
-	 * @param y How many rows the recipe needs.
 	 * @param group The recipe group to go in, or "" for none.
 	 */
-	public static void addShaped(String[] inputs, ItemStack output, int x, int y, String group){
+	public static void addShaped(String[][] inputs, ItemStack output, String group) {
+		try {
+			String[] processed = RecipeParser.processGrid(inputs);
+			int width = inputs[0].length;
+			int height = inputs.length;
+			addShaped(processed, output, width, height, group);
+		} catch (Exception e) {
+			Cotton.logger.error("Error parsing shaped recipe - " + e.getMessage());
+		}
+	}
+
+	public static void addShaped(String[] inputs, ItemStack output, int width, int height) {
+		addShaped(inputs, output, width, height, "");
+	}
+
+	/**
+	 * Register a shaped crafting recipe from a 1D array of inputs.
+	 * @param inputs The input item or tag ids required in order: left to right, top to bottom.
+	 * @param output The output of the recipe.
+	 * @param width How many rows the recipe needs.
+	 * @param height How many columns the recipe needs.
+	 * @param group The recipe group to go in, or "" for none.
+	 */
+	public static void addShaped(String[] inputs, ItemStack output, int width, int height, String group){
 		Identifier recipeId = getRecipeId(output);
 		try {
 			DefaultedList<Ingredient> ingredients = DefaultedList.create();
-			for (int i = 0; i < Math.min(inputs.length, x * y); i++) {
+			for (int i = 0; i < Math.min(inputs.length, width * height); i++) {
 				String id = inputs[i];
 				if (id.equals("")) continue;
 				ingredients.add(i, RecipeParser.processIngredient(id));
 			}
-			addRecipe(new ShapedRecipe(recipeId, group, x, y, ingredients, output));
+			addRecipe(new ShapedRecipe(recipeId, group, width, height, ingredients, output));
 		} catch (Exception e) {
 			Cotton.logger.error("Error parsing shaped recipe - " + e.getMessage());
 		}

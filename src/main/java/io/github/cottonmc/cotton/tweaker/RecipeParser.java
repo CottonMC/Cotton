@@ -42,6 +42,27 @@ public class RecipeParser {
 	}
 
 	/**
+	 * Process a grid of inputs CraftTweaker-style.
+	 * @param inputs The array of string arrays to process inputs from
+	 * @return The inputs converted into a single string array if the grid is valid
+	 */
+	public static String[] processGrid(String[][] inputs) throws TweakerSyntaxException {
+		if (inputs.length > 3) throw new TweakerSyntaxException("Invalid pattern: too many columns, 3 is maximum");
+		if (inputs.length == 0) throw new TweakerSyntaxException("Invalid pattern: empty pattern is not allowed");
+		int width = inputs[0].length;
+		String[] output = new String[inputs.length * inputs[0].length];
+		for (int i = 0; i < inputs.length; i++) {
+			String[] row = inputs[i];
+			if (row.length > 3) throw new TweakerSyntaxException("Invalid pattern: too many columns, 3 is maximum");
+			if (row.length != width) throw new TweakerSyntaxException("Invalid pattern: each row must be the same width");
+			for (int j = 0; j < width; j++) {
+				output[j + inputs.length * i] = inputs[i][j];
+			}
+		}
+		return output;
+	}
+
+	/**
 	 * validate and parse a recipe pattern.
 	 * @param pattern up to three strings of up to three characters each for the pattern
 	 * @return processed pattern
