@@ -131,14 +131,40 @@ public class TweakerUtils {
 
 	/**
 	 * Get a potion of the specified type.
+	 * Deprecated; use `getSpecialStack("minecraft:potion", id); instead
 	 * @param id The id of the potion to get.
 	 * @see <a href="https://minecraft.gamepedia.com/Potion#Data_values">Potion data values</a>
 	 * @return an ItemStack of the desired potion, or an empty stack if the potion doesn't exist.
 	 */
+	@Deprecated
 	public static ItemStack getPotion(String id) {
 		Potion potion = Potion.byId(id);
 		if (potion == Potions.EMPTY) return ItemStack.EMPTY;
 		return PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
+	}
+
+	/**
+	 * Get a specal stack like a potion from its formatted getter string.
+	 * @param getter The formatted getter string ([getter:id]->[entry:id]) to use.
+	 * @return the gotten stack, or an empty stack if the getter or id doesn't exist
+	 */
+	public static ItemStack getSpecialStack(String getter) {
+		String[] split = RecipeParser.processGetter(getter);
+		return getSpecialStack(split[0], split[1]);
+	}
+
+	/**
+	 * Get a special stack like a potion from its getter and ID.
+	 * @param getter The id of the TweakerStackGetter to use.
+	 * @param entry The id of the entry to get from the TweakerStackGetter.
+	 * @return The gotten stack, or an empty stack if the getter or id doesn't exist.
+	 */
+	public static ItemStack getSpecialStack(String getter, String entry) {
+		Identifier getterId = new Identifier(getter);
+		Identifier itemId = new Identifier(entry);
+		if (!TweakerStackGetter.GETTERS.containsKey(getterId)) return ItemStack.EMPTY;
+		TweakerStackGetter get = TweakerStackGetter.GETTERS.get(getterId);
+		return get.getSpecialStack(itemId);
 	}
 
 	/**

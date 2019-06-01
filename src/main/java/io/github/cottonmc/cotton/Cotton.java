@@ -8,10 +8,7 @@ import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.registry.CommonTags;
-import io.github.cottonmc.cotton.tweaker.CauldronTweaker;
-import io.github.cottonmc.cotton.tweaker.RecipeTweaker;
-import io.github.cottonmc.cotton.tweaker.Tweaker;
-import io.github.cottonmc.cotton.tweaker.TweakerLoader;
+import io.github.cottonmc.cotton.tweaker.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -19,6 +16,10 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.potion.Potions;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
@@ -49,6 +50,11 @@ public class Cotton implements ModInitializer {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TweakerLoader());
 		Tweaker.addTweaker(CauldronTweaker.INSTANCE);
 		Tweaker.addTweaker(RecipeTweaker.INSTANCE);
+		TweakerStackGetter.registerGetter(new Identifier("minecraft", "potion"), (id) -> {
+			Potion potion = Potion.byId(id.toString());
+			if (potion == Potions.EMPTY) return ItemStack.EMPTY;
+			return PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
+		});
 
 		//example config and logger code
 		config = ConfigManager.loadConfig(CottonConfig.class);

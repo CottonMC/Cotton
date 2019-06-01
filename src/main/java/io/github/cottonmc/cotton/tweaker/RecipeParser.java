@@ -1,6 +1,7 @@
 package io.github.cottonmc.cotton.tweaker;
 
 import com.google.common.collect.Sets;
+import io.github.cottonmc.cotton.Cotton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,14 +32,32 @@ public class RecipeParser {
 			if (itemTag == null) throw new TweakerSyntaxException("Failed to get item tag for input: " + input);
 			return Ingredient.fromTag(itemTag);
 		} else if (input.indexOf('&') == 0) {
+			Cotton.logger.warn("Use of deprecated potion-getting method in '" + input + "', this will be removed soon!");
 			ItemStack stack = TweakerUtils.getPotion(input.substring(1));
 			if (stack.isEmpty()) throw new TweakerSyntaxException("Failed to get potion for input: " + input);
+			return Ingredient.ofStacks(stack);
+		} else if (input.contains("->")) {
+			ItemStack stack = TweakerUtils.getSpecialStack(input);
+			if (stack.isEmpty()) throw new TweakerSyntaxException("Failed to get special stack for input: " + input);
 			return Ingredient.ofStacks(stack);
 		} else {
 			Item item = TweakerUtils.getItem(input);
 			if (item == Items.AIR) throw new TweakerSyntaxException("Failed to get item for input: " + input);
 			return Ingredient.ofItems(item);
 		}
+	}
+
+	/**
+	 * Split a getter string into the ids of the getter/id.
+	 * @param base The base getter string to split.
+	 * @return A two-item array of the two parts of the getter.
+	 */
+	static String[] processGetter(String base) {
+		String[] split = new String[2];
+		int splitter = base.indexOf("->");
+		split[0] = base.substring(0, splitter);
+		split[1] = base.substring(splitter + 2);
+		return split;
 	}
 
 	/**
