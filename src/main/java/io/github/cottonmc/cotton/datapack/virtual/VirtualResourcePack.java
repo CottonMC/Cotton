@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -30,7 +31,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static final int PACK_FORMAT = 4;
 	private static final Logger LOGGER = LogManager.getLogger();
 	private final Set<String> namespaces;
-	private final Map<String, String> contents;
+	private final Map<String, Supplier<String>> contents;
 	private final String id;
 
 	/**
@@ -40,7 +41,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	 * @param namespaces the namespaces that this pack provides
 	 * @param contents   the contents as a [resource path]=>[contents] map
 	 */
-	public VirtualResourcePack(String id, Set<String> namespaces, Map<String, String> contents) {
+	public VirtualResourcePack(String id, Set<String> namespaces, Map<String, Supplier<String>> contents) {
 		super(null);
 		this.id = id;
 		namespaces.forEach(namespace -> {
@@ -53,7 +54,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 
 	@Override
 	protected InputStream openFile(String s) throws IOException {
-		if (contents.containsKey(s)) return new ReaderInputStream(new StringReader(contents.get(s)), Charsets.UTF_8);
+		if (contents.containsKey(s)) return new ReaderInputStream(new StringReader(contents.get(s).get()), Charsets.UTF_8);
 		else throw new FileNotFoundException("Unknown file in virtual resource pack: " + s);
 	}
 
