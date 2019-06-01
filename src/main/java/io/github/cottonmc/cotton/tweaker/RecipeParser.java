@@ -22,7 +22,7 @@ public class RecipeParser {
 
 	/**
 	 * Get an Ingredient from a string item or tag id.
-	 * @param input The id to use, with a # at the front if it's a tag or & at the front if it's a potion.
+	 * @param input The id to use, with a # at the front if it's a tag or -> between two ids for a getter
 	 * @return the Ingredient for the given id
 	 */
 	public static Ingredient processIngredient(String input) throws TweakerSyntaxException {

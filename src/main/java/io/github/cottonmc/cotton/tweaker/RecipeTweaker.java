@@ -45,7 +45,7 @@ public class RecipeTweaker implements Tweaker {
 
 	@Override
 	public String getApplyMessage() {
-		return recipeCount + " " + (recipeCount == 1? "recipe" : "recipes" + " (" + removeCount + " removed)");
+		return recipeCount + " " + (recipeCount == 1? "recipe" : "recipes" + (removeCount == 0? "" : " (" + removeCount + " removed)"));
 	}
 
 	/**
@@ -58,6 +58,10 @@ public class RecipeTweaker implements Tweaker {
 		return new Identifier(Cotton.MODID, "tweaked/"+resultName+"-"+INSTANCE.recipeCount);
 	}
 
+	/**
+	 * Remove a recipe from the recipe manager.
+	 * @param id The id of the recipe to remove.
+	 */
 	public static void removeRecipe(String id) {
 		Identifier recipeId = new Identifier(id);
 		Map<RecipeType<?>, Map<Identifier, Recipe<?>>> recipeMap = ((RecipeMapAccessor)INSTANCE.manager).getRecipeMap();
@@ -86,7 +90,7 @@ public class RecipeTweaker implements Tweaker {
 	}
 
 	/**
-	 * Get a recipe from an item stack. Call this from java tweaker classes.
+	 * Get a recipe ingredient from an item stack. Call this from java tweaker classes.
 	 * @param stack The item stack to make an ingredient for.
 	 * @return The wrapped ingredient of the stack.
 	 */
