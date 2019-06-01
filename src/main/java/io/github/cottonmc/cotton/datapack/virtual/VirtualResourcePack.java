@@ -1,6 +1,6 @@
 package io.github.cottonmc.cotton.datapack.virtual;
 
-import com.google.gson.JsonElement;
+import com.google.common.base.Charsets;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.DataFixUtils;
@@ -9,6 +9,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
+import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,9 +18,9 @@ import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -29,7 +30,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static final int PACK_FORMAT = 4;
 	private static final Logger LOGGER = LogManager.getLogger();
 	private final Set<String> namespaces;
-	private final Map<String, Supplier<InputStream>> contents;
+	private final Map<String, String> contents;
 	private final String id;
 
 	/**
@@ -37,9 +38,9 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	 *
 	 * @param id         an identifier for this data pack (does not have to be unique)
 	 * @param namespaces the namespaces that this pack provides
-	 * @param contents   the contents as a [resource path]=>[input stream supplier] map
+	 * @param contents   the contents as a [resource path]=>[contents] map
 	 */
-	public VirtualResourcePack(String id, Set<String> namespaces, Map<String, Supplier<InputStream>> contents) {
+	public VirtualResourcePack(String id, Set<String> namespaces, Map<String, String> contents) {
 		super(null);
 		this.id = id;
 		namespaces.forEach(namespace -> {
@@ -52,7 +53,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 
 	@Override
 	protected InputStream openFile(String s) throws IOException {
-		if (contents.containsKey(s)) return contents.get(s).get();
+		if (contents.containsKey(s)) return new ReaderInputStream(new StringReader(contents.get(s)), Charsets.UTF_8);
 		else throw new FileNotFoundException("Unknown file in virtual resource pack: " + s);
 	}
 
