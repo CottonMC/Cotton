@@ -14,7 +14,7 @@ import java.util.*;
 public enum VirtualResourcePackManager {
 	INSTANCE;
 
-	private final Multimap<ResourceType, VirtualResourcePack> packs = MultimapBuilder.hashKeys().arrayListValues().build();
+	final Multimap<ResourceType, VirtualResourcePack> packs = MultimapBuilder.hashKeys().arrayListValues().build();
 
 	public ResourcePackCreator getCreatorForType(ResourceType type) {
 		return new ResourcePackCreator() {

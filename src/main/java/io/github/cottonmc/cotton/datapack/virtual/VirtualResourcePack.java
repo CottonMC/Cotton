@@ -31,7 +31,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static final int PACK_FORMAT = SharedConstants.getGameVersion().getPackVersion();
 	private static final Logger LOGGER = LogManager.getLogger();
 	private final Set<String> namespaces;
-	private final Map<String, Supplier<String>> contents;
+	final Map<String, Supplier<String>> contents;
 	private final String id;
 
 	/**
