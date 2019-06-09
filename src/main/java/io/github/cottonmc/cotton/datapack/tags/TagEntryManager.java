@@ -4,6 +4,7 @@ import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.impl.SyntaxError;
 import io.github.cottonmc.cotton.Cotton;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import java.io.IOException;
 
 public class TagEntryManager {
 	public static void registerToTag(TagType type, Identifier tagId, String... entries) {
-		if (Cotton.isDevEnv) Cotton.logger.info("Adding objects to tag " + tagId.toString());
+		Cotton.logger.devInfo("Adding objects to tag " + tagId.toString());
 		File tagFile = new File(getTagLocation(tagId), type.asString() + "/" + tagId.getPath() + ".json");
 		Jankson jankson = Jankson.builder().build();
 		try {

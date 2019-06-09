@@ -1,6 +1,6 @@
 package io.github.cottonmc.cotton.logging;
 
-import io.github.cottonmc.cotton.Cotton;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,90 +9,78 @@ public class ModLogger {
     private Logger log;
 
     private String prefix;
-    Ansi prefixFormat = new Ansi(Ansi.SANE);
+
+    private final boolean isDev = FabricLoader.getInstance().isDevelopmentEnvironment();
 
     public ModLogger(Class clazz){
         this(clazz.getSimpleName());
     }
+
     public ModLogger(String name){
-        this(name, "");
+        this.log = LogManager.getLogger(name);
     }
     public ModLogger(Class clazz, String prefix) {
         this(clazz.getSimpleName(), prefix);
     }
     public ModLogger(String name, String prefix) {
         this.log = LogManager.getLogger(name);
-        setPrefix(prefix);
+        this.prefix = prefix;
     }
-
-    private void setPrefix(String prefix) {
-        if(prefix.length()>0){
-            this.prefix="["+prefix+"]: ";
-        } else {
-            this.prefix="";
-        }
-    }
-
-    /**Use this method if you want to add custom color or formating to the log prefix.
-     */
-    public void setPrefixFormat(Ansi format){
-        this.prefixFormat = format;
-    }
-
 
     public void retarget(Logger to) {
         log = to;
     }
 
-    public void log(Level level, String msg, Ansi ansi, Object... data) {
-        //since Ansi might not work in a normal windows console we only use it in the dev environemnt
-        log.log(level, getFormattedPrefix() + (Cotton.isDevEnv ? ansi.format(msg, data) : String.format(msg, data)));
+    public void log(Level level, String msg, Object... data) {
+        log.log(level, prefix + String.format(msg, data));
     }
 
-    public void log(Level level, Throwable ex, String msg, Ansi ansi, Object... data) {
-        //since Ansi might not work in a normal windows console we only use it in the dev environemnt
-        log.log(level, getFormattedPrefix() + (Cotton.isDevEnv ? ansi.format(msg, data) : String.format(msg, data)), ex);
-    }
-
-    private String getFormattedPrefix(){
-        //since Ansi might not work in a normal windows console we only use it in the dev environemnt
-        if(Cotton.isDevEnv){
-            return this.prefixFormat.format(this.prefix);
-        } else {
-            return this.prefix;
-        }
+    public void log(Level level, Throwable ex, String msg, Object... data) {
+        log.log(level, prefix + String.format(msg, data), ex);
     }
 
     public void error(String msg, Object... data) {
-        log(Level.ERROR, msg, Ansi.Red.and(Ansi.Bold), data);
+        log(Level.ERROR, msg, data);
     }
 
     public void warn(String msg, Object... data) {
-        log(Level.WARN, msg, Ansi.Red.and(Ansi.Bold), data);
+        log(Level.WARN, msg, data);
     }
 
     public void info(String msg, Object... data) {
-        log(Level.INFO, msg,Ansi.Sane, data);
+        log(Level.INFO, msg, data);
     }
 
-    public void infoBig(String msg, Object... data) {
-        log(Level.INFO, msg,Ansi.Bold, data);
+    /**
+     * Only log this error in a dev enviroment.
+     */
+    public void devError(String msg, Object... data) {
+        if (isDev) error(msg, data);
     }
 
-    public void success(String msg, Object... data) {
-        log(Level.INFO, msg,Ansi.Green.and(Ansi.Bold), data);
+    /**
+     * Only log this warning in a dev environment.
+     */
+    public void devWarn(String msg, Object... data) {
+        if (isDev) warn(msg, data);
     }
 
+    /**
+     * Only log this info in a dev environment.
+     */
+    public void devInfo(String msg, Object... data) {
+        if (isDev) info(msg, data);
+    }
 
     public void debug(String msg, Object... data) {
-        log(Level.DEBUG, msg, Ansi.Sane, data);
+        log(Level.DEBUG, msg, data);
     }
 
     public void trace(String msg, Object... data) {
-        log(Level.TRACE, msg,Ansi.Sane, data);
+        log(Level.TRACE, msg, data);
     }
 
     public void all(String msg, Object... data) {
-        log(Level.TRACE, msg,Ansi.Sane, data);
+        log(Level.TRACE, msg, data);
     }
 }
