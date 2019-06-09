@@ -9,7 +9,8 @@
     "MixinBucketItem",
     "MixinRecipeManager",
     "MixinPlayerEntity",
-    "MixinResourceManagerImpl"
+    "MixinResourceManagerImpl",
+    "MixinLootContextTypes"
   ],
   "client": [
     "MixinCottonInitializerClient"
