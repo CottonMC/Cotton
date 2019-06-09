@@ -1,5 +1,6 @@
 package io.github.cottonmc.cotton.datapack.virtual;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import net.minecraft.resource.ResourcePackContainer;
@@ -14,7 +15,7 @@ import java.util.*;
 public enum VirtualResourcePackManager {
 	INSTANCE;
 
-	final Multimap<ResourceType, VirtualResourcePack> packs = MultimapBuilder.hashKeys().arrayListValues().build();
+	private final Multimap<ResourceType, VirtualResourcePack> packs = MultimapBuilder.hashKeys().arrayListValues().build();
 
 	public ResourcePackCreator getCreatorForType(ResourceType type) {
 		return new ResourcePackCreator() {
@@ -46,5 +47,9 @@ public enum VirtualResourcePackManager {
 		for (ResourceType type : types) {
 			packs.put(type, pack);
 		}
+	}
+
+	public ImmutableMultimap<ResourceType, VirtualResourcePack> getPacks() {
+		return ImmutableMultimap.copyOf(packs);
 	}
 }

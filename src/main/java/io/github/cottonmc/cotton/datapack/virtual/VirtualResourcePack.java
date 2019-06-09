@@ -1,6 +1,7 @@
 package io.github.cottonmc.cotton.datapack.virtual;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.SharedConstants;
@@ -31,7 +32,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static final int PACK_FORMAT = SharedConstants.getGameVersion().getPackVersion();
 	private static final Logger LOGGER = LogManager.getLogger();
 	private final Set<String> namespaces;
-	final Map<String, Supplier<String>> contents;
+	private final Map<String, Supplier<String>> contents;
 	private final String id;
 
 	/**
@@ -121,5 +122,9 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		}
 
 		return null;
+	}
+
+	public ImmutableMap<String, Supplier<String>> getContents() {
+		return ImmutableMap.copyOf(contents);
 	}
 }

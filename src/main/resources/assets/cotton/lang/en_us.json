@@ -1,7 +1,7 @@
 {
   "itemGroup.cotton.common_tab": "Common",
-  "message.cottom.failed_to_crate_folder": "Failed to create folder: %s",
-  "commands.cotton.exportvirtual.invalid_input_error_message": "%s is not a valid resource type.",
+  "message.cotton.failed_to_create_folder": "Failed to create folder: %s",
   "message.cotton.exportvirtual.exported": "Successfully exported resources!",
-  "message.cotton.exportvirtual.failed_to_export": "Failed to export resource: %s"
+  "message.cotton.exportvirtual.failed_to_export_resource": "Failed to export resource: %s",
+  "message.cotton.exportvirtual.failed_to_export_resources": "Failed to export resource"
 }
