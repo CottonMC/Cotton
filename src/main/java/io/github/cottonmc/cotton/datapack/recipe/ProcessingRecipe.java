@@ -47,6 +47,11 @@ public abstract class ProcessingRecipe implements Recipe<Inventory> {
 	protected final ItemStack output;
 	protected final float exp;
 	protected final int processTime;
+
+	/**
+	 * A loot table for bonus drops.
+	 * It should use the {@link io.github.cottonmc.cotton.loot.CottonLootContextTypes#MACHINE cotton:machine} loot type.
+	 */
 	protected final Identifier bonusLootTable;
 
 	public ProcessingRecipe(Identifier id, Ingredient input, ItemStack output, float exp, int processTime, Identifier bonusLootTable) {

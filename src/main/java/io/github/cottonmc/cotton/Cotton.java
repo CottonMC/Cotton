@@ -6,6 +6,7 @@ import io.github.cottonmc.cotton.datapack.PackMetaManager;
 import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import io.github.cottonmc.cotton.logging.ModLogger;
+import io.github.cottonmc.cotton.loot.CottonLootContextTypes;
 import io.github.cottonmc.cotton.registry.CommonTags;
 import io.github.cottonmc.cotton.tweaker.*;
 import net.fabricmc.api.ModInitializer;
@@ -58,6 +59,7 @@ public class Cotton implements ModInitializer {
 		//example datapack manager code
 		CommonTags.init();
 		RecipeUtil.init(config);
+		CottonLootContextTypes.init();
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
 //		LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
