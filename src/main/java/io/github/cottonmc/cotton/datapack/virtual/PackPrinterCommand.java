@@ -7,6 +7,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * Outputs the requested resource/data packs into a specific folder, so they can be read by pack makers.
@@ -66,18 +66,17 @@ public final class PackPrinterCommand implements Consumer<CommandDispatcher<Serv
 				} else {
 					//loop through all of the virtual resource packs of the required type.
 					for (VirtualResourcePack virtualResourcePack : virtualResourcePacks) {
-						Map<String, Supplier<String>> contents = virtualResourcePack.getContents();
+						Map<String, InputStreamProvider> contents = virtualResourcePack.getContents();
 
 						//write out all of our entries.
-						for (Map.Entry<String, Supplier<String>> entry : contents.entrySet()) {
+						for (Map.Entry<String, InputStreamProvider> entry : contents.entrySet()) {
 							String location = entry.getKey();
-							Supplier<String> stringSupplier = entry.getValue();
+							InputStreamProvider inputProvider = entry.getValue();
 							Path outputPath = exportedVirtualPacks.resolve(location);
 							Files.createDirectories(outputPath.getParent());
 
 							try (BufferedWriter writer = Files.newBufferedWriter(outputPath)) {
-								String s = stringSupplier.get();
-								writer.write(s);
+								IOUtils.copy(new InputStreamReader(inputProvider.create()), writer);
 								writer.flush();
 							} catch (IOException e) {
 								LOGGER.error("Failed to export virtual resource " + location, e);

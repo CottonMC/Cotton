@@ -5,6 +5,7 @@ import io.github.cottonmc.cotton.config.CottonConfig;
 import io.github.cottonmc.cotton.datapack.PackMetaManager;
 import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
+import io.github.cottonmc.cotton.datapack.virtual.InputStreamProvider;
 import io.github.cottonmc.cotton.datapack.virtual.PackPrinterCommand;
 import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePack;
 import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePackManager;
@@ -75,13 +76,15 @@ public class Cotton implements ModInitializer {
 		CommandRegistry.INSTANCE.register(false, new PackPrinterCommand());
 
 		/*
-		HashMap<String, Supplier<String>> map = new HashMap<>();
-		map.put("assets/minecraft/blockstates/cobblestone.json",()->"{\n" +
+		HashMap<String, InputStreamProvider> map = new HashMap<>();
+		map.put("assets/minecraft/blockstates/cobblestone.json", InputStreamProvider.of(() -> "{\n" +
 				"    \"variants\": {\n" +
 				"        \"\": { \"model\": \"block/cobblestone\" }\n" +
 				"    }\n" +
-				"}\n");
-		VirtualResourcePackManager.INSTANCE.addPack(new VirtualResourcePack("test", Collections.singleton("minecraft"),map), Collections.singleton(ResourceType.CLIENT_RESOURCES));'
+				"}\n"));
+		VirtualResourcePackManager.INSTANCE.addPack(new VirtualResourcePack(
+				"test", Collections.singleton("minecraft"), map), Collections.singleton(ResourceType.CLIENT_RESOURCES)
+		);
 		*/
 
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
