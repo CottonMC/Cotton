@@ -61,7 +61,7 @@ public class ConfigManager {
                 if(jsonElementNew instanceof JsonObject){
                     JsonObject jsonNew = (JsonObject) jsonElementNew;
                     if(json.getDelta(jsonNew).size()>= 0){
-                        saveConfig(result);
+                        saveConfig(result, configName);
                     }
                 }
 
