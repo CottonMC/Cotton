@@ -22,6 +22,7 @@ import java.util.List;
  * @author dain
  *
  */
+@Deprecated
 public final class Ansi {
 
 	// Color code strings from:
