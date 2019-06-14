@@ -48,13 +48,12 @@ public final class PackPrinterCommand implements Consumer<CommandDispatcher<Serv
 	/**
 	 * Exports all of the required virtual packs.
 	 */
-	private static void export(ServerCommandSource serverCommandSource, ResourceType type) {
+	private static void export(ServerCommandSource source, ResourceType type) {
 		try {
 			//if we're not on a dedicated server. This will be removed when moving to client sidecommands.
-			if (!serverCommandSource.getMinecraftServer().isDedicated()) {
-				System.out.println("we're not dedicated, we can export");
-				Map<ResourceType, Collection<VirtualResourcePack>> typeCollectionMap = VirtualResourcePackManager.INSTANCE.getPacks().asMap();
-				Collection<VirtualResourcePack> virtualResourcePacks = typeCollectionMap.getOrDefault(type, Collections.emptyList());
+			if (!source.getMinecraftServer().isDedicated()) {
+				Map<ResourceType, Collection<VirtualResourcePackManager.PackContainer>> typeCollectionMap = VirtualResourcePackManager.INSTANCE.getPacks().asMap();
+				Collection<VirtualResourcePackManager.PackContainer> virtualResourcePacks = typeCollectionMap.getOrDefault(type, Collections.emptyList());
 
 				Path gameDir = FabricLoader.getInstance().getGameDirectory().toPath();
 				Path exportedVirtualPacks = gameDir.resolve("exportedVirtualPacks");
@@ -62,11 +61,11 @@ public final class PackPrinterCommand implements Consumer<CommandDispatcher<Serv
 				//create the folder
 				Files.createDirectories(exportedVirtualPacks);
 				if (Files.notExists(exportedVirtualPacks)) {
-					serverCommandSource.sendError(new TranslatableComponent("message." + Cotton.MODID + ".failed_to_create_folder", exportedVirtualPacks.toString()));
+					source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".failed_to_create_folder", exportedVirtualPacks.toString()));
 				} else {
 					//loop through all of the virtual resource packs of the required type.
-					for (VirtualResourcePack virtualResourcePack : virtualResourcePacks) {
-						Map<String, InputStreamProvider> contents = virtualResourcePack.getContents();
+					for (VirtualResourcePackManager.PackContainer packContainer : virtualResourcePacks) {
+						Map<String, InputStreamProvider> contents = packContainer.getPack().getContents();
 
 						//write out all of our entries.
 						for (Map.Entry<String, InputStreamProvider> entry : contents.entrySet()) {
@@ -80,20 +79,20 @@ public final class PackPrinterCommand implements Consumer<CommandDispatcher<Serv
 								writer.flush();
 							} catch (IOException e) {
 								LOGGER.error("Failed to export virtual resource " + location, e);
-								serverCommandSource.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resource", outputPath.toString()));
+								source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resource", outputPath.toString()));
 								return;
 							}
 						}
 					}
 
-					serverCommandSource.sendFeedback(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.exported"), true);
+					source.sendFeedback(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.exported"), true);
 				}
 			} else {
-				// System.out.println("we're dedicated.");
+				source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.dedicated_error"));
 			}
 		} catch (IOException e) {
 			LOGGER.error("Failed to export virtual resources", e);
-			serverCommandSource.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resources"));
+			source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resources"));
 		}
 	}
 }

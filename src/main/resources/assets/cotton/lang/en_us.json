@@ -3,5 +3,6 @@
   "message.cotton.failed_to_create_folder": "Failed to create folder: %s",
   "message.cotton.exportvirtual.exported": "Successfully exported resources!",
   "message.cotton.exportvirtual.failed_to_export_resource": "Failed to export resource: %s",
-  "message.cotton.exportvirtual.failed_to_export_resources": "Failed to export resource"
+  "message.cotton.exportvirtual.failed_to_export_resources": "Failed to export resources",
+  "message.cotton.exportvirtual.dedicated_error": "This command only works in singleplayer."
 }
