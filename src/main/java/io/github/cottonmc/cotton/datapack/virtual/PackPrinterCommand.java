@@ -74,9 +74,10 @@ public final class PackPrinterCommand implements Consumer<CommandDispatcher<Serv
 							Path outputPath = exportedVirtualPacks.resolve(location);
 							Files.createDirectories(outputPath.getParent());
 
-							try (BufferedWriter writer = Files.newBufferedWriter(outputPath)) {
-								IOUtils.copy(new InputStreamReader(inputProvider.create()), writer);
-								writer.flush();
+							try (InputStream in = inputProvider.create();
+								 OutputStream out = Files.newOutputStream(outputPath)) {
+								IOUtils.copy(in, out);
+								out.flush();
 							} catch (IOException e) {
 								LOGGER.error("Failed to export virtual resource " + location, e);
 								source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resource", outputPath.toString()));
