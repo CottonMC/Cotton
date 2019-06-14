@@ -79,11 +79,12 @@ public class Cotton implements ModInitializer {
 		HashMap<String, InputStreamProvider> map = new HashMap<>();
 		map.put("assets/minecraft/blockstates/cobblestone.json", InputStreamProvider.of(() -> "{\n" +
 				"    \"variants\": {\n" +
-				"        \"\": { \"model\": \"block/cobblestone\" }\n" +
+				"        \"\": { \"model\": \"block/sandstone\" }\n" +
 				"    }\n" +
 				"}\n"));
-		VirtualResourcePackManager.INSTANCE.addPack(new VirtualResourcePack(
-				"test", Collections.singleton("minecraft"), map), Collections.singleton(ResourceType.CLIENT_RESOURCES)
+		VirtualResourcePackManager.INSTANCE.addPack(
+				new VirtualResourcePack("test", map),
+				Collections.singleton(ResourceType.CLIENT_RESOURCES)
 		);
 		*/
 

@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -27,6 +30,7 @@ import java.util.stream.Stream;
 public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static final int PACK_FORMAT = SharedConstants.getGameVersion().getPackVersion();
 	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Pattern NAMESPACE_PATTERN = Pattern.compile("(?:.+?)/(.+?)/.+");
 	private final Set<String> namespaces;
 	private final Map<String, InputStreamProvider> contents;
 	private final String id;
@@ -34,18 +38,24 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	/**
 	 * The constructor.
 	 *
-	 * @param id         an identifier for this data pack (does not have to be unique)
-	 * @param namespaces the namespaces that this pack provides
-	 * @param contents   the contents as a [resource path]=>[contents] map
+	 * @param id       an identifier for this data pack (does not have to be unique)
+	 * @param contents the contents as a [resource path]=>[contents] map
 	 */
-	public VirtualResourcePack(String id, Set<String> namespaces, Map<String, InputStreamProvider> contents) {
+	public VirtualResourcePack(String id, Map<String, InputStreamProvider> contents) {
 		super(null);
 		this.id = id;
-		namespaces.forEach(namespace -> {
-			if (!Identifier.isValid(namespace + ":test"))
-				throw new InvalidIdentifierException("Invalid namespace: " + namespace);
-		});
-		this.namespaces = namespaces;
+		this.namespaces = contents.keySet().stream()
+				.map(path -> {
+					Matcher matcher = NAMESPACE_PATTERN.matcher(path);
+					if (matcher.find()) {
+						return matcher.group(1);
+					} else {
+						LOGGER.warn("Resource path {} in virtual resource pack {} might not be valid", path, id);
+						return null;
+					}
+				})
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 		this.contents = contents;
 	}
 
@@ -88,7 +98,8 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	}
 
 	@Override
-	public void close() {}
+	public void close() {
+	}
 
 	@Override
 	public String getName() {
