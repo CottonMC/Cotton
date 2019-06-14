@@ -17,14 +17,30 @@ public class ModLogger {
     }
 
     public ModLogger(String name){
-        this.log = LogManager.getLogger(name);
+        this(name, name);
     }
     public ModLogger(Class clazz, String prefix) {
         this(clazz.getSimpleName(), prefix);
     }
+
     public ModLogger(String name, String prefix) {
         this.log = LogManager.getLogger(name);
-        this.prefix = prefix;
+        setPrefix(prefix);
+    }
+
+    private void setPrefix(String prefix) {
+        if(prefix.length()>0){
+            this.prefix="["+prefix+"]: ";
+        } else {
+            this.prefix="";
+        }
+    }
+
+    /**
+     * ANSI is no longer supported in Cotton loggers, due to no production launcher supporting it.
+     */
+    @Deprecated
+    public void setPrefixFormat(Ansi format) {
     }
 
     public void retarget(Logger to) {
