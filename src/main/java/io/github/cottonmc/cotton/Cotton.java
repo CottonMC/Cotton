@@ -9,7 +9,6 @@ import io.github.cottonmc.cotton.datapack.virtual.InputStreamProvider;
 import io.github.cottonmc.cotton.datapack.virtual.PackPrinterCommand;
 import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePack;
 import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePackManager;
-import io.github.cottonmc.cotton.logging.Ansi;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.registry.CommonTags;
 import io.github.cottonmc.cotton.tweaker.*;
@@ -38,8 +37,6 @@ public class Cotton implements ModInitializer {
 	public static final String MODID = "cotton";
 	public static final String SHARED_NAMESPACE = "c";
 
-	public static final boolean isDevEnv = Boolean.parseBoolean(System.getProperty("fabric.development", "true"));
-
 	public static final File DATA_PACK_LOCATION = new File(FabricLoader.getInstance().getGameDirectory(), "datapacks/cotton_generated");
 
 	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(
@@ -51,8 +48,6 @@ public class Cotton implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		//setup
-		//TODO: uncomment once we have a way to check if a console supports ANSI
-//		logger.setPrefixFormat(Ansi.Blue);
 		PackMetaManager.saveMeta();
 		CottonRecipes.init();
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TweakerLoader());
