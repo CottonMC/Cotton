@@ -34,6 +34,8 @@ minecraft {
 
 repositories {
 	mavenCentral()
+	maven { url "http://server.bbkr.space:8081/artifactory/libs-snapshot/" }
+	maven { url "http://server.bbkr.space:8081/artifactory/libs-release/" }
 }
 
 dependencies {
@@ -44,6 +46,9 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modCompile "io.github.cottonmc:LibCD:${project.libcd_version}"
+	include "io.github.cottonmc:LibCD:${project.libcd_version}"
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 	implementation ("blue.endless:jankson:1.1.2") { transitive = false }
