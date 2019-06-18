@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import io.github.cottonmc.cotton.impl.RecipeMapAccessor;
 import net.minecraft.recipe.RecipeType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,16 +21,13 @@ import net.minecraft.recipe.RecipeManager;
 import net.minecraft.util.Identifier;
 
 @Mixin(RecipeManager.class)
-public class MixinRecipeManager implements RecipeMapAccessor {
+public class MixinRecipeManager {
 	@Shadow
 	@Final
 	public static int PREFIX_LENGTH;
 	@Shadow
 	@Final
 	public static int SUFFIX_LENGTH;
-	@Shadow
-	@Final
-	private Map<RecipeType<?>, Map<Identifier, Recipe<?>>> recipeMap;
 
 	@ModifyVariable(method = "apply", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Collection;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
 	public Iterator<Identifier> filterIterator(Iterator<Identifier> iterator) {
@@ -61,8 +57,4 @@ public class MixinRecipeManager implements RecipeMapAccessor {
 		}
 	}
 
-	@Override
-	public Map<RecipeType<?>, Map<Identifier, Recipe<?>>> getRecipeMap() {
-		return recipeMap;
-	}
 }

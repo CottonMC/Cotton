@@ -2,6 +2,7 @@ package io.github.cottonmc.cotton.tweaker;
 
 import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
+import io.github.cottonmc.libcd.tweaker.Tweaker;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;

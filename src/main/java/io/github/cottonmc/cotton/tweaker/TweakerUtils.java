@@ -1,29 +1,20 @@
 package io.github.cottonmc.cotton.tweaker;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import io.github.cottonmc.cotton.Cotton;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.tag.Tag;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 /**
  * Various utilities for writing tweakers, due to the obfuscation of minecraft code.
+ * Use {@link io.github.cottonmc.libcd.tweaker.TweakerUtils}
  */
+@Deprecated
 public class TweakerUtils {
 	/**
 	 * Get a registered item inside a script.
@@ -119,28 +110,7 @@ public class TweakerUtils {
 	 * @return The stack with added NBT.
 	 */
 	public static ItemStack addNbtToStack(ItemStack stack, String nbt) {
-		StringNbtReader reader = new StringNbtReader(new StringReader(nbt));
-		try {
-			CompoundTag tag = reader.parseCompoundTag();
-			stack.setTag(tag);
-		} catch (CommandSyntaxException e) {
-			Cotton.logger.error("Error adding NBT to stack: " + e.getMessage());
-		}
-		return stack;
-	}
-
-	/**
-	 * Get a potion of the specified type.
-	 * Deprecated; use `getSpecialStack("minecraft:potion", id); instead
-	 * @param id The id of the potion to get.
-	 * @see <a href="https://minecraft.gamepedia.com/Potion#Data_values">Potion data values</a>
-	 * @return an ItemStack of the desired potion, or an empty stack if the potion doesn't exist.
-	 */
-	@Deprecated
-	public static ItemStack getPotion(String id) {
-		Potion potion = Potion.byId(id);
-		if (potion == Potions.EMPTY) return ItemStack.EMPTY;
-		return PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
+		return io.github.cottonmc.libcd.tweaker.TweakerUtils.addNbtToStack(stack, nbt);
 	}
 
 	/**
@@ -149,8 +119,7 @@ public class TweakerUtils {
 	 * @return the gotten stack, or an empty stack if the getter or id doesn't exist
 	 */
 	public static ItemStack getSpecialStack(String getter) {
-		String[] split = RecipeParser.processGetter(getter);
-		return getSpecialStack(split[0], split[1]);
+		return io.github.cottonmc.libcd.tweaker.TweakerUtils.getSpecialStack(getter);
 	}
 
 	/**
@@ -160,11 +129,7 @@ public class TweakerUtils {
 	 * @return The gotten stack, or an empty stack if the getter or id doesn't exist.
 	 */
 	public static ItemStack getSpecialStack(String getter, String entry) {
-		Identifier getterId = new Identifier(getter);
-		Identifier itemId = new Identifier(entry);
-		if (!TweakerStackGetter.GETTERS.containsKey(getterId)) return ItemStack.EMPTY;
-		TweakerStackGetter get = TweakerStackGetter.GETTERS.get(getterId);
-		return get.getSpecialStack(itemId);
+		return io.github.cottonmc.libcd.tweaker.TweakerUtils.getSpecialStack(getter, entry);
 	}
 
 	/**
@@ -173,13 +138,6 @@ public class TweakerUtils {
 	 * @return An array of items in the tag.
 	 */
 	public static String[] getItemsInTag(String tagId) {
-		Tag<Item> tag = ItemTags.getContainer().get(new Identifier(tagId));
-		if (tag == null) return new String[0];
-		Object[] items = tag.values().toArray();
-		String[] res = new String[items.length];
-		for (int i = 0; i < items.length; i++) {
-			res[i] = Registry.ITEM.getId((Item)items[i]).toString();
-		}
-		return res;
+		return io.github.cottonmc.libcd.tweaker.TweakerUtils.getItemsInTag(tagId);
 	}
 }

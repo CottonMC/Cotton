@@ -1,79 +1,22 @@
 package io.github.cottonmc.cotton.tweaker;
 
-import io.github.cottonmc.cotton.Cotton;
-import io.github.cottonmc.cotton.impl.RecipeMapAccessor;
-import io.github.cottonmc.cotton.impl.ReloadListenersAccessor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.*;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceReloadListener;
-import net.minecraft.util.DefaultedList;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
-import java.util.List;
 import java.util.Map;
 
-public class RecipeTweaker implements Tweaker {
-	public static final RecipeTweaker INSTANCE = new RecipeTweaker();
-	private RecipeManager manager;
-	private int recipeCount;
-	private int removeCount;
-
-	/**
-	 * Used during data pack loading to set up recipe adding.
-	 * DO NOT CALL THIS YOURSELF, EVER. IT WILL LIKELY MESS THINGS UP.
-	 */
-	@Override
-	public void prepareReload(ResourceManager manager) {
-		recipeCount = 0;
-		removeCount = 0;
-		if (manager instanceof ReloadListenersAccessor) {
-			List<ResourceReloadListener> listeners = ((ReloadListenersAccessor)manager).cotton_getListeners();
-			for (ResourceReloadListener listener : listeners) {
-				if (listener instanceof RecipeManager) {
-					this.manager = (RecipeManager)listener;
-					return;
-				}
-			}
-			Cotton.logger.error("No recipe manager was found! Tweaker cannot register recipes!");
-			throw new IllegalStateException("No recipe manager was found! Tweaker cannot register recipes!");
-		}
-		Cotton.logger.error("No reload listeners accessor found! Tweaker cannot register recipes!");
-		throw new IllegalStateException("No reload listeners accessor found! Tweaker cannot register recipes!");
-	}
-
-	@Override
-	public String getApplyMessage() {
-		return recipeCount + " " + (recipeCount == 1? "recipe" : "recipes" + (removeCount == 0? "" : " (" + removeCount + " removed)"));
-	}
-
-	/**
-	 * Generate a recipe ID. Call this from Java tweaker classes.
-	 * @param output The output stack of the recipe.
-	 * @return A unique identifier for the recipe.
-	 */
-	public static Identifier getRecipeId(ItemStack output) {
-		String resultName = Registry.ITEM.getId(output.getItem()).getPath();
-		return new Identifier(Cotton.MODID, "tweaked/"+resultName+"-"+INSTANCE.recipeCount);
-	}
+/**
+ * Use {@link io.github.cottonmc.libcd.tweaker.RecipeTweaker}
+ */
+@Deprecated
+public class RecipeTweaker {
 
 	/**
 	 * Remove a recipe from the recipe manager.
 	 * @param id The id of the recipe to remove.
 	 */
 	public static void removeRecipe(String id) {
-		Identifier recipeId = new Identifier(id);
-		Map<RecipeType<?>, Map<Identifier, Recipe<?>>> recipeMap = ((RecipeMapAccessor)INSTANCE.manager).getRecipeMap();
-		for (RecipeType<?> type : recipeMap.keySet()) {
-			Map<Identifier, Recipe<?>> map = recipeMap.get(type);
-			if (map.containsKey(recipeId)) {
-				map.remove(recipeId);
-				INSTANCE.removeCount++;
-				return;
-			}
-		}
-		Cotton.logger.error("Could not find recipe to remove: " + id);
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.removeRecipe(id);
 	}
 
 	/**
@@ -81,12 +24,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param recipe A constructed recipe.
 	 */
 	public static void addRecipe(Recipe<?> recipe) {
-		INSTANCE.recipeCount++;
-		try {
-			INSTANCE.manager.add(recipe);
-		} catch (Exception e) {
-			Cotton.logger.error("Failed to add recipe from tweaker - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addRecipe(recipe);
 	}
 
 	/**
@@ -109,14 +47,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addShaped(String[][] inputs, ItemStack output, String group) {
-		try {
-			String[] processed = RecipeParser.processGrid(inputs);
-			int width = inputs[0].length;
-			int height = inputs.length;
-			addShaped(processed, output, width, height, group);
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing shaped recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addShaped(inputs, output, group);
 	}
 
 	public static void addShaped(String[] inputs, ItemStack output, int width, int height) {
@@ -132,18 +63,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addShaped(String[] inputs, ItemStack output, int width, int height, String group){
-		Identifier recipeId = getRecipeId(output);
-		try {
-			DefaultedList<Ingredient> ingredients = DefaultedList.create();
-			for (int i = 0; i < Math.min(inputs.length, width * height); i++) {
-				String id = inputs[i];
-				if (id.equals("")) continue;
-				ingredients.add(i, RecipeParser.processIngredient(id));
-			}
-			addRecipe(new ShapedRecipe(recipeId, group, width, height, ingredients, output));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing shaped recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addShaped(inputs, output, width, height, group);
 	}
 
 	public static void addShaped(String[] pattern, Map<String, String> dictionary, ItemStack output) {
@@ -158,17 +78,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addShaped(String[] pattern, Map<String, String> dictionary, ItemStack output, String group) {
-		Identifier recipeId = getRecipeId(output);
-		try {
-			pattern = RecipeParser.processPattern(pattern);
-			Map<String, Ingredient> map = RecipeParser.processDictionary(dictionary);
-			int x = pattern[0].length();
-			int y = pattern.length;
-			DefaultedList<Ingredient> ingredients = RecipeParser.getIngredients(pattern, map, x, y);
-			addRecipe(new ShapedRecipe(recipeId, group, x, y, ingredients, output));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing shaped recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addShaped(pattern, dictionary, output, group);
 	}
 
 	public static void addShapeless(String[] inputs, ItemStack output) {
@@ -182,18 +92,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addShapeless(String[] inputs, ItemStack output, String group) {
-		Identifier recipeId = getRecipeId(output);
-		try {
-		DefaultedList<Ingredient> ingredients = DefaultedList.create();
-		for (int i = 0; i < Math.min(inputs.length, 9); i++) {
-			String id = inputs[i];
-			if (id.equals("")) continue;
-			ingredients.add(i, RecipeParser.processIngredient(id));
-		}
-		addRecipe(new ShapelessRecipe(recipeId, group, output, ingredients));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing shapeless recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addShapeless(inputs, output, group);
 	}
 
 	public static void addSmelting(String input, ItemStack output, int ticks, float xp) {
@@ -209,13 +108,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addSmelting(String input, ItemStack output, int cookTime, float xp, String group) {
-		Identifier recipeId = getRecipeId(output);
-		try {
-			Ingredient ingredient = RecipeParser.processIngredient(input);
-			addRecipe(new SmeltingRecipe(recipeId, group, ingredient, output, xp, cookTime));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing smelting recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addSmelting(input, output, cookTime, xp, group);
 	}
 
 	public static void addBlasting(String input, ItemStack output, int ticks, float xp) {
@@ -231,13 +124,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addBlasting(String input, ItemStack output, int cookTime, float xp, String group) {
-		Identifier recipeId = getRecipeId(output);
-		try {
-		Ingredient ingredient = RecipeParser.processIngredient(input);
-		addRecipe(new BlastingRecipe(recipeId, group, ingredient, output, xp, cookTime));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing blasting recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addBlasting(input, output, cookTime, xp, group);
 	}
 
 	public static void addSmoking(String input, ItemStack output, int ticks, float xp) {
@@ -253,13 +140,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addSmoking(String input, ItemStack output, int cookTime, float xp, String group) {
-		Identifier recipeId = getRecipeId(output);
-		try {
-			Ingredient ingredient = RecipeParser.processIngredient(input);
-			addRecipe(new SmokingRecipe(recipeId, group, ingredient, output, xp, cookTime));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing smokig recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addSmoking(input, output, cookTime, xp, group);
 	}
 
 	public static void addCampfire(String input, ItemStack output, int ticks, float xp) {
@@ -275,13 +156,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addCampfire(String input, ItemStack output, int cookTime, float xp, String group) {
-		Identifier recipeId = getRecipeId(output);
-		try {
-		Ingredient ingredient = RecipeParser.processIngredient(input);
-		addRecipe(new CampfireCookingRecipe(recipeId, group, ingredient, output, xp, cookTime));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing campfire recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addCampfire(input, output, cookTime, xp, group);
 	}
 
 	public static void addStonecutting(String input, ItemStack output) {
@@ -295,13 +170,7 @@ public class RecipeTweaker implements Tweaker {
 	 * @param group The recipe group to go in, or "" for none.
 	 */
 	public static void addStonecutting(String input, ItemStack output, String group) {
-		Identifier recipeId = getRecipeId(output);
-		try {
-			Ingredient ingredient = RecipeParser.processIngredient(input);
-			addRecipe(new StonecuttingRecipe(recipeId, group, ingredient, output));
-		} catch (Exception e) {
-			Cotton.logger.error("Error parsing stonecutter recipe - " + e.getMessage());
-		}
+		io.github.cottonmc.libcd.tweaker.RecipeTweaker.addStonecutting(input, output, group);
 	}
 
 }
