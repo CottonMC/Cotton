@@ -5,10 +5,7 @@ import io.github.cottonmc.cotton.config.CottonConfig;
 import io.github.cottonmc.cotton.datapack.PackMetaManager;
 import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
-import io.github.cottonmc.cotton.datapack.virtual.InputStreamProvider;
 import io.github.cottonmc.cotton.datapack.virtual.PackPrinterCommand;
-import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePack;
-import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePackManager;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import io.github.cottonmc.cotton.registry.CommonTags;
 import io.github.cottonmc.cotton.tweaker.*;
@@ -16,7 +13,6 @@ import io.github.cottonmc.libcd.tweaker.Tweaker;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
@@ -24,9 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.function.Supplier;
 
 public class Cotton implements ModInitializer {
 
