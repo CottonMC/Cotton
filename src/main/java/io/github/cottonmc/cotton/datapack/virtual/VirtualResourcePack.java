@@ -33,7 +33,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static final Pattern NAMESPACE_PATTERN = Pattern.compile("(?:.+?)/(.+?)/.+");
 	private final Set<String> namespaces;
 	private final Map<String, InputStreamProvider> contents;
-	private final String id;
+	private final Identifier id;
 
 	/**
 	 * The constructor.
@@ -41,7 +41,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	 * @param id       an identifier for this data pack (does not have to be unique)
 	 * @param contents the contents as a [resource path]=>[contents] map
 	 */
-	public VirtualResourcePack(String id, Map<String, InputStreamProvider> contents) {
+	public VirtualResourcePack(Identifier id, Map<String, InputStreamProvider> contents) {
 		super(null);
 		this.id = id;
 		this.namespaces = contents.keySet().stream()
@@ -106,11 +106,14 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		return String.format("%s (virtual)", id);
 	}
 
-	String getId(int index) {
-		return String.format("virtual/%d_%s", index, id);
-	}
+    /**
+     * @return the id of this resource pack
+     */
+    public Identifier getId() {
+        return id;
+    }
 
-	@Nullable
+    @Nullable
 	@Override
 	public <T> T parseMetadata(ResourceMetadataReader<T> reader) {
 		JsonObject packMetadata = new JsonObject();
@@ -131,6 +134,10 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		return null;
 	}
 
+    /**
+     * Gets the contents of this pack as a file path -> input stream provider map.
+     * @return the contents
+     */
 	public ImmutableMap<String, InputStreamProvider> getContents() {
 		return ImmutableMap.copyOf(contents);
 	}

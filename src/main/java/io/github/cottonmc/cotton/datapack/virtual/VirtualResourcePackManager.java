@@ -21,11 +21,10 @@ public enum VirtualResourcePackManager {
 		return new ResourcePackCreator() {
 			@Override
 			public <T extends ResourcePackContainer> void registerContainer(Map<String, T> map, ResourcePackContainer.Factory<T> factory) {
-				int i = 0;
 				for (PackContainer packContainer : packs.get(type)) {
 					VirtualResourcePack pack = packContainer.getPack();
 					ClientResourcePackMode clientPackMode = packContainer.getClientPackMode();
-					String id = pack.getId(i++);
+					String id = "virtual/" + pack.getId();
 					T container = ResourcePackContainer.of(
 							id,
 							type == ResourceType.CLIENT_RESOURCES && clientPackMode == ClientResourcePackMode.ALWAYS_ENABLED,
@@ -54,6 +53,12 @@ public enum VirtualResourcePackManager {
 		}
 
 		for (ResourceType type : types) {
+		    for (PackContainer existing : packs.get(type)) {
+		        if (existing.getPack().getId().equals(pack.getId())) {
+		            throw new IllegalArgumentException(String.format("Duplicate resource pack ID for type %s: %s", type.getName(), pack.getId()));
+                }
+            }
+
 			packs.put(type, new PackContainer(pack, clientPackMode));
 		}
 	}
