@@ -11,7 +11,8 @@
     "MixinPlayerEntity"
   ],
   "client": [
-    "MixinCottonInitializerClient"
+    "MixinCottonInitializerClient",
+    "MixinClientDataLoad"
   ],
   "server": [
     "MixinCottonInitializerServer"
