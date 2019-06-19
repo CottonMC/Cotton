@@ -31,7 +31,7 @@ public enum VirtualResourcePackManager {
 							type == ResourceType.CLIENT_RESOURCES && clientPackMode == ClientResourcePackMode.ALWAYS_ENABLED,
 							() -> pack,
 							factory,
-							ResourcePackContainer.InsertionPosition.BOTTOM
+							ResourcePackContainer.InsertionPosition.TOP
 					);
 					if (container != null) {
 						map.put(id, container);
