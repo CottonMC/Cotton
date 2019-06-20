@@ -10,7 +10,7 @@ buildscript {
 }
 
 plugins {
-	id 'fabric-loom' version '0.2.2-SNAPSHOT'
+	id 'fabric-loom' version '0.2.4-SNAPSHOT'
 	id 'maven-publish'
 	id "com.jfrog.artifactory" version "4.9.0"
 }
@@ -25,7 +25,7 @@ if(rootProject.file('private.gradle').exists()) { //Publishing details
 }
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version+"-SNAPSHOT"
+version = project.mod_version
 group = project.maven_group
 
 minecraft {
@@ -42,12 +42,12 @@ dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+	modApi "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modCompile "io.github.cottonmc:LibCD:${project.libcd_version}"
+	modApi "io.github.cottonmc:LibCD:${project.libcd_version}"
 	include "io.github.cottonmc:LibCD:${project.libcd_version}"
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
