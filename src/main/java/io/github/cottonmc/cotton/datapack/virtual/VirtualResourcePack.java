@@ -67,9 +67,9 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	 * @param contents the contents as a [resource path]=>[contents] map
 	 */
 	@Deprecated
-    public VirtualResourcePack(String id, Map<String, InputStreamProvider> contents) {
-	    this(convertToUniqueId(id), contents);
-    }
+	public VirtualResourcePack(String id, Map<String, InputStreamProvider> contents) {
+		this(convertToUniqueId(id), contents);
+	}
 
 	@Override
 	protected InputStream openFile(String s) throws IOException {
@@ -118,14 +118,14 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		return String.format("%s (virtual)", id);
 	}
 
-    /**
-     * @return the id of this resource pack
-     */
-    public Identifier getId() {
-        return id;
-    }
+	/**
+	 * @return the id of this resource pack
+	 */
+	public Identifier getId() {
+		return id;
+	}
 
-    @Nullable
+	@Nullable
 	@Override
 	public <T> T parseMetadata(ResourceMetadataReader<T> reader) {
 		JsonObject packMetadata = new JsonObject();
@@ -146,10 +146,11 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		return null;
 	}
 
-    /**
-     * Gets the contents of this pack as a file path -> input stream provider map.
-     * @return the contents
-     */
+	/**
+	 * Gets the contents of this pack as a file path -> input stream provider map.
+	 *
+	 * @return the contents
+	 */
 	public ImmutableMap<String, InputStreamProvider> getContents() {
 		return ImmutableMap.copyOf(contents);
 	}
@@ -169,17 +170,17 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static Identifier convertToUniqueId(String str) {
 		int colonIndex = str.indexOf(':');
 		boolean hasNamespace = colonIndex != -1 && colonIndex < str.length() - 1;
-        Identifier result = hasNamespace ? Identifier.ofNullable(str) : null; // Identifier.tryParse() in 1.14.3
+		Identifier result = hasNamespace ? Identifier.ofNullable(str) : null; // Identifier.tryParse() in 1.14.3
 
-        if (result == null) {
-        	String namespace = hasNamespace ? filterValidIdChars(str.substring(0, colonIndex)) : "unknown";
-        	String path = filterValidIdChars(hasNamespace ? str.substring(colonIndex + 1) : str);
+		if (result == null) {
+			String namespace = hasNamespace ? filterValidIdChars(str.substring(0, colonIndex)) : "unknown";
+			String path = filterValidIdChars(hasNamespace ? str.substring(colonIndex + 1) : str);
 			result = new Identifier(namespace, path);
-        }
+		}
 
-        int index = VirtualResourcePackManager.INSTANCE.getPackIds().size();
-        return Identifiers.suffixPath(result, "_" + index);
-    }
+		int index = VirtualResourcePackManager.INSTANCE.getPackIds().size();
+		return Identifiers.suffixPath(result, "_" + index);
+	}
 
 	/**
 	 * Filters the input string by checking each character
