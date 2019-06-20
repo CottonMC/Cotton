@@ -1,11 +1,13 @@
 package io.github.cottonmc.cotton.datapack.virtual;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import net.minecraft.resource.ResourcePackContainer;
 import net.minecraft.resource.ResourcePackCreator;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
 
 import java.util.*;
 
@@ -16,6 +18,7 @@ public enum VirtualResourcePackManager {
 	INSTANCE;
 
 	private final Multimap<ResourceType, PackContainer> packs = MultimapBuilder.hashKeys().arrayListValues().build();
+	private final Set<Identifier> packIds = new HashSet<>();
 
 	public ResourcePackCreator getCreatorForType(ResourceType type) {
 		return new ResourcePackCreator() {
@@ -43,24 +46,22 @@ public enum VirtualResourcePackManager {
 	/**
 	 * Adds a virtual resource pack to the manager.
 	 *
-	 * @param pack the pack
-	 * @param types the resource types that the pack provides
+	 * @param pack           the pack
+	 * @param types          the resource types that the pack provides
 	 * @param clientPackMode the client resource pack mode
 	 */
 	public void addPack(VirtualResourcePack pack, Collection<ResourceType> types, ClientResourcePackMode clientPackMode) {
 		if (types.isEmpty()) {
 			throw new IllegalArgumentException("Trying to add virtual resource pack with no types");
+		} else if (packIds.contains(pack.getId())) {
+			throw new IllegalArgumentException(String.format("Duplicate virtual resource pack ID: %s", pack.getId()));
 		}
 
 		for (ResourceType type : types) {
-		    for (PackContainer existing : packs.get(type)) {
-		        if (existing.getPack().getId().equals(pack.getId())) {
-		            throw new IllegalArgumentException(String.format("Duplicate resource pack ID for type %s: %s", type.getName(), pack.getId()));
-                }
-            }
-
 			packs.put(type, new PackContainer(pack, clientPackMode));
 		}
+
+		packIds.add(pack.getId());
 	}
 
 	/**
@@ -68,15 +69,27 @@ public enum VirtualResourcePackManager {
 	 * If the pack is a client-side resource pack,
 	 * it'll be {@linkplain ClientResourcePackMode#ALWAYS_ENABLED always enabled}.
 	 *
-	 * @param pack the pack
+	 * @param pack  the pack
 	 * @param types the resource types that the pack provides
 	 */
 	public void addPack(VirtualResourcePack pack, Collection<ResourceType> types) {
 		addPack(pack, types, ClientResourcePackMode.ALWAYS_ENABLED);
 	}
 
+	/**
+	 * Gets all virtual packs as a resource type->pack multimap.
+	 *
+	 * @return the pack multimap
+	 */
 	public ImmutableMultimap<ResourceType, PackContainer> getPacks() {
 		return ImmutableMultimap.copyOf(packs);
+	}
+
+	/**
+	 * @return an immutable set of all virtual pack ids
+	 */
+	public ImmutableSet<Identifier> getPackIds() {
+		return ImmutableSet.copyOf(packIds);
 	}
 
 	/**
