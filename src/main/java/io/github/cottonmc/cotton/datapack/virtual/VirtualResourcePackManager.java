@@ -54,7 +54,7 @@ public enum VirtualResourcePackManager {
 		if (types.isEmpty()) {
 			throw new IllegalArgumentException("Trying to add virtual resource pack with no types");
 		} else if (packIds.contains(pack.getId())) {
-			throw new IllegalArgumentException(String.format("Duplicate virtual resource pack ID: %s", pack.getId()));
+			throw new IllegalArgumentException("Duplicate virtual resource pack ID: " + pack.getId());
 		}
 
 		for (ResourceType type : types) {
