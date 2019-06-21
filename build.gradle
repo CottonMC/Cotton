@@ -15,7 +15,6 @@ plugins {
 	id "com.jfrog.artifactory" version "4.9.0"
 }
 
-apply plugin: "com.github.johnrengelman.shadow"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -52,7 +51,7 @@ dependencies {
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 	implementation ("blue.endless:jankson:1.1.2") { transitive = false }
-	shadow ("blue.endless:jankson:1.1.2") { transitive = false }
+	include ("blue.endless:jankson:1.1.2") { transitive = false }
 
 	testImplementation ("org.junit.jupiter:junit-jupiter-api:5.4.1") //{ transitive=false; };
 	testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.4.1") //{ transitive=false; };
@@ -86,17 +85,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 	from sourceSets.main.allSource
 }
 
-shadowJar {
-	relocate 'blue.endless.jankson', 'io.github.cottonmc.repackage.blue.endless.jankson'
-	classifier = "shadow"
-	configurations = [project.configurations.shadow]
-}
-
-remapJar {
-	dependsOn shadowJar
-	jar = shadowJar.archivePath
-}
-
 jar {
 	from "LICENSE"
 }
@@ -109,12 +97,12 @@ publishing {
 			//artifact(jar) {
 			//	builtBy remapJar
 			//}
-			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow.jar") { //release jar - file location not provided anywhere in loom
+			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") { //release jar - file location not provided anywhere in loom
 				classifier null
 				builtBy remapJar
 			}
 
-			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-shadow-dev.jar") { //release jar - file location not provided anywhere in loom
+			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") { //release jar - file location not provided anywhere in loom
 				classifier "dev"
 				builtBy remapJar
 			}
