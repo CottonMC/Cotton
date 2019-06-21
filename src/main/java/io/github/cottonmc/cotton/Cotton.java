@@ -52,7 +52,7 @@ public class Cotton implements ModInitializer {
 		//register the command that prints out the virtual data and resource packs.
 		CommandRegistry.INSTANCE.register(false, new PackPrinterCommand());
 
-        /*
+		/*
 		HashMap<String, InputStreamProvider> map = new HashMap<>();
 		map.put("assets/minecraft/blockstates/cobblestone.json", InputStreamProvider.of(() -> "{\n" +
 				"    \"variants\": {\n" +
@@ -61,9 +61,9 @@ public class Cotton implements ModInitializer {
 				"}\n"));
 		VirtualResourcePackManager.INSTANCE.addPack(
 				new VirtualResourcePack(new Identifier("cotton", "test"), map),
-                Arrays.asList(ResourceType.values())
+				Arrays.asList(ResourceType.values())
 		);
-        */
+		*/
 
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:enderman_holdable"), "minecraft:string");
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
