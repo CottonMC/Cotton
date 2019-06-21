@@ -168,14 +168,10 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	 * @return a unique pack id
 	 */
 	private static Identifier convertToUniqueId(String str) {
-		int colonIndex = str.indexOf(':');
-		boolean hasNamespace = colonIndex != -1 && colonIndex < str.length() - 1;
-		Identifier result = hasNamespace ? Identifier.ofNullable(str) : null; // Identifier.tryParse() in 1.14.3
+		Identifier result = Identifier.ofNullable(str); // Identifier.tryParse() in 1.14.3
 
 		if (result == null) {
-			String namespace = hasNamespace ? filterValidIdChars(str.substring(0, colonIndex)) : "unknown";
-			String path = filterValidIdChars(hasNamespace ? str.substring(colonIndex + 1) : str);
-			result = new Identifier(namespace, path);
+			result = new Identifier("unknown", filterValidIdChars(str));
 		}
 
 		int index = VirtualResourcePackManager.INSTANCE.getPackIds().size();
