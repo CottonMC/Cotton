@@ -3,6 +3,7 @@ package io.github.cottonmc.cotton.datapack.virtual;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.cottonmc.cotton.util.Identifiers;
 import net.minecraft.SharedConstants;
 import net.minecraft.resource.AbstractFileResourcePack;
 import net.minecraft.resource.ResourceType;
@@ -33,15 +34,15 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	private static final Pattern NAMESPACE_PATTERN = Pattern.compile("(?:.+?)/(.+?)/.+");
 	private final Set<String> namespaces;
 	private final Map<String, InputStreamProvider> contents;
-	private final String id;
+	private final Identifier id;
 
 	/**
 	 * The constructor.
 	 *
-	 * @param id       an identifier for this data pack (does not have to be unique)
+	 * @param id       a unique identifier for this data pack
 	 * @param contents the contents as a [resource path]=>[contents] map
 	 */
-	public VirtualResourcePack(String id, Map<String, InputStreamProvider> contents) {
+	public VirtualResourcePack(Identifier id, Map<String, InputStreamProvider> contents) {
 		super(null);
 		this.id = id;
 		this.namespaces = contents.keySet().stream()
@@ -57,6 +58,17 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 		this.contents = contents;
+	}
+
+	/**
+	 * A deprecated constructor. Use {@link #VirtualResourcePack(Identifier, Map)} instead.
+	 *
+	 * @param id       an identifier for this data pack (does not have to be unique)
+	 * @param contents the contents as a [resource path]=>[contents] map
+	 */
+	@Deprecated
+	public VirtualResourcePack(String id, Map<String, InputStreamProvider> contents) {
+		this(convertToUniqueId(id), contents);
 	}
 
 	@Override
@@ -106,8 +118,11 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		return String.format("%s (virtual)", id);
 	}
 
-	String getId(int index) {
-		return String.format("virtual/%d_%s", index, id);
+	/**
+	 * @return the id of this resource pack
+	 */
+	public Identifier getId() {
+		return id;
 	}
 
 	@Nullable
@@ -131,7 +146,68 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		return null;
 	}
 
+	/**
+	 * Gets the contents of this pack as a file path -> input stream provider map.
+	 *
+	 * @return the contents
+	 */
 	public ImmutableMap<String, InputStreamProvider> getContents() {
 		return ImmutableMap.copyOf(contents);
+	}
+
+	/*
+	 Everything below is used to make unique identifiers for the deprecated constructor.
+	 The constructor tries to convert the old ids to identifiers as well as possible
+	 (also adding the index in the end to make them unique).
+	*/
+
+	/**
+	 * Converts the input string into a unique pack identifier.
+	 *
+	 * @param str the input string
+	 * @return a unique pack id
+	 */
+	private static Identifier convertToUniqueId(String str) {
+		Identifier result = Identifier.ofNullable(str); // Identifier.tryParse() in 1.14.3
+
+		if (result == null) {
+			result = new Identifier("unknown", filterValidIdChars(str));
+		}
+
+		int index = VirtualResourcePackManager.INSTANCE.getPackIds().size();
+		return Identifiers.suffixPath(result, "_" + index);
+	}
+
+	/**
+	 * Filters the input string by checking each character
+	 * with {@link #isValidIdChar(char)}.
+	 *
+	 * @param str the string
+	 * @return a filtered string
+	 */
+	private static String filterValidIdChars(String str) {
+		StringBuilder result = new StringBuilder();
+
+		for (char c : str.toCharArray()) {
+			if (isValidIdChar(c)) {
+				result.append(c);
+			}
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * Returns true if the character is a valid character
+	 * for an identifier namespace.
+	 *
+	 * @param c the character
+	 * @return true if the character is valid for an id namespace
+	 */
+	private static boolean isValidIdChar(char c) {
+		// a-z0-9_.-
+		return c == '.' || c == '-' || c == '_' ||
+				(c >= 'a' && c <= 'z') ||
+				(c >= '0' && c <= '9');
 	}
 }
