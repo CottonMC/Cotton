@@ -61,7 +61,7 @@ public class Cotton implements ModInitializer {
 				"}\n"));
 		VirtualResourcePackManager.INSTANCE.addPack(
 				new VirtualResourcePack(new Identifier("cotton", "test"), map),
-				Arrays.asList(ResourceType.values())
+				Collections.singleton(ResourceType.CLIENT_RESOURCES)
 		);
 		*/
 
