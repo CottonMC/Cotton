@@ -10,7 +10,7 @@ buildscript {
 }
 
 plugins {
-	id 'fabric-loom' version '0.2.2-SNAPSHOT'
+	id 'fabric-loom' version '0.2.4-SNAPSHOT'
 	id 'maven-publish'
 	id "com.jfrog.artifactory" version "4.9.0"
 }
@@ -41,16 +41,17 @@ dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modCompile "io.github.cottonmc:LibCD:${project.libcd_version}"
+	modApi "io.github.cottonmc:LibCD:${project.libcd_version}"
 	include "io.github.cottonmc:LibCD:${project.libcd_version}"
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
-	implementation ("blue.endless:jankson:1.1.2") //we want jankson available now that it's included instead of shadowed!
+    // modApi jankson for properly including it as a dep with Loom
+	modApi ("blue.endless:jankson:1.1.2") //we want jankson available now that it's included instead of shadowed!
 	include ("blue.endless:jankson:1.1.2") { transitive = false }
 
 	testImplementation ("org.junit.jupiter:junit-jupiter-api:5.4.1") //{ transitive=false; };
