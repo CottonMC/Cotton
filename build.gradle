@@ -50,7 +50,7 @@ dependencies {
 	include "io.github.cottonmc:LibCD:${project.libcd_version}"
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
-	implementation ("blue.endless:jankson:1.1.2") { transitive = false }
+	implementation ("blue.endless:jankson:1.1.2") //we want jankson available now that it's included instead of shadowed!
 	include ("blue.endless:jankson:1.1.2") { transitive = false }
 
 	testImplementation ("org.junit.jupiter:junit-jupiter-api:5.4.1") //{ transitive=false; };

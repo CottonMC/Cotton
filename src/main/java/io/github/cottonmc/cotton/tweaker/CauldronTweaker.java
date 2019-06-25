@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.function.Predicate;
 
 public class CauldronTweaker implements Tweaker {
@@ -32,6 +33,9 @@ public class CauldronTweaker implements Tweaker {
 	public void prepareReload(ResourceManager manager) {
 		INSTANCE.behaviors.clear();
 	}
+
+	@Override
+	public void applyReload(ResourceManager resourceManager, Executor executor) { }
 
 	@Override
 	public String getApplyMessage() {
