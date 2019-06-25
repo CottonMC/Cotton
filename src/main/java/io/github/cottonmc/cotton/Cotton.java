@@ -17,7 +17,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
@@ -70,8 +69,6 @@ public class Cotton implements ModInitializer {
 //		TagEntryManager.registerToTag(TagType.BLOCK, new Identifier("minecraft:dragon_immune"), "#minecraft:enderman_holdable");
 //		LootTableManager.registerBasicBlockDropTable(new Identifier("minecraft", "dirt"));
 //		RecipeUtil.removeRecipe(new Identifier("crafting_table"));
-		RecipeUtil.removeRecipe(new Identifier("crafting_table"));
-		RecipeUtil.removeRecipeFor(new ItemStack(Items.OAK_PLANKS, 4));
 
 		//example cauldron behavior code - turns a sponge into a wet sponge
 //		CauldronBehavior.registerBehavior(
