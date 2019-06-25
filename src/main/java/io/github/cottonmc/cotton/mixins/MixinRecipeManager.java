@@ -7,28 +7,20 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.profiler.Profiler;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.cottonmc.cotton.Cotton;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(RecipeManager.class)
 public class MixinRecipeManager {
-	@ModifyVariable(method = "method_20705", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Collection;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
+	@ModifyVariable(method = "method_20705", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Set;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
 	private Iterator<Map.Entry<Identifier, JsonObject>> filterIterator(Iterator<Map.Entry<Identifier, JsonObject>> iterator) {
 		ArrayList<Map.Entry<Identifier, JsonObject>> replacement = new ArrayList<>();
 		while(iterator.hasNext()) {
