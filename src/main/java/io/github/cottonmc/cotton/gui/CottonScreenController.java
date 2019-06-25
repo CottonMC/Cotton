@@ -143,15 +143,15 @@ public abstract class CottonScreenController extends CraftingContainer<Inventory
 	private boolean insertIntoExisting(ItemStack toInsert, Slot slot) {
 		ItemStack curSlotStack = slot.getStack();
 		if (!curSlotStack.isEmpty() && canStacksCombine(toInsert, curSlotStack)) {
-			int combinedAmount = curSlotStack.getAmount() + toInsert.getAmount();
-			if (combinedAmount <= toInsert.getMaxAmount()) {
-				toInsert.setAmount(0);
-				curSlotStack.setAmount(combinedAmount);
+			int combinedCount = curSlotStack.getCount() + toInsert.getCount();
+			if (combinedCount <= toInsert.getMaxCount()) {
+				toInsert.setCount(0);
+				curSlotStack.setCount(combinedCount);
 				slot.markDirty();
 				return true;
-			} else if (curSlotStack.getAmount() < toInsert.getMaxAmount()) {
-				toInsert.subtractAmount(toInsert.getMaxAmount() - curSlotStack.getAmount());
-				curSlotStack.setAmount(toInsert.getMaxAmount());
+			} else if (curSlotStack.getCount() < toInsert.getMaxCount()) {
+				toInsert.decrement(toInsert.getMaxCount() - curSlotStack.getCount());
+				curSlotStack.setCount(toInsert.getMaxCount());
 				slot.markDirty();
 				return true;
 			}
@@ -163,10 +163,10 @@ public abstract class CottonScreenController extends CraftingContainer<Inventory
 	private boolean insertIntoEmpty(ItemStack toInsert, Slot slot) {
 		ItemStack curSlotStack = slot.getStack();
 		if (curSlotStack.isEmpty() && slot.canInsert(toInsert)) {
-			if (toInsert.getAmount() > slot.getMaxStackAmount()) {
+			if (toInsert.getCount() > slot.getMaxStackAmount()) {
 				slot.setStack(toInsert.split(slot.getMaxStackAmount()));
 			} else {
-				slot.setStack(toInsert.split(toInsert.getAmount()));
+				slot.setStack(toInsert.split(toInsert.getCount()));
 			}
 
 			slot.markDirty();

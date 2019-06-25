@@ -7,8 +7,8 @@ import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.container.PropertyDelegate;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public class WBar extends WWidget {
@@ -20,7 +20,7 @@ public class WBar extends WWidget {
 	protected PropertyDelegate properties;
 	protected final Direction direction;
 	protected String tooltipLabel;
-	protected Component tooltipTextComponent;
+	protected Text tooltipTextComponent;
 	
 	public WBar(Identifier bg, Identifier bar, int field, int maxfield) {
 		this(bg, bar, field, maxfield, Direction.UP);
@@ -51,7 +51,7 @@ public class WBar extends WWidget {
 	
 	
 	
-	public WBar withTooltip(Component label) {
+	public WBar withTooltip(Text label) {
 		this.tooltipTextComponent = label;
 		return this;
 	}
@@ -130,7 +130,7 @@ public class WBar extends WWidget {
 			int valMax = (max>=0) ? properties.get(max) : maxValue;
 			String formatted = tooltipLabel;
 			try {
-				formatted = new TranslatableComponent(tooltipLabel, Integer.valueOf(value), Integer.valueOf(valMax)).getFormattedText();
+				formatted = new TranslatableText(tooltipLabel, Integer.valueOf(value), Integer.valueOf(valMax)).asFormattedString();
 			} catch (Throwable t) {
 				formatted = t.getLocalizedMessage();
 			} //Fallback to raw tooltipLabel
@@ -138,7 +138,7 @@ public class WBar extends WWidget {
 		}
 		if (tooltipTextComponent!=null) {
 			try {
-				information.add(tooltipTextComponent.getFormattedText());
+				information.add(tooltipTextComponent.asFormattedString());
 			} catch (Throwable t) {
 				information.add(t.getLocalizedMessage());
 			}

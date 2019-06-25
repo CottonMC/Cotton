@@ -76,8 +76,8 @@ public class CauldronTweaker implements Tweaker {
 	 * @return Whether the items could be taken.
 	 */
 	public static boolean takeItem(CauldronContext ctx, int amount) {
-		if (ctx.getStack().getAmount() < amount) return false;
-		if (ctx.getPlayer() == null || !ctx.getPlayer().abilities.creativeMode) ctx.getStack().subtractAmount(amount);
+		if (ctx.getStack().getCount() < amount) return false;
+		if (ctx.getPlayer() == null || !ctx.getPlayer().abilities.creativeMode) ctx.getStack().decrement(amount);
 		return true;
 	}
 
@@ -90,7 +90,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @return Whether the items could be given.
 	 */
 	public static boolean giveItem(CauldronContext ctx, Item item, int amount) {
-		if (amount > item.getMaxAmount()) return false;
+		if (amount > item.getMaxCount()) return false;
 		PlayerEntity player = ctx.getPlayer();
 		ItemStack give = new ItemStack(item, amount);
 		if (player != null) {

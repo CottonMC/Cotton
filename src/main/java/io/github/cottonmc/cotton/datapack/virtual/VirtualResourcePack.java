@@ -168,7 +168,7 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	 * @return a unique pack id
 	 */
 	private static Identifier convertToUniqueId(String str) {
-		Identifier result = Identifier.ofNullable(str); // Identifier.tryParse() in 1.14.3
+		Identifier result = Identifier.tryParse(str);
 
 		if (result == null) {
 			result = new Identifier("unknown", filterValidIdChars(str));

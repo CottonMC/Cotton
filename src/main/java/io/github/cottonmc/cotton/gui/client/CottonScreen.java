@@ -6,8 +6,8 @@ import io.github.cottonmc.cotton.gui.widget.WWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Nameable;
 
 public class CottonScreen<T extends CottonScreenController> extends AbstractContainerScreen<T> {
@@ -16,7 +16,7 @@ public class CottonScreen<T extends CottonScreenController> extends AbstractCont
 	protected WWidget lastResponder = null;
 	
 	public CottonScreen(T container, PlayerEntity player) {
-		super(container, player.inventory, new TextComponent(""));
+		super(container, player.inventory, new LiteralText(""));
 		this.container = container;
 		width = 18*9;
 		height = 18*9;
@@ -206,10 +206,10 @@ public class CottonScreen<T extends CottonScreenController> extends AbstractCont
 		
 		//TODO: Change this to a label that lives in the rootPanel instead?
 		if (container instanceof Nameable) {
-			Component name = ((Nameable)container).getDisplayName();
-			font.draw(name.getFormattedText(), left, top, container.getTitleColor());
+			Text name = ((Nameable)container).getDisplayName();
+			font.draw(name.asFormattedString(), left, top, container.getTitleColor());
 		} else if (getTitle() != null) {
-			font.draw(getTitle().getFormattedText(), left, top, container.getTitleColor());
+			font.draw(getTitle().asFormattedString(), left, top, container.getTitleColor());
 		}
 	}
 	

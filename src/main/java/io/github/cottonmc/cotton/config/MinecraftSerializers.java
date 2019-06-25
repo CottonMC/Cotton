@@ -27,7 +27,7 @@ public class MinecraftSerializers {
 		if (json.containsKey("count")) {
 			Integer count = json.get(Integer.class, "count");
 			if (count!=null) {
-				stack.setAmount(count);
+				stack.setCount(count);
 			}
 		}
 		return stack;
@@ -42,11 +42,11 @@ public class MinecraftSerializers {
 
 	public static JsonElement saveItemStack(ItemStack stack) {
 		JsonPrimitive id = new JsonPrimitive(Registry.ITEM.getId(stack.getItem()).toString());
-		if (stack.getAmount()==1) return id;
+		if (stack.getCount()==1) return id;
 	
 		JsonObject result = new JsonObject();
 		result.put("item", new JsonPrimitive(Registry.ITEM.getId(stack.getItem()).toString()));
-		result.put("count", new JsonPrimitive(stack.getAmount()));
+		result.put("count", new JsonPrimitive(stack.getCount()));
 		return result;
 		
 	}
@@ -136,6 +136,6 @@ public class MinecraftSerializers {
 	}
 	
 	public static <T extends Comparable<T>> String getProperty(BlockState state, Property<T> property) {
-		return property.getValueAsString(state.get(property));
+		return property.getName(state.get(property));
 	}
 }

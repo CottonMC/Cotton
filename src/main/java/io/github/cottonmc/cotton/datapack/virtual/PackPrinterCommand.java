@@ -3,10 +3,10 @@ package io.github.cottonmc.cotton.datapack.virtual;
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.cottonmc.cotton.Cotton;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.TranslatableText;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,7 +61,7 @@ public final class PackPrinterCommand implements Consumer<CommandDispatcher<Serv
 				//create the folder
 				Files.createDirectories(exportedVirtualPacks);
 				if (Files.notExists(exportedVirtualPacks)) {
-					source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".failed_to_create_folder", exportedVirtualPacks.toString()));
+					source.sendError(new TranslatableText("message." + Cotton.MODID + ".failed_to_create_folder", exportedVirtualPacks.toString()));
 				} else {
 					//loop through all of the virtual resource packs of the required type.
 					for (VirtualResourcePackManager.PackContainer packContainer : virtualResourcePacks) {
@@ -80,20 +80,20 @@ public final class PackPrinterCommand implements Consumer<CommandDispatcher<Serv
 								out.flush();
 							} catch (IOException e) {
 								LOGGER.error("Failed to export virtual resource " + location, e);
-								source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resource", outputPath.toString()));
+								source.sendError(new TranslatableText("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resource", outputPath.toString()));
 								return;
 							}
 						}
 					}
 
-					source.sendFeedback(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.exported"), true);
+					source.sendFeedback(new TranslatableText("message." + Cotton.MODID + ".exportvirtual.exported"), true);
 				}
 			} else {
-				source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.dedicated_error"));
+				source.sendError(new TranslatableText("message." + Cotton.MODID + ".exportvirtual.dedicated_error"));
 			}
 		} catch (IOException e) {
 			LOGGER.error("Failed to export virtual resources", e);
-			source.sendError(new TranslatableComponent("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resources"));
+			source.sendError(new TranslatableText("message." + Cotton.MODID + ".exportvirtual.failed_to_export_resources"));
 		}
 	}
 }

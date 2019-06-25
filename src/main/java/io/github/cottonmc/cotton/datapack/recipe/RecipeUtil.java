@@ -63,7 +63,7 @@ public class RecipeUtil {
 		
 		@Override
 		public boolean test(Recipe<?> t) {
-			return ItemStack.areEqual(t.getOutput(), product);
+			return ItemStack.areEqualIgnoreDamage(t.getOutput(), product);
 		}
 	}
 }
