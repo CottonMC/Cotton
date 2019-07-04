@@ -1,7 +1,28 @@
+# Private
+
 .gradle
+private.gradle
+
+
+# IDE stuff
+
+.idea
+.classpath
+.project
+.settings
+
+# Logs
+
+logs
+
+# Build bits
+
+run
+bin
 build
 out
-.idea
-run
-private.gradle
 classes
+
+# Naughty filesystems
+
+.directory
