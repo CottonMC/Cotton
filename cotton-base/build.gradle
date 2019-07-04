@@ -1,0 +1,14 @@
+archivesBaseName = "cotton-base"
+
+dependencies {
+    afterEvaluate {
+        compile project(":cotton-logging")
+        compile project(":cotton-config")
+        compile project(":cotton-datapack")
+    }
+    modApi "io.github.cottonmc:Jankson:1.0.0+j1.1.2"
+    include "io.github.cottonmc:Jankson:1.0.0+j1.1.2"
+    modImplementation "net.fabricmc.fabric-api:fabric-api-base:0.1.0+f1618918"
+    modImplementation "net.fabricmc.fabric-api:fabric-item-groups-v0:0.1.0+f1618918"
+    modImplementation "net.fabricmc.fabric-api:fabric-tag-extensions-v0:0.1.1+c189dc5c"
+}

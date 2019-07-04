@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "io.github.cottonmc.cotton.cauldron.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.cotton-cauldron.refmap.json",
+  "mixins": [
+    "MixinCauldronBehavior"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

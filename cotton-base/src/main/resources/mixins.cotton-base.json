@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "io.github.cottonmc.cotton.base.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.cotton-base.refmap.json",
+  "mixins": [
+    "MixinPlayerEntity"
+  ],
+  "client": [
+    "MixinCottonInitializerClient"
+  ],
+  "server": [
+    "MixinCottonInitializerServer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

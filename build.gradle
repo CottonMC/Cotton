@@ -1,151 +1,130 @@
-buildscript {
-	repositories {
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
-	}
-	dependencies {
-		classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0"
-	}
-}
-
 plugins {
-	id 'fabric-loom' version '0.2.4-SNAPSHOT'
-	id 'maven-publish'
-	id "com.jfrog.artifactory" version "4.9.0"
+    id "com.jfrog.artifactory" version "4.9.0" apply false
+    id "fabric-loom" version "0.2.4-SNAPSHOT" apply false
 }
 
+def minecraftVersion = "1.14.3"
+def yarnMappings = "1.14.3+build.12"
+def loaderVersion = "0.4.8+build.155"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-if(rootProject.file('private.gradle').exists()) { //Publishing details
-	apply from: 'private.gradle'
+//Publishing details
+if (rootProject.file("private.gradle").exists()) {
+	apply from: "private.gradle"
 }
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+allprojects {
+    apply plugin: "maven-publish"
+    apply plugin: "com.jfrog.artifactory"
+    apply plugin: "fabric-loom"
 
-minecraft {
-	refmapName = 'mixins.cotton.refmap.json'
+    version = "1.0.0-rc.1"
+    group = "io.github.cottonmc.cotton"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    minecraft {
+        refmapName = "mixins.${archivesBaseName}.refmap.json"
+    }
+
+    repositories {
+        maven {
+            name = "Cotton"
+            url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+        }
+        maven {
+            name = "Cotton (snapshots)"
+            url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
+        }
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:$minecraftVersion"
+        mappings "net.fabricmc:yarn:$yarnMappings"
+        modImplementation "net.fabricmc:fabric-loader:$loaderVersion"
+
+        compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
+    }
+
+
+    afterEvaluate {
+        processResources {
+            inputs.property "version", project.version
+
+            from(sourceSets.main.resources.srcDirs) {
+                include "fabric.mod.json"
+                expand "version": project.version
+            }
+
+            from(sourceSets.main.resources.srcDirs) {
+                exclude "fabric.mod.json"
+            }
+        }
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = "sources"
+        from sourceSets.main.allSource
+    }
+
+    jar {
+        from rootProject.files("LICENSE")
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                //release jar - file location not provided anywhere in loom
+                artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") {
+                    classifier null
+                    builtBy remapJar
+                }
+
+                //release jar - file location not provided anywhere in loom
+                artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") {
+                    classifier "dev"
+                    builtBy remapJar
+                }
+
+                artifact(sourcesJar) {
+                    builtBy remapSourcesJar
+                }
+            }
+        }
+    }
+
+    artifactory {
+        if (rootProject.hasProperty("artifactoryUsername")) {
+            contextUrl = "http://server.bbkr.space:8081/artifactory/libs-release/"
+            publish {
+                repository {
+                    username = artifactoryUsername
+                    password = artifactoryPassword
+                }
+                defaults {
+                    publications("maven")
+
+                    publishArtifacts = true
+                    publishPom = true
+                }
+            }
+        } else {
+            println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
+        }
+    }
 }
 
-repositories {
-	mavenCentral()
-	maven { url "http://server.bbkr.space:8081/artifactory/libs-snapshot/" }
-	maven { url "http://server.bbkr.space:8081/artifactory/libs-release/" }
-}
+archivesBaseName = "cotton-all"
 
 dependencies {
-	//to change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    afterEvaluate {
+        subprojects.each {
+            compile project(":${it.name}")
+            include project(":${it.name}")
+        }
+    }
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	modApi "io.github.cottonmc:LibCD:${project.libcd_version}"
-	include "io.github.cottonmc:LibCD:${project.libcd_version}"
-
-	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
-    // modApi jankson for properly including it as a dep with Loom
-	modApi ("blue.endless:jankson:1.1.2") //we want jankson available now that it's included instead of shadowed!
-	include ("blue.endless:jankson:1.1.2") { transitive = false }
-
-	testImplementation ("org.junit.jupiter:junit-jupiter-api:5.4.1") //{ transitive=false; };
-	testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.4.1") //{ transitive=false; };
-}
-
-processResources {
-	inputs.property "version", project.version
-
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
-		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
-}
-
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
-}
-
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
-}
-
-jar {
-	from "LICENSE"
-}
-
-// configure the maven publication
-publishing {
-	publications {
-		maven(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			//artifact(jar) {
-			//	builtBy remapJar
-			//}
-			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") { //release jar - file location not provided anywhere in loom
-				classifier null
-				builtBy remapJar
-			}
-
-			artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") { //release jar - file location not provided anywhere in loom
-				classifier "dev"
-				builtBy remapJar
-			}
-
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-
-	// select the repositories you want to publish to
-	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
-	}
-}
-
-artifactory {
-	if (project.hasProperty("artifactoryUsername")) {
-		contextUrl = 'http://server.bbkr.space:8081/artifactory/'
-		publish {
-			repository {
-				if (version.contains("SNAPSHOT")) {
-					repoKey = "libs-snapshot"
-				} else {
-					repoKey = "libs-release"
-				}
-				username = artifactoryUsername
-				password = artifactoryPassword
-			}
-			defaults {
-				publications('maven')
-
-				publishArtifacts = true
-				publishPom = true
-			}
-		}
-	} else {
-		println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
-	}
-}
-
-test {
-	useJUnitPlatform()
+    // For integration tests
+    modImplementation "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.1.1+eff4f58d"
+    modImplementation "io.github.prospector.modmenu:ModMenu:1.6.2-93"
 }

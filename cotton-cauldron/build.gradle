@@ -1,0 +1,9 @@
+archivesBaseName = "cotton-cauldron"
+
+dependencies {
+    afterEvaluate {
+        compile project(":cotton-base")
+    }
+    modApi "io.github.cottonmc:LibCD:1.2.1+1.14.3"
+    include "io.github.cottonmc:LibCD:1.2.1+1.14.3"
+}

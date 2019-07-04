@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "io.github.cottonmc.cotton.datapack.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.cotton-datapack.refmap.json",
+  "mixins": [
+    "MixinDataPackLoad",
+    "MixinRecipeManager"
+  ],
+  "client": [
+    "MixinClientDataLoad"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
