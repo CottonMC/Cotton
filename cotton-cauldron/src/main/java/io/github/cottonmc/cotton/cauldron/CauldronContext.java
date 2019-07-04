@@ -2,7 +2,7 @@ package io.github.cottonmc.cotton.cauldron;
 
 import javax.annotation.Nullable;
 
-import io.github.cottonmc.cotton.base.registry.CommonTags;
+import io.github.cottonmc.cotton.commons.CommonTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;

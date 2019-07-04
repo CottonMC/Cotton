@@ -1,0 +1,5 @@
+archivesBaseName = "cotton-player-events"
+
+dependencies {
+    modImplementation "net.fabricmc.fabric-api:fabric-api-base:0.1.0+f1618918"
+}

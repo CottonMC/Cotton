@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "cotton-commons",
+  "version": "${version}",
+  "name": "Cotton Commons",
+  "icon": "icon.png",
+  "licence": "MIT",
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/cotton",
+    "issues": "https://github.com/CottonMC/cotton/issues"
+  },
+  "entrypoints": {
+    "main": [
+      "io.github.cottonmc.cotton.commons.CottonCommons"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "cotton-logging": "*",
+    "cotton-config": "*",
+    "cotton-datapack": "*",
+    "jankson": "*",
+    "fabric-api-base": "*",
+    "fabric-item-groups-v0": "*",
+    "fabric-tag-extensions-v0": "*"
+  }
+}

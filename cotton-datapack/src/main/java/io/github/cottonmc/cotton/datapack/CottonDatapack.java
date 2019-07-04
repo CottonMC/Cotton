@@ -2,6 +2,7 @@ package io.github.cottonmc.cotton.datapack;
 
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.datapack.config.CottonDatapackConfig;
+import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import io.github.cottonmc.cotton.datapack.virtual.PackPrinterCommand;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
@@ -22,6 +23,9 @@ public class CottonDatapack implements ModInitializer {
 
     @Override
     public void onInitialize() {
+		PackMetaManager.saveMeta();
+		CottonRecipes.init();
+
         config = ConfigManager.loadConfig(CottonDatapackConfig.class);
         LOGGER.info("Loaded config.");
 

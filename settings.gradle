@@ -11,8 +11,9 @@ pluginManagement {
 
 rootProject.name = "cotton"
 
-include "cotton-base"
 include "cotton-cauldron"
+include "cotton-commons"
 include "cotton-config"
 include "cotton-datapack"
 include "cotton-logging"
+include "cotton-player-events"
