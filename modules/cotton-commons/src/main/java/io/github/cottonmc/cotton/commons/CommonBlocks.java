@@ -17,7 +17,7 @@ public class CommonBlocks {
 	 * @return Returns either an already existing block with the specified name or a new one that was register under the given name.
 	 */
 	public static Block register(String name, Block block) {
-		BlockItem item = new BlockItem(block, new Item.Settings().group(CottonCommons.commonGroup));
+		BlockItem item = new BlockItem(block, new Item.Settings().group(CottonCommons.ITEM_GROUP));
 		return register(name, block, item);
 	}
 

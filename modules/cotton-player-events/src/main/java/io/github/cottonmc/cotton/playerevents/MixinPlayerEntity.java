@@ -1,7 +1,5 @@
 package io.github.cottonmc.cotton.playerevents;
 
-import io.github.cottonmc.cotton.playerevents.PlayerDamageCallback;
-import io.github.cottonmc.cotton.playerevents.PlayerTickCallback;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;

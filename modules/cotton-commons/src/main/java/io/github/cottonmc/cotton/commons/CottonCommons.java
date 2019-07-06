@@ -13,11 +13,11 @@ public class CottonCommons implements ModInitializer {
 
 	public static final String MODID = "cotton-commons";
 
-	public static final ItemGroup commonGroup = FabricItemGroupBuilder.build(
-			new Identifier("cotton-commons", "common_tab"), () -> new ItemStack(Blocks.LIGHT_BLUE_WOOL));
+	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(
+			new Identifier("cotton-commons", "common_item_group"), () -> new ItemStack(Blocks.LIGHT_BLUE_WOOL));
 
-	public static final ModLogger logger = new ModLogger(MODID, "COTTON COMMONS");
-	public static final CottonCommonsConfig config = ConfigManager.loadConfig(CottonCommonsConfig.class);;
+	public static final ModLogger LOGGER = new ModLogger(MODID, "COTTON COMMONS");
+	public static final CottonCommonsConfig CONFIG = ConfigManager.loadConfig(CottonCommonsConfig.class);
 
 	@Override
 	public void onInitialize() {

@@ -31,8 +31,8 @@ public class CommonTags {
 	public static final Tag<Block> CAULDRON_FIRE = TagRegistry.block(new Identifier(CottonCommons.MODID, "cauldron_fire"));
 
 	public static void init() {
-		if (CottonCommons.config.fillCommonTags) {
-			CottonCommons.logger.info("Generating common tags!");
+		if (CottonCommons.CONFIG.fillCommonTags) {
+			CottonCommons.LOGGER.info("Generating common tags!");
 			List<String> glass_blocks = new ArrayList<>();
 			List<String> glass_panes = new ArrayList<>();
 			List<String> terracotta = new ArrayList<>();
