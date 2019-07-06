@@ -5,8 +5,9 @@ def yarnMappings = "1.14.3+build.12"
 def loaderVersion = "0.4.8+build.155"
 
 //Publishing details
-if (rootProject.file("private.gradle").exists()) {
-	apply from: "private.gradle"
+if (rootProject.file("../../private.gradle").exists()) {
+    println("PRIVATE GRADLE FOUND")
+	apply from: "../../private.gradle"
 }
 
 group = "io.github.cottonmc.cotton"
