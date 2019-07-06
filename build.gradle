@@ -1,3 +1,10 @@
+/**
+
+TODO: This buildscript is obsolete. We need to make an empty project shell now
+which just "include"s all modules, plus Jankson and LibCD.
+
+ */
+
 plugins {
     id "com.jfrog.artifactory" version "4.9.0" apply false
     id "fabric-loom" version "0.2.4-SNAPSHOT" apply false
@@ -117,14 +124,17 @@ allprojects {
 archivesBaseName = "cotton-all"
 
 dependencies {
-    afterEvaluate {
-        subprojects.each {
-            compile project(":${it.name}")
-            include project(":${it.name}")
-        }
-    }
+    //include ""
+
+    //IN PROGRESS: RIPPING OUT SUBPROJECTS AND REPLACING THEM WITH INCLUDES
+    //afterEvaluate {
+    //    subprojects.each {
+    //        compile project(":${it.name}")
+    //        include project(":${it.name}")
+    //    }
+    //}
 
     // For integration tests
-    modImplementation "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.1.1+eff4f58d"
-    modImplementation "io.github.prospector.modmenu:ModMenu:1.6.2-93"
+    //modImplementation "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.1.1+eff4f58d"
+    //modImplementation "io.github.prospector.modmenu:ModMenu:1.6.2-93"
 }
