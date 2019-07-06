@@ -6,10 +6,6 @@ plugins {
 
 ext {
 	module_dependencies = [
-		// "jankson" : "1.0.0+j1.1.2",
-
-		// "logging" : "1.0.0-rc.1",
-		// "config"  : "1.0.0-rc.1",
 		"datapack": "1.0.0-rc.1"
 	];
 }
