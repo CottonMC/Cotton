@@ -1,5 +1,3 @@
-
-
 def minecraftVersion = "1.14.3"
 def yarnMappings = "1.14.3+build.12"
 def loaderVersion = "0.4.8+build.155"
@@ -48,13 +46,6 @@ dependencies {
                     break;
             }
 
-            //def dependencyString = (modname.equalsIgnoreCase("jankson")) ?
-            //    "io.github.cottonmc:Jankson:"+modversion
-            //:
-            //    "io.github.cottonmc.cotton:cotton-"+modname+":"+modversion
-            //;
-
-            // include dependencyString;
             modApi dependencyString;
         }
     } else {
