@@ -9,5 +9,3 @@ do
 	eval "$@"
 	cd ../..
 done
-
-./gradlew clean build
