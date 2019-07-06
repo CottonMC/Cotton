@@ -8,12 +8,3 @@ pluginManagement {
         }
     }   
 }
-
-rootProject.name = "cotton"
-
-def modules = [ "cauldron", "commons", "config", "datapack", "logging", "player-events" ]
-
-for(module in modules) {
-	//include "cotton-"+module;
-	//startParameter.excludedTaskNames.add(":cotton-"+module+":genSources");
-}

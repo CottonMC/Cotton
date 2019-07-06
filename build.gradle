@@ -1,140 +1,111 @@
-/**
-
-TODO: This buildscript is obsolete. We need to make an empty project shell now
-which just "include"s all modules, plus Jankson and LibCD.
-
- */
-
 plugins {
-    id "com.jfrog.artifactory" version "4.9.0" apply false
-    id "fabric-loom" version "0.2.4-SNAPSHOT" apply false
+    id "com.jfrog.artifactory" version "4.9.0"
+    id "maven-publish"
+    id "fabric-loom" version "0.2.4-SNAPSHOT"
 }
 
 def minecraftVersion = "1.14.3"
 def yarnMappings = "1.14.3+build.12"
 def loaderVersion = "0.4.8+build.155"
 
+archivesBaseName = "cotton"
+version = "1.0.0-rc.1"
+group = "io.github.cottonmc.cotton"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven {
+        name = "Cotton"
+        url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+    }
+    maven {
+        name = "Cotton (snapshots)"
+        url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:$minecraftVersion"
+    mappings "net.fabricmc:yarn:$yarnMappings"
+    modImplementation "net.fabricmc:fabric-loader:$loaderVersion"
+
+    def modules = ["player-events", "logging", "config", "datapack", "commons", "cauldron"]
+    modules.each { module ->
+        include "io.github.cottonmc.cotton:cotton-$module:latest.release"
+    }
+
+    compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
+}
+
+
+processResources {
+    inputs.property "version", project.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "fabric.mod.json"
+        expand "version": project.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "fabric.mod.json"
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = "sources"
+    from sourceSets.main.allSource
+}
+
+jar {
+    from rootProject.files("LICENSE")
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            //release jar - file location not provided anywhere in loom
+            artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") {
+                classifier null
+                builtBy remapJar
+            }
+
+            //release jar - file location not provided anywhere in loom
+            artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") {
+                classifier "dev"
+                builtBy remapJar
+            }
+
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
+}
+
 //Publishing details
 if (rootProject.file("private.gradle").exists()) {
 	apply from: "private.gradle"
 }
 
-allprojects {
-    apply plugin: "maven-publish"
-    apply plugin: "com.jfrog.artifactory"
-    apply plugin: "fabric-loom"
-
-    version = "1.0.0-rc.1"
-    group = "io.github.cottonmc.cotton"
-
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
-    minecraft {
-        refmapName = "mixins.${archivesBaseName}.refmap.json"
-    }
-
-    repositories {
-        maven {
-            name = "Cotton"
-            url = "http://server.bbkr.space:8081/artifactory/libs-release/"
-        }
-        maven {
-            name = "Cotton (snapshots)"
-            url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
-        }
-    }
-
-    dependencies {
-        minecraft "com.mojang:minecraft:$minecraftVersion"
-        mappings "net.fabricmc:yarn:$yarnMappings"
-        modImplementation "net.fabricmc:fabric-loader:$loaderVersion"
-
-        compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
-    }
-
-
-    afterEvaluate {
-        processResources {
-            inputs.property "version", project.version
-
-            from(sourceSets.main.resources.srcDirs) {
-                include "fabric.mod.json"
-                expand "version": project.version
+artifactory {
+    if (rootProject.hasProperty("artifactoryUsername")) {
+        contextUrl = "http://server.bbkr.space:8081/artifactory/libs-release/"
+        publish {
+            repository {
+                username = artifactoryUsername
+                password = artifactoryPassword
             }
+            defaults {
+                publications("maven")
 
-            from(sourceSets.main.resources.srcDirs) {
-                exclude "fabric.mod.json"
+                publishArtifacts = true
+                publishPom = true
             }
         }
+    } else {
+        println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
     }
-
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = "sources"
-        from sourceSets.main.allSource
-    }
-
-    jar {
-        from rootProject.files("LICENSE")
-    }
-
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                //release jar - file location not provided anywhere in loom
-                artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") {
-                    classifier null
-                    builtBy remapJar
-                }
-
-                //release jar - file location not provided anywhere in loom
-                artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") {
-                    classifier "dev"
-                    builtBy remapJar
-                }
-
-                artifact(sourcesJar) {
-                    builtBy remapSourcesJar
-                }
-            }
-        }
-    }
-
-    artifactory {
-        if (rootProject.hasProperty("artifactoryUsername")) {
-            contextUrl = "http://server.bbkr.space:8081/artifactory/libs-release/"
-            publish {
-                repository {
-                    username = artifactoryUsername
-                    password = artifactoryPassword
-                }
-                defaults {
-                    publications("maven")
-
-                    publishArtifacts = true
-                    publishPom = true
-                }
-            }
-        } else {
-            println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
-        }
-    }
-}
-
-archivesBaseName = "cotton-all"
-
-dependencies {
-    //include ""
-
-    //IN PROGRESS: RIPPING OUT SUBPROJECTS AND REPLACING THEM WITH INCLUDES
-    //afterEvaluate {
-    //    subprojects.each {
-    //        compile project(":${it.name}")
-    //        include project(":${it.name}")
-    //    }
-    //}
-
-    // For integration tests
-    //modImplementation "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.1.1+eff4f58d"
-    //modImplementation "io.github.prospector.modmenu:ModMenu:1.6.2-93"
 }
