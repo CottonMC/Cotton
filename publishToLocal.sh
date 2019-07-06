@@ -6,7 +6,7 @@ for MODULE in $MODULES;
 do
 	MODULE_NAME="modules/cotton-$MODULE"
 	cd $MODULE_NAME
-	../../gradlew clean build
+	../../gradlew clean build publishToMavenLocal
 	cd ../..
 done
 
