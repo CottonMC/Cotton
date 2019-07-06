@@ -54,7 +54,7 @@ dependencies {
             //    "io.github.cottonmc.cotton:cotton-"+modname+":"+modversion
             //;
 
-            include dependencyString;
+            // include dependencyString;
             modApi dependencyString;
         }
     } else {
