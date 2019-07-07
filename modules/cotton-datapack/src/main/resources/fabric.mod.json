@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "cotton-datapack",
+  "version": "${version}",
+  "name": "Cotton Datapack",
+  "icon": "icon.png",
+  "licence": "MIT",
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/cotton",
+    "issues": "https://github.com/CottonMC/cotton/issues"
+  },
+  "entrypoints": {
+    "main": [
+      "io.github.cottonmc.cotton.datapack.CottonDatapack"
+    ]
+  },
+  "mixins": [
+    "mixins.cotton-datapack.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "cotton-logging": "*",
+    "cotton-config": "*",
+    "jankson": "*",
+    "fabric-commands-v0": "*"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu:parent": "cotton"
+  }
+}

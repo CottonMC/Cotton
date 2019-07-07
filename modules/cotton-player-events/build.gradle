@@ -1,0 +1,11 @@
+plugins {
+	id "com.jfrog.artifactory" version "4.9.0"
+	id "fabric-loom" version "0.2.4-SNAPSHOT"
+	id "maven-publish"
+}
+version = "1.0.0-rc.1";
+apply from: "../module-base.gradle"
+
+dependencies {
+    modImplementation "net.fabricmc.fabric-api:fabric-api-base:0.1.0+f1618918"
+}

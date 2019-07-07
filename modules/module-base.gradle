@@ -1,0 +1,127 @@
+def minecraftVersion = "1.14.3"
+def yarnMappings = "1.14.3+build.12"
+def loaderVersion = "0.4.8+build.155"
+
+//Publishing details
+if (rootProject.file("../../private.gradle").exists()) {
+    println("PRIVATE GRADLE FOUND")
+	apply from: "../../private.gradle"
+}
+
+group = "io.github.cottonmc.cotton"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+    refmapName = "mixins.${archivesBaseName}.refmap.json"
+}
+
+repositories {
+    mavenLocal();
+    mavenCentral();
+    maven {
+        name = "Cotton"
+        url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+    }
+    maven {
+        name = "Cotton (snapshots)"
+        url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
+    }
+}
+
+dependencies {
+    if (project.ext.has("module_dependencies")) {
+        project.ext.module_dependencies.each { modname, modversion ->
+            String dependencyString = "io.github.cottonmc.cotton:cotton-"+modname+":"+modversion;
+
+            switch(modname) { //common non-cotton imports
+                case "jankson":
+                    dependencyString = "io.github.cottonmc:Jankson:"+modversion;
+                    break;
+                case "libcd":
+                    dependencyString = "io.github.cottonmc:LibCD:"+modversion;
+                    break;
+                default:
+                    break;
+            }
+
+            modApi dependencyString;
+        }
+    } else {
+        println "NO MODULE DEPENDENCIES"
+    }
+
+
+    minecraft "com.mojang:minecraft:$minecraftVersion"
+    mappings "net.fabricmc:yarn:$yarnMappings"
+    modImplementation "net.fabricmc:fabric-loader:$loaderVersion"
+
+    compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
+}
+
+afterEvaluate {
+    processResources {
+        inputs.property "version", project.version
+
+        from(sourceSets.main.resources.srcDirs) {
+            include "fabric.mod.json"
+            expand "version": project.version
+        }
+
+        from(sourceSets.main.resources.srcDirs) {
+            exclude "fabric.mod.json"
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = "sources"
+    from sourceSets.main.allSource
+}
+
+jar {
+    from rootProject.files("LICENSE")
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            //release jar - file location not provided anywhere in loom
+            artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") {
+                classifier null
+                builtBy remapJar
+            }
+
+            //release jar - file location not provided anywhere in loom
+            artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") {
+                classifier "dev"
+                builtBy remapJar
+            }
+
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
+}
+
+artifactory {
+    if (rootProject.hasProperty("artifactoryUsername")) {
+        contextUrl = "http://server.bbkr.space:8081/artifactory/libs-release/"
+        publish {
+            repository {
+                username = artifactoryUsername
+                password = artifactoryPassword
+            }
+            defaults {
+                publications("maven")
+
+                publishArtifacts = true
+                publishPom = true
+            }
+        }
+    } else {
+        println "Cannot configure artifactory; please define ext.artifactoryUsername and ext.artifactoryPassword before running artifactoryPublish"
+    }
+}

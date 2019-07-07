@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "cotton-cauldron",
+  "version": "${version}",
+  "name": "Cotton Cauldron",
+  "icon": "icon.png",
+  "licence": "MIT",
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/cotton",
+    "issues": "https://github.com/CottonMC/cotton/issues"
+  },
+  "entrypoints": {
+    "main": [
+      "io.github.cottonmc.cotton.cauldron.CottonCauldron"
+    ]
+  },
+  "mixins": [
+    "mixins.cotton-cauldron.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "cotton-commons": "*",
+    "libcd": "*"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu:parent": "cotton"
+  }
+}

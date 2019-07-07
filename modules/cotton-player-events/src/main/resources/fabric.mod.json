@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "cotton-player-events",
+  "version": "${version}",
+  "name": "Cotton Player Events",
+  "icon": "icon.png",
+  "licence": "MIT",
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/cotton",
+    "issues": "https://github.com/CottonMC/cotton/issues"
+  },
+  "mixins": [
+    "mixins.cotton-player-events.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric-api-base": "*"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu:parent": "cotton"
+  }
+}
