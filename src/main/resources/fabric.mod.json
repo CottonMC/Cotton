@@ -5,9 +5,15 @@
   "name": "Cotton",
   "icon": "icon.png",
   "description": "Feature-rich set of libraries for the most important things you need",
+  "authors": [
+    "The Cotton Project"
+  ],
   "licence": "MIT",
   "contact": {
     "homepage": "https://curseforge.com/minecraft/mc-mods/cotton",
     "issues": "https://github.com/CottonMC/cotton/issues"
+  },
+  "custom": {
+    "modmenu:api": true
   }
 }

@@ -24,5 +24,7 @@ out
 classes
 
 # Naughty filesystems
-
+Thumbs.db
+.DS_Store
+local.properties
 .directory

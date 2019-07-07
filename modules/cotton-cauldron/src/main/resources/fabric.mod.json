@@ -21,5 +21,9 @@
     "fabricloader": ">=0.4.0",
     "cotton-commons": "*",
     "libcd": "*"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu:parent": "cotton"
   }
 }

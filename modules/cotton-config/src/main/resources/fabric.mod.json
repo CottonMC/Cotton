@@ -13,5 +13,9 @@
     "fabricloader": ">=0.4.0",
     "cotton-logging": "*",
     "jankson": "*"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu:parent": "cotton"
   }
 }

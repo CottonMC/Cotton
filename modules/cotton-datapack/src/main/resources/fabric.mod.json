@@ -23,5 +23,9 @@
     "cotton-config": "*",
     "jankson": "*",
     "fabric-commands-v0": "*"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu:parent": "cotton"
   }
 }

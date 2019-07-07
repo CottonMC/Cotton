@@ -32,15 +32,22 @@ dependencies {
     mappings "net.fabricmc:yarn:$yarnMappings"
     modImplementation "net.fabricmc:fabric-loader:$loaderVersion"
 
+    // `modApi`s below are for the dev env
     def modules = ["player-events", "logging", "config", "datapack", "commons", "cauldron"]
     modules.each { module ->    
-        include ("io.github.cottonmc.cotton:cotton-$module:latest.release") { transitive = false }
+        modApi ("io.github.cottonmc.cotton:cotton-$module:latest.release") { transitive = false }
+        include "io.github.cottonmc.cotton:cotton-$module:latest.release"
     }
-    
+    modApi ("io.github.cottonmc:Jankson:1.0.0+j1.1.2") { transitive = false }
+    modApi ("io.github.cottonmc:LibCD:1.3.0+1.14.3") { transitive = false }
     include "io.github.cottonmc:Jankson:1.0.0+j1.1.2"
     include "io.github.cottonmc:LibCD:1.3.0+1.14.3"
 
     compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
+
+    // For ModMenu compatibility tests
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.3.0+build.187"
+    modImplementation "io.github.prospector.modmenu:ModMenu:1.6.3-94"
 }
 
 
