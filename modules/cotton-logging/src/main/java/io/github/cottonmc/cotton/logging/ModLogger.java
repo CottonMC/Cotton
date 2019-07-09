@@ -1,6 +1,7 @@
 package io.github.cottonmc.cotton.logging;
 
 import net.fabricmc.loader.api.FabricLoader;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,7 @@ public class ModLogger {
     }
 
     public ModLogger(String name, String prefix) {
-        this.log = LogManager.getLogger(name);
+        this.log = LogManager.getFormatterLogger(name);
         setPrefix(prefix);
     }
 
@@ -41,11 +42,16 @@ public class ModLogger {
     }
 
     public void log(Level level, String msg, Object... data) {
-        log.log(level, prefix + String.format(msg, data));
+        log.log(level, prefix + msg, data);
     }
 
+    /**
+     * @deprecated Use {@link #log(Level, String, Object...)} instead with the throwable as the last object
+     *             after the rest of the data.
+     */
+    @Deprecated
     public void log(Level level, Throwable ex, String msg, Object... data) {
-        log.log(level, prefix + String.format(msg, data), ex);
+        log(level, msg, ArrayUtils.add(data, ex));
     }
 
     public void error(String msg, Object... data) {
@@ -90,6 +96,6 @@ public class ModLogger {
     }
 
     public void all(String msg, Object... data) {
-        log(Level.TRACE, msg, data);
+        log(Level.ALL, msg, data);
     }
 }
