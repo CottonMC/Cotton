@@ -35,8 +35,8 @@ dependencies {
     // `modApi`s below are for the dev env
     def modules = ["player-events", "logging", "config", "datapack", "commons", "cauldron"]
     modules.each { module ->    
-        modApi ("io.github.cottonmc.cotton:cotton-$module:latest.release") { transitive = false }
-        include "io.github.cottonmc.cotton:cotton-$module:latest.release"
+        modApi ("io.github.cottonmc.cotton:cotton-$module:+") { transitive = false }
+        include "io.github.cottonmc.cotton:cotton-$module:+"
     }
     modApi ("io.github.cottonmc:Jankson:1.0.0+j1.1.2") { transitive = false }
     modApi ("io.github.cottonmc:LibCD:1.3.0+1.14.3") { transitive = false }
