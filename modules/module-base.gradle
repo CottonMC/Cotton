@@ -108,9 +108,15 @@ publishing {
 
 artifactory {
     if (rootProject.hasProperty("artifactoryUsername")) {
-        contextUrl = "http://server.bbkr.space:8081/artifactory/libs-release/"
+        contextUrl = "http://server.bbkr.space:8081/artifactory/"
         publish {
             repository {
+                if (version.contains("SNAPSHOT")) {
+                    repoKey = "libs-snapshot"
+                } else {
+                    repoKey = "libs-release"
+                }
+
                 username = artifactoryUsername
                 password = artifactoryPassword
             }
