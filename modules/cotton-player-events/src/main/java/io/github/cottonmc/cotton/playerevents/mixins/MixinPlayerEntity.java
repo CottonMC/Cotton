@@ -1,4 +1,4 @@
-package main.java.io.github.cottonmc.cotton.playerevents.mixins;
+package io.github.cottonmc.cotton.playerevents.mixins;
 
 import io.github.cottonmc.cotton.playerevents.PlayerDamageCallback;
 import io.github.cottonmc.cotton.playerevents.PlayerTickCallback;
