@@ -10,4 +10,4 @@ do
 	cd ../..
 done
 
-./gradlew clean build artifactoryPublish
+./gradlew clean build artifactoryPublish --refresh-dependencies
