@@ -1,6 +1,8 @@
 # Cotton
 
-[![Maven metadata URL](https://img.shields.io/maven-metadata/v/http/server.bbkr.space:8081/artifactory/libs-release/io/github/cottonmc/cotton/maven-metadata.xml.svg)](http://server.bbkr.space:8081/artifactory/libs-release/io/github/cottonmc/cotton)
+[![Maven metadata URL](https://img.shields.io/maven-metadata/v/http/server.bbkr.space:8081/artifactory/libs-release/io/github/cottonmc/cotton/cotton/maven-metadata.xml.svg)](http://server.bbkr.space:8081/artifactory/libs-release/io/github/cottonmc/cotton/cotton)
+
+> Cotton is now modular, like fabric, and modules are not compatible with the `include` configuration. Please use `modCompile`, `modApi`, or `modImplementation` and list the modules you use in your fabric.mod.json
 
 ## Features
 - Config files
