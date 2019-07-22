@@ -4,9 +4,9 @@ plugins {
     id "fabric-loom" version "0.2.4-SNAPSHOT"
 }
 
-def minecraftVersion = "1.14.3"
-def yarnMappings = "1.14.3+build.12"
-def loaderVersion = "0.4.8+build.155"
+def minecraftVersion = "1.14.4"
+def yarnMappings = "1.14.4+build.2"
+def loaderVersion = "0.4.8+build.157"
 
 archivesBaseName = "cotton"
 version = "1.0.0-rc.2"
@@ -46,7 +46,7 @@ dependencies {
     compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 
     // For ModMenu compatibility tests
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.3.0+build.187"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.3.0+build.200"
     modImplementation "io.github.prospector.modmenu:ModMenu:1.6.3-94"
 }
 
