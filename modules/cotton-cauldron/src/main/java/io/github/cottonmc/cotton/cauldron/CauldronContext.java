@@ -1,7 +1,5 @@
 package io.github.cottonmc.cotton.cauldron;
 
-import javax.annotation.Nullable;
-
 import io.github.cottonmc.cotton.commons.CommonTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,9 +18,7 @@ public class CauldronContext {
 	private int level;
 	private Fluid fluid;
 	private DefaultedList<ItemStack> previousItems;
-	@Nullable
 	private PlayerEntity player;
-	@Nullable
 	private Hand hand;
 	private ItemStack stack;
 
@@ -38,7 +34,7 @@ public class CauldronContext {
 	 * @param hand the hand the player's using
 	 * @param stack the stack in the player's hand
 	 */
-	public CauldronContext(World world, BlockPos pos, BlockState state, int level, Fluid fluid, DefaultedList<ItemStack> previousItems, @Nullable PlayerEntity player, @Nullable Hand hand, ItemStack stack) {
+	public CauldronContext(World world, BlockPos pos, BlockState state, int level, Fluid fluid, DefaultedList<ItemStack> previousItems, PlayerEntity player, Hand hand, ItemStack stack) {
 		this.world = world;
 		this.pos = pos;
 		this.state = state;
@@ -95,7 +91,6 @@ public class CauldronContext {
 	/**
 	 * @return The player interacting with the cauldron, or null if the interaction was automated.
 	 */
-	@Nullable
 	public PlayerEntity getPlayer() {
 		return player;
 	}
@@ -103,7 +98,6 @@ public class CauldronContext {
 	/**
 	 * @return The hand the player is interacting with the cauldron with, or null if there is no player.
 	 */
-	@Nullable
 	public Hand getHand() {
 		return hand;
 	}

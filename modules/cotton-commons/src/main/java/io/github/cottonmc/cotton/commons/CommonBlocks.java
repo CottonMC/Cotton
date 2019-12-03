@@ -20,7 +20,7 @@ public class CommonBlocks {
 	 * @deprecated This function is moving to Cotton Resources
 	 */
 	public static Block register(String name, Block block) {
-		BlockItem item = new BlockItem(block, new Item.Settings().group(CottonCommons.ITEM_GROUP));
+		BlockItem item = new BlockItem(block, new Item.Settings()/*.group(CottonCommons.ITEM_GROUP)*/);
 		return register(name, block, item);
 	}
 

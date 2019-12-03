@@ -14,7 +14,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,23 +82,22 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 	}
 
 	@Override
-	public Collection<Identifier> findResources(ResourceType type, String path, int depth, Predicate<String> predicate) {
+	public Collection<Identifier> findResources(ResourceType type, String namespace, String path, int depth, Predicate<String> predicate) {
 		List<Identifier> ids = new ArrayList<>();
 		Set<String> contentKeys = contents.keySet();
 
-		for (String namespace : getNamespaces(type)) {
-			String prefix = String.format("%s/%s/%s", type.getName(), namespace, path);
-			Stream<String> matchingKeys = contentKeys.stream().filter(s -> s.startsWith(prefix));
-			matchingKeys.map(s -> s.split("/"))
-					.filter(split -> predicate.test(split[split.length - 1]))
-					.forEach(split -> {
-						try {
-							ids.add(new Identifier(namespace, String.join("/", ArrayUtils.subarray(split, 2, split.length))));
-						} catch (InvalidIdentifierException e) {
-							LOGGER.error("Invalid identifier found in virtual resource pack", e);
-						}
-					});
-		}
+		String prefix = String.format("%s/%s/%s", type.getDirectory(), namespace, path);
+		Stream<String> matchingKeys = contentKeys.stream().filter(s -> s.startsWith(prefix));
+		matchingKeys.map(s -> s.split("/"))
+				.filter(split -> predicate.test(split[split.length - 1]))
+				.forEach(split -> {
+					try {
+						ids.add(new Identifier(namespace, String.join("/", ArrayUtils.subarray(split, 2, split.length))));
+					} catch (InvalidIdentifierException e) {
+						LOGGER.error("Invalid identifier found in virtual resource pack", e);
+					}
+				});
+
 
 		return ids;
 	}
@@ -125,7 +123,6 @@ public class VirtualResourcePack extends AbstractFileResourcePack {
 		return id;
 	}
 
-	@Nullable
 	@Override
 	public <T> T parseMetadata(ResourceMetadataReader<T> reader) {
 		JsonObject packMetadata = new JsonObject();

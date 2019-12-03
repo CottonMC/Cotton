@@ -2,7 +2,7 @@ package io.github.cottonmc.cotton.datapack.tags;
 
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.impl.SyntaxError;
+import blue.endless.jankson.api.SyntaxError;
 import io.github.cottonmc.cotton.datapack.CottonDatapack;
 import net.minecraft.util.Identifier;
 

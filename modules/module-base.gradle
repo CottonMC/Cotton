@@ -37,7 +37,7 @@ dependencies {
 
             switch(modname) { //common non-cotton imports
                 case "jankson":
-                    dependencyString = "io.github.cottonmc:Jankson:"+modversion;
+                    dependencyString = "io.github.cottonmc:Jankson-Fabric:"+modversion;
                     break;
                 case "libcd":
                     dependencyString = "io.github.cottonmc:LibCD:"+modversion;

@@ -21,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -29,7 +28,7 @@ import java.util.function.Predicate;
 @Mixin(CauldronBlock.class)
 public class MixinCauldronBehavior implements Cauldron {
 
-	@Inject(method = "activate", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
 	private void onActivateHead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<Boolean> cir) {
 		// Run Cauldron Behaviors - this is the code to imitate when implementing on your own block
 		CauldronContext ctx = new CauldronContext(world, pos, state, state.get(CauldronBlock.LEVEL), state.get(CauldronBlock.LEVEL) == 0 ? Fluids.EMPTY : Fluids.WATER, DefaultedList.copyOf(ItemStack.EMPTY), player, hand, player.getStackInHand(hand));
@@ -70,7 +69,7 @@ public class MixinCauldronBehavior implements Cauldron {
 	}
 
 	@Override
-	public CauldronContext createContext(World world, BlockPos pos, @Nullable PlayerEntity player, ItemStack stack) {
+	public CauldronContext createContext(World world, BlockPos pos, PlayerEntity player, ItemStack stack) {
 		Hand hand;
 		if (player == null) hand = null;
 		else hand = player.getActiveHand();

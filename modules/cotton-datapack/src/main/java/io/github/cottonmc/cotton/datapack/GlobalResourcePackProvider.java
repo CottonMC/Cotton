@@ -8,7 +8,7 @@ import java.io.FileFilter;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GlobalResourcePackCreator implements ResourcePackCreator {
+public class GlobalResourcePackProvider implements ResourcePackProvider {
 	private static final FileFilter POSSIBLE_PACK = (file) -> {
 		boolean isZip = file.isFile() && file.getName().endsWith(".zip");
 		boolean hasMeta = file.isDirectory() && (new File(file, "pack.mcmeta")).isFile();
@@ -16,11 +16,11 @@ public class GlobalResourcePackCreator implements ResourcePackCreator {
 	};
 	private final File packsFolder;
 
-	public GlobalResourcePackCreator() {
+	public GlobalResourcePackProvider() {
 		this.packsFolder = new File(FabricLoader.getInstance().getGameDirectory(), "datapacks");
 	}
 
-	public <T extends ResourcePackContainer> void registerContainer(Map<String, T> packMap, ResourcePackContainer.Factory<T> factory) {
+	public <T extends ResourcePackProfile> void register(Map<String, T> packMap, ResourcePackProfile.Factory<T> factory) {
 		if (!this.packsFolder.isDirectory()) {
 			this.packsFolder.mkdirs();
 		}
@@ -30,7 +30,7 @@ public class GlobalResourcePackCreator implements ResourcePackCreator {
 
 			for(File file : files) {
 				String name = "global/" + file.getName();
-				T container = ResourcePackContainer.of(name, false, this.createResourcePack(file), factory, ResourcePackContainer.InsertionPosition.TOP);
+				T container = ResourcePackProfile.of(name, false, this.createResourcePack(file), factory, ResourcePackProfile.InsertionPosition.TOP);
 				if (container != null) {
 					packMap.put(name, container);
 				}

@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 
 @Mixin(RecipeManager.class)
 public class MixinRecipeManager {
-	@ModifyVariable(method = "method_20705", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Set;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
+	@ModifyVariable(method = "setRecipes", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Set;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
 	private Iterator<Map.Entry<Identifier, JsonObject>> filterIterator(Iterator<Map.Entry<Identifier, JsonObject>> iterator) {
 		ArrayList<Map.Entry<Identifier, JsonObject>> replacement = new ArrayList<>();
 		while(iterator.hasNext()) {
@@ -38,7 +38,7 @@ public class MixinRecipeManager {
 	}
 
 	// TODO: Should this be also done in the client-side method_20702 (setRecipes?)
-	@Redirect(method = "method_20705", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap$Builder;put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap$Builder;", remap = false))
+	@Redirect(method = "apply", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap$Builder;put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap$Builder;", remap = false))
 	private ImmutableMap.Builder<Identifier, Recipe<?>> onPutRecipe(ImmutableMap.Builder<Identifier, Recipe<?>> builder, Object key, Object value) {
 		Identifier id = (Identifier) key;
 		Recipe<?> recipe = (Recipe<?>) value;

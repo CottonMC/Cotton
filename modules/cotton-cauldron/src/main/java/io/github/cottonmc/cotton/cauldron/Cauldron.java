@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public interface Cauldron {
 
 	/**
@@ -51,5 +49,5 @@ public interface Cauldron {
 	 * @param stack The ItemStack used in the context.
 	 * @return The fully-populated context.
 	 */
-	CauldronContext createContext(World world, BlockPos pos, @Nullable PlayerEntity player, ItemStack stack);
+	CauldronContext createContext(World world, BlockPos pos, PlayerEntity player, ItemStack stack);
 }

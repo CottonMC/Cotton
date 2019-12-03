@@ -3,7 +3,7 @@ package io.github.cottonmc.cotton.config;
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.impl.SyntaxError;
+import blue.endless.jankson.api.SyntaxError;
 import io.github.cottonmc.cotton.config.annotations.ConfigFile;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import net.fabricmc.loader.api.FabricLoader;

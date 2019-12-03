@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import net.minecraft.resource.ResourcePackContainer;
-import net.minecraft.resource.ResourcePackCreator;
+import net.minecraft.resource.ResourcePackProfile;
+import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
@@ -20,20 +20,20 @@ public enum VirtualResourcePackManager {
 	private final Multimap<ResourceType, PackContainer> packs = MultimapBuilder.hashKeys().arrayListValues().build();
 	private final Set<Identifier> packIds = new HashSet<>();
 
-	public ResourcePackCreator getCreatorForType(ResourceType type) {
-		return new ResourcePackCreator() {
+	public ResourcePackProvider getCreatorForType(ResourceType type) {
+		return new ResourcePackProvider() {
 			@Override
-			public <T extends ResourcePackContainer> void registerContainer(Map<String, T> map, ResourcePackContainer.Factory<T> factory) {
+			public <T extends ResourcePackProfile> void register(Map<String, T> map, ResourcePackProfile.Factory<T> factory) {
 				for (PackContainer packContainer : packs.get(type)) {
 					VirtualResourcePack pack = packContainer.getPack();
 					ClientResourcePackMode clientPackMode = packContainer.getClientPackMode();
 					String id = "virtual/" + pack.getId();
-					T container = ResourcePackContainer.of(
+					T container = ResourcePackProfile.of(
 							id,
 							type == ResourceType.CLIENT_RESOURCES && clientPackMode == ClientResourcePackMode.ALWAYS_ENABLED,
 							() -> pack,
 							factory,
-							ResourcePackContainer.InsertionPosition.TOP
+							ResourcePackProfile.InsertionPosition.TOP
 					);
 					if (container != null) {
 						map.put(id, container);

@@ -8,11 +8,9 @@
     "MixinRecipeManager"
   ],
   "client": [
-    "MixinClientDataLoad",
-    "MixinCottonInitializerClient"
+    "MixinClientDataLoad"
   ],
   "server": [
-    "MixinCottonInitializerServer"
   ],
   "injectors": {
     "defaultRequire": 1

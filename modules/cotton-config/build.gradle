@@ -6,11 +6,11 @@ plugins {
 
 ext {
 	module_dependencies = [
-		"jankson" : "1.0.0+j1.1.2",
+		"jankson" : "2.0.0+j1.2.0",
 
-		"logging" : "1.0.0-rc.1"
+		"logging" : "1.0.0-rc.4"
 	];
 }
 
-version = "1.0.0-rc.1";
+version = "1.0.0-rc.4";
 apply from: "../module-base.gradle"

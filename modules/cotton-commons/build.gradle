@@ -10,11 +10,11 @@ ext {
 	];
 }
 
-version = "1.0.0-rc.3";
+version = "1.0.0-rc.4";
 apply from: "../module-base.gradle"
 
 
 dependencies {
-    modImplementation "net.fabricmc.fabric-api:fabric-item-groups-v0:0.1.0+f1618918"
-    modImplementation "net.fabricmc.fabric-api:fabric-tag-extensions-v0:0.1.1+c189dc5c"
+    modImplementation "net.fabricmc.fabric-api:fabric-item-groups-v0:0.1.4+b7f9825de4"
+    modImplementation "net.fabricmc.fabric-api:fabric-tag-extensions-v0:0.1.2+b7f9825de4"
 }

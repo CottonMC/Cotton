@@ -3,5 +3,5 @@ plugins {
 	id "fabric-loom" version "0.2.4-SNAPSHOT"
 	id "maven-publish"
 }
-version = "1.0.0-rc.1";
+version = "1.0.0-rc.4";
 apply from: "../module-base.gradle"

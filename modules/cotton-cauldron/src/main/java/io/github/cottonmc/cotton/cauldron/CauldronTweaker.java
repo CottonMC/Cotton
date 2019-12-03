@@ -1,7 +1,5 @@
 package io.github.cottonmc.cotton.cauldron;
 
-import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
-import io.github.cottonmc.cotton.cauldron.CauldronContext;
 import io.github.cottonmc.libcd.tweaker.Tweaker;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
@@ -22,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.function.Predicate;
 
+//TODO: improve system
 public class CauldronTweaker implements Tweaker {
 	public final Map<Predicate<CauldronContext>, CauldronBehavior> behaviors = new HashMap<>();
 	public static final CauldronTweaker INSTANCE = new CauldronTweaker();
@@ -48,7 +47,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @param ctx A predicate for under what conditions the behavior should be performed.
 	 * @param behavior The behavior to perform when the conditions are met.
 	 */
-	public static void registerBehavior(Predicate<CauldronContext> ctx, CauldronBehavior behavior) {
+	public void registerBehavior(Predicate<CauldronContext> ctx, CauldronBehavior behavior) {
 		INSTANCE.behaviors.put(ctx, behavior);
 	}
 
@@ -58,7 +57,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @param bottles How many bottles of fluid to drain.
 	 * @return Whether the drain was successful.
 	 */
-	public static boolean drainCauldron(CauldronContext ctx, int bottles) {
+	public boolean drainCauldron(CauldronContext ctx, int bottles) {
 		return ctx.getCauldron().drain(ctx.getWorld(), ctx.getPos(), ctx.getState(), ctx.getFluid(), bottles);
 	}
 
@@ -69,7 +68,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @param bottles How many bottles of fluid to fill.
 	 * @return Whether the fill was successful.
 	 */
-	public static boolean fillCaudron(CauldronContext ctx, Fluid fluid, int bottles) {
+	public boolean fillCaudron(CauldronContext ctx, Fluid fluid, int bottles) {
 		return ctx.getCauldron().fill(ctx.getWorld(), ctx.getPos(), ctx.getState(), fluid, bottles);
 	}
 
@@ -79,7 +78,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @param amount How many items to take.
 	 * @return Whether the items could be taken.
 	 */
-	public static boolean takeItem(CauldronContext ctx, int amount) {
+	public boolean takeItem(CauldronContext ctx, int amount) {
 		if (ctx.getStack().getCount() < amount) return false;
 		if (ctx.getPlayer() == null || !ctx.getPlayer().abilities.creativeMode) ctx.getStack().decrement(amount);
 		return true;
@@ -93,7 +92,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @param amount How many of the item to give.
 	 * @return Whether the items could be given.
 	 */
-	public static boolean giveItem(CauldronContext ctx, Item item, int amount) {
+	public boolean giveItem(CauldronContext ctx, Item item, int amount) {
 		if (amount > item.getMaxCount()) return false;
 		PlayerEntity player = ctx.getPlayer();
 		ItemStack give = new ItemStack(item, amount);
@@ -121,7 +120,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @param volume The volume to play at.
 	 * @param pitch The pitch to play at.
 	 */
-	public static void playSound(CauldronContext ctx, SoundEvent sound, float volume, float pitch) {
+	public void playSound(CauldronContext ctx, SoundEvent sound, float volume, float pitch) {
 		ctx.getWorld().playSound(null, ctx.getPos(), sound, SoundCategory.BLOCKS, volume, pitch);
 	}
 
@@ -130,7 +129,7 @@ public class CauldronTweaker implements Tweaker {
 	 * @param ctx The {@link CauldronContext} being used.
 	 * @param type The type of entity to spawn.
 	 */
-	public static void spawnEntity(CauldronContext ctx, EntityType type) {
+	public void spawnEntity(CauldronContext ctx, EntityType type) {
 		World world = ctx.getWorld();
 		BlockPos pos = ctx.getPos();
 		if (type.equals(EntityType.LIGHTNING_BOLT) && world instanceof ServerWorld) {

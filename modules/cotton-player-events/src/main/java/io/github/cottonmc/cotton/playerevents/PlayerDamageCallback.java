@@ -8,6 +8,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.profiler.Profiler;
 
 public interface PlayerDamageCallback {
+	//TODO: priority system instead, voting is bad
 	public static final Event<PlayerDamageCallback> EVENT = EventFactory.createArrayBacked(PlayerDamageCallback.class,
 			(listeners) -> {
 				if (EventFactory.isProfilingEnabled()) {
