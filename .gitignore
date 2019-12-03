@@ -50,3 +50,7 @@ modules/cotton-player-events/gradle/wrapper/gradle-wrapper.jar
 modules/cotton-player-events/gradle/wrapper/gradle-wrapper.properties
 modules/cotton-player-events/gradlew
 modules/cotton-player-events/gradlew.bat
+modules/cotton-cauldron/gradle/wrapper/gradle-wrapper.jar
+modules/cotton-cauldron/gradle/wrapper/gradle-wrapper.properties
+modules/cotton-cauldron/gradlew
+modules/cotton-cauldron/gradlew.bat

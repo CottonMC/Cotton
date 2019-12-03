@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 
 @Mixin(RecipeManager.class)
 public class MixinRecipeManager {
-	@ModifyVariable(method = "setRecipes", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Set;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
+	@ModifyVariable(method = "apply", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Set;iterator()Ljava/util/Iterator;", ordinal = 0, remap = false))
 	private Iterator<Map.Entry<Identifier, JsonObject>> filterIterator(Iterator<Map.Entry<Identifier, JsonObject>> iterator) {
 		ArrayList<Map.Entry<Identifier, JsonObject>> replacement = new ArrayList<>();
 		while(iterator.hasNext()) {

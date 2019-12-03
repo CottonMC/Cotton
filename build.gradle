@@ -9,7 +9,7 @@ def yarnMappings = "1.15-pre3+build.6:v2"
 def loaderVersion = "0.7.2+build.174"
 
 archivesBaseName = "cotton"
-version = "1.0.0-rc.4"
+version = "1.0.0-rc.5"
 group = "io.github.cottonmc.cotton"
 
 sourceCompatibility = 1.8
