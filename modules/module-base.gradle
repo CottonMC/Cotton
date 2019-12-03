@@ -1,6 +1,6 @@
-def minecraftVersion = "1.14.4"
-def yarnMappings = "1.14.4+build.2"
-def loaderVersion = "0.4.8+build.157"
+def minecraftVersion = "1.15-pre3"
+def yarnMappings = "1.15-pre3+build.6:v2"
+def loaderVersion = "0.7.2+build.174"
 
 //Publishing details
 if (rootProject.file("../../private.gradle").exists()) {
@@ -21,6 +21,10 @@ repositories {
     mavenLocal();
     mavenCentral();
     maven {
+        name = "Fabric Maven"
+        url = "http://maven.fabricmc.net"
+    }
+    maven {
         name = "Cotton"
         url = "http://server.bbkr.space:8081/artifactory/libs-release/"
     }
@@ -28,12 +32,17 @@ repositories {
         name = "Cotton (snapshots)"
         url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
     }
+    maven {
+        name = "JitPack"
+        url = "https://jitpack.io/"
+    }
 }
 
 dependencies {
     if (project.ext.has("module_dependencies")) {
         project.ext.module_dependencies.each { modname, modversion ->
             String dependencyString = "io.github.cottonmc.cotton:cotton-"+modname+":"+modversion;
+            boolean shouldCarry = true
 
             switch(modname) { //common non-cotton imports
                 case "jankson":
@@ -41,12 +50,13 @@ dependencies {
                     break;
                 case "libcd":
                     dependencyString = "io.github.cottonmc:LibCD:"+modversion;
+                    shouldCarry = false
                     break;
                 default:
                     break;
             }
 
-            modApi dependencyString;
+            modApi (dependencyString) { transitive = shouldCarry };
         }
     } else {
         println "NO MODULE DEPENDENCIES"

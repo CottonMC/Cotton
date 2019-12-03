@@ -18,6 +18,10 @@ targetCompatibility = 1.8
 repositories {
     mavenLocal()
     maven {
+        name = "Fabric Maven"
+        url = "http://maven.fabricmc.net"
+    }
+    maven {
         name = "Cotton"
         url = "http://server.bbkr.space:8081/artifactory/libs-release/"
     }
