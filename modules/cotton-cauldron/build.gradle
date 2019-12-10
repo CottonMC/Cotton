@@ -3,11 +3,11 @@ plugins {
     id "fabric-loom" version "0.2.6-SNAPSHOT"
     id "maven-publish"
 }
-version = "1.0.0-rc.4";
+version = "1.0.0-rc.6";
 
 ext {
 	module_dependencies = [
-		"libcd"  : "1.6.3+1.15",
+		"libcd"  : "2.0.1+1.15",
 		"commons": "1.0.0-rc.4"
 	];
 }

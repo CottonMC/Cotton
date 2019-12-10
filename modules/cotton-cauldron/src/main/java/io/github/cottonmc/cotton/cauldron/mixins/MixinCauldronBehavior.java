@@ -3,7 +3,7 @@ package io.github.cottonmc.cotton.cauldron.mixins;
 import io.github.cottonmc.cotton.cauldron.Cauldron;
 import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
-import io.github.cottonmc.cotton.cauldron.CauldronTweaker;
+import io.github.cottonmc.cotton.cauldron.tweaker.CauldronTweaker;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +11,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.FluidTags;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -29,7 +30,7 @@ import java.util.function.Predicate;
 public class MixinCauldronBehavior implements Cauldron {
 
 	@Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-	private void onActivateHead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<Boolean> cir) {
+	private void onActivateHead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult var6, CallbackInfoReturnable<ActionResult> cir) {
 		// Run Cauldron Behaviors - this is the code to imitate when implementing on your own block
 		CauldronContext ctx = new CauldronContext(world, pos, state, state.get(CauldronBlock.LEVEL), state.get(CauldronBlock.LEVEL) == 0 ? Fluids.EMPTY : Fluids.WATER, DefaultedList.copyOf(ItemStack.EMPTY), player, hand, player.getStackInHand(hand));
 		Map<Predicate<CauldronContext>, CauldronBehavior> allBehaviors = new HashMap<>(CauldronBehavior.BEHAVIORS);
@@ -39,7 +40,7 @@ public class MixinCauldronBehavior implements Cauldron {
 			if (pred.test(ctx)) {
 				CauldronBehavior behavior = allBehaviors.get(pred);
 				behavior.react(ctx);
-				cir.setReturnValue(true);
+				cir.setReturnValue(ActionResult.SUCCESS);
 				return;
 			}
 		}

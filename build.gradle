@@ -9,7 +9,7 @@ def yarnMappings = "1.15-pre3+build.6:v2"
 def loaderVersion = "0.7.2+build.174"
 
 archivesBaseName = "cotton"
-version = "1.0.0-rc.5"
+version = "1.0.0-rc.6"
 group = "io.github.cottonmc.cotton"
 
 sourceCompatibility = 1.8
@@ -43,9 +43,9 @@ dependencies {
         include "io.github.cottonmc.cotton:cotton-$module:+"
     }
     modApi ("io.github.cottonmc:Jankson-Fabric:2.0.0+j1.2.0") { transitive = false }
-    modApi ("io.github.cottonmc:LibCD:1.6.3+1.15") { transitive = false }
+    modApi ("io.github.cottonmc:LibCD:2.0.1+1.15") { transitive = false }
     include "io.github.cottonmc:Jankson-Fabric:2.0.0+j1.2.0"
-    include "io.github.cottonmc:LibCD:1.6.3+1.15"
+    include "io.github.cottonmc:LibCD:2.0.1+1.15"
 
     compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 

@@ -1,13 +1,14 @@
 package io.github.cottonmc.cotton.cauldron;
 
-import io.github.cottonmc.libcd.tweaker.Tweaker;
+import io.github.cottonmc.cotton.cauldron.tweaker.CauldronTweaker;
+import io.github.cottonmc.libcd.api.LibCDInitializer;
+import io.github.cottonmc.libcd.api.condition.ConditionManager;
+import io.github.cottonmc.libcd.api.tweaker.TweakerManager;
 import net.fabricmc.api.ModInitializer;
 
-public class CottonCauldron implements ModInitializer {
+public class CottonCauldron implements ModInitializer, LibCDInitializer {
     @Override
     public void onInitialize() {
-        Tweaker.addTweaker(CauldronTweaker.INSTANCE);
-
         //example cauldron behavior code - turns a sponge into a wet sponge
 //		CauldronBehavior.registerBehavior(
 //				(ctx) -> ctx.getStack().getItem() == Items.SPONGE
@@ -36,5 +37,15 @@ public class CottonCauldron implements ModInitializer {
 //					((Cauldron)ctx.getState().getBlock()).drain(world, pos, ctx.getState(), Fluids.WATER, 3);
 //				}
 //		);
+    }
+
+    @Override
+    public void initTweakers(TweakerManager tweakerManager) {
+        tweakerManager.addTweaker("cotton.cauldron.CauldronTweaker", CauldronTweaker.INSTANCE);
+    }
+
+    @Override
+    public void initConditions(ConditionManager conditionManager) {
+
     }
 }

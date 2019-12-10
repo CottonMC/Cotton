@@ -12,6 +12,9 @@
   "entrypoints": {
     "main": [
       "io.github.cottonmc.cotton.cauldron.CottonCauldron"
+    ],
+    "libcd": [
+      "io.github.cottonmc.cotton.cauldron.CottonCauldron"
     ]
   },
   "mixins": [
@@ -20,7 +23,7 @@
   "depends": {
     "fabricloader": ">=0.4.0",
     "cotton-commons": "*",
-    "libcd": "*"
+    "libcd": ">=2.0.0"
   },
   "custom": {
     "modmenu:api": true,
