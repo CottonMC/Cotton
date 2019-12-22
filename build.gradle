@@ -47,7 +47,7 @@ dependencies {
 
     // For ModMenu compatibility tests
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.3.0+build.200"
-    modImplementation "io.github.prospector.modmenu:ModMenu:1.6.3-94"
+    modRuntime "io.github.prospector.modmenu:ModMenu:1.6.3-94"
 }
 
 
