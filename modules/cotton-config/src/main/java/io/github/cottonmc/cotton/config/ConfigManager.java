@@ -116,7 +116,7 @@ public class ConfigManager {
         try {
             File file = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(configName).toFile();
             if(!file.exists()) {
-                file.mkdirs();
+                file.getParentFile().mkdirs();
                 file.createNewFile();
             }
 
