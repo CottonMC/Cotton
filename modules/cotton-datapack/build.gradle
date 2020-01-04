@@ -10,7 +10,7 @@ ext {
 	];
 }
 
-version = "1.0.0-rc.5";
+version = "1.0.1";
 apply from: "../module-base.gradle"
 
 dependencies {
