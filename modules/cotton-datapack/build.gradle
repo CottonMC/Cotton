@@ -6,7 +6,7 @@ plugins {
 
 ext {
 	module_dependencies = [
-		"config"  : "1.0.0-rc.4"
+		"config"  : "1.0.0-rc.7"
 	];
 }
 
@@ -14,8 +14,9 @@ version = "1.0.1";
 apply from: "../module-base.gradle"
 
 dependencies {
+	modImplementation "net.fabricmc.fabric-api:fabric-api-base:0.1.2+b7f9825d95"
 	modImplementation "net.fabricmc.fabric-api:fabric-commands-v0:0.1.2+b7f9825de4"
-	
+
 	testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.1"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.4.1"
 }
