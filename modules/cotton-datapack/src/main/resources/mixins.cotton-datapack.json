@@ -8,7 +8,7 @@
     "MixinRecipeManager"
   ],
   "client": [
-    "MixinClientDataLoad"
+    "MixinClientBuiltinResourcePackProvider"
   ],
   "server": [
   ],
