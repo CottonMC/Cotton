@@ -203,7 +203,7 @@ public class CauldronTweaker implements Tweaker {
 			if (type.getCategory() == EntityCategory.MONSTER) {
 				((MobEntity)entity).initialize(world, world.getLocalDifficulty(pos), SpawnType.EVENT, null, null);
 			}
-			entity.setPosition(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
+			entity.setPos(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
 			world.spawnEntity(entity);
 		}
 	}

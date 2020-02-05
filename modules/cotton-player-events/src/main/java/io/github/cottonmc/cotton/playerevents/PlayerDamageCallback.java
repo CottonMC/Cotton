@@ -11,33 +11,33 @@ public interface PlayerDamageCallback {
 	//TODO: priority system instead, voting is bad
 	public static final Event<PlayerDamageCallback> EVENT = EventFactory.createArrayBacked(PlayerDamageCallback.class,
 			(listeners) -> {
-				if (EventFactory.isProfilingEnabled()) {
-					return (player, source, amount) -> {
-						int cancelVotes = 0;
-						if (player.getServer() != null) {
-							Profiler profiler = player.getServer().getProfiler();
-							profiler.push("cottonPlayerDamage");
-							for (PlayerDamageCallback event : listeners) {
-								profiler.push(EventFactory.getHandlerName(event));
-								ActionResult result = event.attemptDamage(player, source, amount);
-								if (result == ActionResult.SUCCESS) {
-									cancelVotes--;
-								} else if (result == ActionResult.FAIL) cancelVotes++;
-								profiler.pop();
-							}
-							profiler.pop();
-						}
-						else {
-							for (PlayerDamageCallback event : listeners) {
-								ActionResult result = event.attemptDamage(player, source, amount);
-								if (result == ActionResult.SUCCESS) {
-									cancelVotes--;
-								} else if (result == ActionResult.FAIL) cancelVotes++;
-							}
-						}
-						return cancelVotes > 0? ActionResult.FAIL : ActionResult.SUCCESS;
-					};
-				} else {
+//				if (EventFactory.isProfilingEnabled()) {
+//					return (player, source, amount) -> {
+//						int cancelVotes = 0;
+//						if (player.getServer() != null) {
+//							Profiler profiler = player.getServer().getProfiler();
+//							profiler.push("cottonPlayerDamage");
+//							for (PlayerDamageCallback event : listeners) {
+//								profiler.push(EventFactory.getHandlerName(event));
+//								ActionResult result = event.attemptDamage(player, source, amount);
+//								if (result == ActionResult.SUCCESS) {
+//									cancelVotes--;
+//								} else if (result == ActionResult.FAIL) cancelVotes++;
+//								profiler.pop();
+//							}
+//							profiler.pop();
+//						}
+//						else {
+//							for (PlayerDamageCallback event : listeners) {
+//								ActionResult result = event.attemptDamage(player, source, amount);
+//								if (result == ActionResult.SUCCESS) {
+//									cancelVotes--;
+//								} else if (result == ActionResult.FAIL) cancelVotes++;
+//							}
+//						}
+//						return cancelVotes > 0? ActionResult.FAIL : ActionResult.SUCCESS;
+//					};
+//				} else {
 					return (player, source, amount) -> {
 						int cancelVotes = 0;
 						for (PlayerDamageCallback event : listeners) {
@@ -48,7 +48,7 @@ public interface PlayerDamageCallback {
 						}
 						return cancelVotes > 0? ActionResult.FAIL : ActionResult.SUCCESS;
 					};
-				}
+//				}
 			}
 	);
 

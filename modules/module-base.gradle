@@ -1,6 +1,6 @@
-def minecraftVersion = "1.15-pre3"
-def yarnMappings = "1.15-pre3+build.6:v2"
-def loaderVersion = "0.7.2+build.174"
+def minecraftVersion = "20w06a"
+def yarnMappings = "20w06a+build.3:v2"
+def loaderVersion = "0.7.8+build.184"
 
 //Publishing details
 if (rootProject.file("../../private.gradle").exists()) {
