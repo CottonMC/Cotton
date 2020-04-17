@@ -4,12 +4,12 @@ plugins {
     id "fabric-loom" version "0.2.6-SNAPSHOT"
 }
 
-def minecraftVersion = "20w06a"
-def yarnMappings = "20w06a+build.3:v2"
+def minecraftVersion = "1.15.2"
+def yarnMappings = "1.15.2+build.3:v2"
 def loaderVersion = "0.7.8+build.184"
 
 archivesBaseName = "cotton"
-version = "1.0.2"
+version = "1.0.3"
 group = "io.github.cottonmc.cotton"
 
 sourceCompatibility = 1.8
@@ -42,10 +42,9 @@ dependencies {
         modApi ("io.github.cottonmc.cotton:cotton-$module:+") { transitive = false }
         include "io.github.cottonmc.cotton:cotton-$module:+"
     }
-    modApi ("io.github.cottonmc:Jankson-Fabric:2.0.0+j1.2.0") { transitive = false }
-    modApi ("io.github.cottonmc:LibCD:2.0.1+1.15") { transitive = false }
-    include "io.github.cottonmc:Jankson-Fabric:2.0.0+j1.2.0"
-    include "io.github.cottonmc:LibCD:2.2.2+1.15.2"
+    modApi ("io.github.cottonmc:Jankson-Fabric:2.0.1+j1.2.0") { transitive = false }
+    modApi ("io.github.cottonmc:LibCD:2.3.0+1.15") { transitive = false }
+    include "io.github.cottonmc:Jankson-Fabric:2.0.1+j1.2.0"
 
     compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 

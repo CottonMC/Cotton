@@ -37,6 +37,7 @@ public class CauldronTweaker implements Tweaker {
 	public static final CauldronTweaker INSTANCE = new CauldronTweaker();
 	private CDLogger logger = new CDLogger();
 	private JsonObject debug;
+	private ScriptBridge currentBridge;
 
 	/**
 	 * Used during data pack loading to clear the behavior list.
@@ -45,6 +46,7 @@ public class CauldronTweaker implements Tweaker {
 	public void prepareReload(ResourceManager manager) {
 		INSTANCE.behaviors.clear();
 		debug = new JsonObject();
+		currentBridge = null;
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class CauldronTweaker implements Tweaker {
 	@Override
 	public void prepareFor(ScriptBridge bridge) {
 		this.logger = new CDLogger(bridge.getId().getNamespace());
+		this.currentBridge = bridge;
 	}
 
 	@Override
@@ -68,7 +71,17 @@ public class CauldronTweaker implements Tweaker {
 	/**
 	 * Register a new cauldron behavior.
 	 * References functions defined in the same script as this is called.
-	 * @param bridge The ScriptBridge passed in the `libcd` variable.
+	 * @param testName The name of the function used to test whether this behavior should run. Passed one argument of type {@link WrappedCauldronContext}.
+	 * @param runName The name of the function used to perform this behavior. Passed one argument of type {@link WrappedCauldronContext}.
+	 */
+	public void registerBehavior(String testName, String runName) {
+		registerBehavior(currentBridge, testName, runName);
+	}
+
+	/**
+	 * Register a new cauldron behavior.
+	 * References functions defined in the passed ScriptBridge instead of the one for the current script.
+	 * @param bridge The ScriptBridge passed in the `libcd` variable, or the ScriptBridge of another script if the functions are in another script bridge.
 	 * @param testName The name of the function used to test whether this behavior should run. Passed one argument of type {@link WrappedCauldronContext}.
 	 * @param runName The name of the function used to perform this behavior. Passed one argument of type {@link WrappedCauldronContext}.
 	 */
@@ -90,13 +103,14 @@ public class CauldronTweaker implements Tweaker {
 		}
 	}
 
-	@Deprecated
+
 	/**
 	 * Register a new cauldron behavior. Deprecated; use {@link CauldronTweaker#registerBehavior(ScriptBridge, String, String)} instead.
 	 * Construct new classes and pass them functions for these. Each are passed a {@link CauldronContext}.
-	 * @param ctx A predicate for under what conditions the behavior should be performed.
+	 * @param context A predicate for under what conditions the behavior should be performed.
 	 * @param behavior The behavior to perform when the conditions are met.
 	 */
+	@Deprecated
 	public void registerBehavior(Predicate<CauldronContext> context, CauldronBehavior behavior) {
 		int deprecated = debug.getInt("deprecated_behaviors", 0);
 		debug.put("deprecated_behaviors", new JsonPrimitive(deprecated + 1));
@@ -104,108 +118,71 @@ public class CauldronTweaker implements Tweaker {
 	}
 
 	/**
-	 * Drain a cauldron of its fluid (for ease of calling from scripts).
+	 * Drain a cauldron of its fluid (for ease of calling from scripts). Depreacated; use {@link WrappedCauldronContext#drain} instead.
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
 	 * @param bottles How many bottles of fluid to drain.
 	 * @return Whether the drain was successful.
 	 */
+	@Deprecated
 	public boolean drainCauldron(WrappedCauldronContext context, int bottles) {
-		CauldronContext ctx = context.getContext();
-		return ctx.getCauldron().drain(ctx.getWorld(), ctx.getPos(), ctx.getState(), ctx.getFluid(), bottles);
+		return context.drain(bottles);
 	}
 
 	/**
-	 * Fill a cauldron with a given fluid (for ease of calling from scripts).
+	 * Fill a cauldron with a given fluid (for ease of calling from scripts). Deprecated; use {@link WrappedCauldronContext#fill} instead.
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
 	 * @param fluid What fluid to fill with.
 	 * @param bottles How many bottles of fluid to fill.
 	 * @return Whether the fill was successful.
 	 */
+	@Deprecated
 	public boolean fillCaudron(WrappedCauldronContext context, Fluid fluid, int bottles) {
-		CauldronContext ctx = context.getContext();
-		return ctx.getCauldron().fill(ctx.getWorld(), ctx.getPos(), ctx.getState(), fluid, bottles);
+		return context.fill(fluid, bottles);
 	}
 
 	/**
-	 * Take items from the stack used in a cauldron behavior.
+	 * Take items from the stack used in a cauldron behavior. Deprecated; use {@link WrappedCauldronContext#takeItem} instead.
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
 	 * @param amount How many items to take.
 	 * @return Whether the items could be taken.
 	 */
+	@Deprecated
 	public boolean takeItem(WrappedCauldronContext context, int amount) {
-		CauldronContext ctx = context.getContext();
-		if (ctx.getStack().getCount() < amount) return false;
-		if (ctx.getPlayer() == null || !ctx.getPlayer().abilities.creativeMode) ctx.getStack().decrement(amount);
-		return true;
+		return context.takeItem(amount);
 	}
 
 	/**
-	 * Give items to a player using a cauldron behavior, or drop them on the ground if there's no player.
+	 * Give items to a player using a cauldron behavior, or drop them on the ground if there's no player. Deprecated; use {@link WrappedCauldronContext#giveItem} instead.
 	 * Items dropped will have the "NoCauldronCollect" scoreboard tag, which prevents in-spec cauldrons from picking them up hopper-style.
 	 * @param context The {@link CauldronContext} being used.
 	 * @param stack The item stack to give.
 	 * @return Whether the items could be given.
 	 */
+	@Deprecated
 	public boolean giveItem(WrappedCauldronContext context, Object stack) {
-		CauldronContext ctx = context.getContext();
-		PlayerEntity player = ctx.getPlayer();
-		try {
-			ItemStack give = RecipeParser.processItemStack(stack);
-			if (player != null) {
-				player.increaseStat(Stats.USE_CAULDRON, 1);
-				if (ctx.getStack().isEmpty()) {
-					player.setStackInHand(ctx.getHand(), give);
-				} else if (!player.inventory.insertStack(give)) {
-					ItemEntity entity = player.dropItem(give, false);
-					if (entity != null) entity.addScoreboardTag("NoCauldronCollect");
-					ctx.getWorld().spawnEntity(entity);
-				}
-			} else {
-				ItemEntity entity = new ItemEntity(ctx.getWorld(), ctx.getPos().getX(), ctx.getPos().getY() + 1, ctx.getPos().getZ(), give);
-				entity.addScoreboardTag("NoCauldronCollect");
-				ctx.getWorld().spawnEntity(entity);
-			}
-			return true;
-		} catch (CDSyntaxError e) {
-			context.getLogger().error("Could not parse cauldron tweaker item stack: " + e.getMessage());
-			return false;
-		}
+		return context.giveItem(stack);
 	}
 
 	/**
-	 * Play a sound effect from the cauldron.
+	 * Play a sound effect from the cauldron. Deprecated; use {@link WrappedCauldronContext#playSound} instead.
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
 	 * @param sound The ID of the sound to play.
 	 * @param volume The volume to play at.
 	 * @param pitch The pitch to play at.
 	 */
+	@Deprecated
 	public void playSound(WrappedCauldronContext context, String sound, float volume, float pitch) {
-		CauldronContext ctx = context.getContext();
-		ctx.getWorld().playSound(null, ctx.getPos(), Registry.SOUND_EVENT.get(new Identifier(sound)), SoundCategory.BLOCKS, volume, pitch);
+		context.playSound(sound, volume, pitch);
 	}
 
 	/**
-	 * Spawn an entity above the cauldron.
+	 * Spawn an entity above the cauldron. Deprecated; use {@link WrappedCauldronContext#spawnEntity} instead.
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
 	 * @param typeName The ID of the type of entity to spawn.
 	 */
+	@Deprecated
 	public void spawnEntity(WrappedCauldronContext context, String typeName) {
-		CauldronContext ctx = context.getContext();
-		World world = ctx.getWorld();
-		BlockPos pos = ctx.getPos();
-		EntityType<?> type = Registry.ENTITY_TYPE.get(new Identifier(typeName));
-		if (type.equals(EntityType.LIGHTNING_BOLT) && world instanceof ServerWorld) {
-			LightningEntity lightning = new LightningEntity(ctx.getWorld(), pos.getX(), pos.getY(), pos.getZ(), false);
-			((ServerWorld)world).addLightning(lightning);
-		} else {
-			Entity entity = type.create(world);
-			if (entity == null) return;
-			if (type.getCategory() == EntityCategory.MONSTER) {
-				((MobEntity)entity).initialize(world, world.getLocalDifficulty(pos), SpawnType.EVENT, null, null);
-			}
-			entity.setPos(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
-			world.spawnEntity(entity);
-		}
+		context.spawnEntity(typeName);
 	}
 
 }
