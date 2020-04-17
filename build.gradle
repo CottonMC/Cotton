@@ -43,7 +43,7 @@ dependencies {
         include "io.github.cottonmc.cotton:cotton-$module:+"
     }
     modApi ("io.github.cottonmc:Jankson-Fabric:2.0.1+j1.2.0") { transitive = false }
-    modApi ("io.github.cottonmc:LibCD:2.3.0+1.15") { transitive = false }
+    modApi ("io.github.cottonmc:LibCD:2.3.0+1.15.2") { transitive = false }
     include "io.github.cottonmc:Jankson-Fabric:2.0.1+j1.2.0"
 
     compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
