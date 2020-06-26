@@ -1,6 +1,6 @@
 plugins {
     id "com.jfrog.artifactory" version "4.9.0"
-    id "fabric-loom" version "0.2.7-SNAPSHOT"
+    id "fabric-loom" version "0.4-SNAPSHOT"
     id "maven-publish"
 }
 
@@ -15,6 +15,6 @@ apply from: "../module-base.gradle"
 
 
 dependencies {
-    modImplementation "net.fabricmc.fabric-api:fabric-item-groups-v0:0.1.4+b7f9825de4"
-    modImplementation "net.fabricmc.fabric-api:fabric-tag-extensions-v0:0.1.2+b7f9825de4"
+    modImplementation "net.fabricmc.fabric-api:fabric-item-groups-v0:0.2.0+0121bd900c"
+    modImplementation "net.fabricmc.fabric-api:fabric-tag-extensions-v0:0.2.7+a4c57d8e02"
 }

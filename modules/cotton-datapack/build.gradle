@@ -1,6 +1,6 @@
 plugins {
 	id "com.jfrog.artifactory" version "4.9.0"
-	id "fabric-loom" version "0.2.7-SNAPSHOT"
+	id "fabric-loom" version "0.4-SNAPSHOT"
 	id "maven-publish"
 }
 
@@ -10,12 +10,12 @@ ext {
 	];
 }
 
-version = "1.0.1";
+version = "1.0.4";
 apply from: "../module-base.gradle"
 
 dependencies {
-	modImplementation "net.fabricmc.fabric-api:fabric-api-base:0.1.2+b7f9825d95"
-	modImplementation "net.fabricmc.fabric-api:fabric-commands-v0:0.1.2+b7f9825de4"
+	modImplementation "net.fabricmc.fabric-api:fabric-api-base:0.1.3+12a8474c02"
+	modImplementation "net.fabricmc.fabric-api:fabric-command-api-v1:1.0.8+5ce5339802"
 
 	testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.1"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.4.1"

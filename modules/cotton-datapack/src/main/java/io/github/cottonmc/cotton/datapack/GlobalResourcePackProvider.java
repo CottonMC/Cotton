@@ -6,6 +6,7 @@ import net.minecraft.resource.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GlobalResourcePackProvider implements ResourcePackProvider {
@@ -20,7 +21,7 @@ public class GlobalResourcePackProvider implements ResourcePackProvider {
 		this.packsFolder = new File(FabricLoader.getInstance().getGameDirectory(), "datapacks");
 	}
 
-	public <T extends ResourcePackProfile> void register(Map<String, T> packMap, ResourcePackProfile.Factory<T> factory) {
+	public <T extends ResourcePackProfile> void register(Consumer<T> packConsumer, ResourcePackProfile.Factory<T> factory) {
 		if (!this.packsFolder.isDirectory()) {
 			this.packsFolder.mkdirs();
 		}
@@ -30,9 +31,9 @@ public class GlobalResourcePackProvider implements ResourcePackProvider {
 
 			for(File file : files) {
 				String name = "global/" + file.getName();
-				T container = ResourcePackProfile.of(name, false, this.createResourcePack(file), factory, ResourcePackProfile.InsertionPosition.TOP);
+				T container = ResourcePackProfile.of(name, false, this.createResourcePack(file), factory, ResourcePackProfile.InsertionPosition.TOP, ResourcePackSource.method_29486("global"));
 				if (container != null) {
-					packMap.put(name, container);
+					packConsumer.accept(container);
 				}
 			}
 

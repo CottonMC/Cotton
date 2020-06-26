@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.profiler.Profiler;
 
+@Deprecated
 public interface PlayerDamageCallback {
 	//TODO: priority system instead, voting is bad
 	public static final Event<PlayerDamageCallback> EVENT = EventFactory.createArrayBacked(PlayerDamageCallback.class,

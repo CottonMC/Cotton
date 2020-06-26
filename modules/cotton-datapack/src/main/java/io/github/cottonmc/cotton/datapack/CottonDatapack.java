@@ -5,7 +5,7 @@ import io.github.cottonmc.cotton.datapack.config.CottonDatapackConfig;
 import io.github.cottonmc.cotton.datapack.recipe.CottonRecipes;
 import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import io.github.cottonmc.cotton.datapack.virtual.PackPrinterCommand;
-import net.fabricmc.fabric.api.registry.CommandRegistry;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -32,7 +32,7 @@ public class CottonDatapack implements ModInitializer {
         RecipeUtil.init(config);
 
         //register the command that prints out the virtual data and resource packs.
-        CommandRegistry.INSTANCE.register(false, new PackPrinterCommand());
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) -> new PackPrinterCommand().accept(commandDispatcher) );
 
         // EXAMPLE CODE START
 

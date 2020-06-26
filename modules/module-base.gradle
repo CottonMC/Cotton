@@ -1,6 +1,6 @@
-def minecraftVersion = "1.15.2"
-def yarnMappings = "1.15.2+build.3:v2"
-def loaderVersion = "0.7.8+build.184"
+def minecraftVersion = "1.16.1"
+def yarnMappings = "1.16.1+build.9:v2"
+def loaderVersion = "0.8.8+build.202"
 
 //Publishing details
 if (rootProject.file("../../private.gradle").exists()) {
@@ -50,7 +50,6 @@ dependencies {
                     break;
                 case "libcd":
                     dependencyString = "io.github.cottonmc:LibCD:"+modversion;
-                    shouldCarry = false
                     break;
                 default:
                     break;

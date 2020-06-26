@@ -3,11 +3,6 @@ package io.github.cottonmc.cotton.commons;
 import io.github.cottonmc.cotton.config.ConfigManager;
 import io.github.cottonmc.cotton.logging.ModLogger;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 
 public class CottonCommons implements ModInitializer {
 

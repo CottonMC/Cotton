@@ -6,10 +6,12 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.resource.ResourcePackProvider;
+import net.minecraft.resource.ResourcePackSource;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Manages virtual resource packs. See {@link #addPack(VirtualResourcePack, Collection)} for registering packs.
@@ -23,7 +25,7 @@ public enum VirtualResourcePackManager {
 	public ResourcePackProvider getCreatorForType(ResourceType type) {
 		return new ResourcePackProvider() {
 			@Override
-			public <T extends ResourcePackProfile> void register(Map<String, T> map, ResourcePackProfile.Factory<T> factory) {
+			public <T extends ResourcePackProfile> void register(Consumer<T> packConsumer, ResourcePackProfile.Factory<T> factory) {
 				for (PackContainer packContainer : packs.get(type)) {
 					VirtualResourcePack pack = packContainer.getPack();
 					ClientResourcePackMode clientPackMode = packContainer.getClientPackMode();
@@ -33,10 +35,11 @@ public enum VirtualResourcePackManager {
 							type == ResourceType.CLIENT_RESOURCES && clientPackMode == ClientResourcePackMode.ALWAYS_ENABLED,
 							() -> pack,
 							factory,
-							ResourcePackProfile.InsertionPosition.TOP
+							ResourcePackProfile.InsertionPosition.TOP,
+							ResourcePackSource.method_29486("virtual")
 					);
 					if (container != null) {
-						map.put(id, container);
+						packConsumer.accept(container);
 					}
 				}
 			}

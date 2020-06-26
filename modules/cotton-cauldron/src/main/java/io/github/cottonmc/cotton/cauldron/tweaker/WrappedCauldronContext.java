@@ -11,12 +11,14 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -184,13 +186,17 @@ public class WrappedCauldronContext {
 		BlockPos pos = context.getPos();
 		EntityType<?> type = Registry.ENTITY_TYPE.get(new Identifier(entityType));
 		if (type.equals(EntityType.LIGHTNING_BOLT) && world instanceof ServerWorld) {
-			LightningEntity lightning = new LightningEntity(world, pos.getX(), pos.getY(), pos.getZ(), false);
-			((ServerWorld)world).addLightning(lightning);
+			LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
+			lightning.method_29495(Vec3d.ofBottomCenter(pos));
+			if (context.getPlayer() instanceof ServerPlayerEntity) {
+				lightning.setChanneler((ServerPlayerEntity)context.getPlayer());
+			}
+			world.spawnEntity(lightning);
 		} else {
 			Entity entity = type.create(world);
 			if (entity == null) return;
-			if (type.getCategory() == EntityCategory.MONSTER) {
-				((MobEntity)entity).initialize(world, world.getLocalDifficulty(pos), SpawnType.EVENT, null, null);
+			if (type.getSpawnGroup() == SpawnGroup.MONSTER) {
+				((MobEntity)entity).initialize(world, world.getLocalDifficulty(pos), SpawnReason.EVENT, null, null);
 			}
 			entity.setPos(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
 			world.spawnEntity(entity);
