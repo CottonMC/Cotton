@@ -16,19 +16,19 @@ import java.util.List;
 
 public class CommonTags {
 	//auto-fillable tags for common decorative/functional blocks
-	public static final Tag<Item> GLASS_BLOCKS = registerItemTag("glass_blocks");
-	public static final Tag<Item> GLASS_PANES = registerItemTag("glass_panes");
-	public static final Tag<Item> TERRACOTTA = registerItemTag("terracotta");
-	public static final Tag<Item> PRESSURE_PLATES = registerItemTag("pressure_plates");
+	public static final Tag.Identified<Item> GLASS_BLOCKS = registerItemTag("glass_blocks");
+	public static final Tag.Identified<Item> GLASS_PANES = registerItemTag("glass_panes");
+	public static final Tag.Identified<Item> TERRACOTTA = registerItemTag("terracotta");
+	public static final Tag.Identified<Item> PRESSURE_PLATES = registerItemTag("pressure_plates");
 
 	//tags for common item categories
-	public static final Tag<Item> MUSHROOMS = registerItemTag("mushrooms");
-	public static final Tag<Item> RAW_MEAT = registerItemTag("raw_meat");
-	public static final Tag<Item> COOKED_MEAT = registerItemTag("cooked_meat");
-	public static final Tag<Item> PLANTABLES = registerItemTag("plantables");
+	public static final Tag.Identified<Item> MUSHROOMS = registerItemTag("mushrooms");
+	public static final Tag.Identified<Item> RAW_MEAT = registerItemTag("raw_meat");
+	public static final Tag.Identified<Item> COOKED_MEAT = registerItemTag("cooked_meat");
+	public static final Tag.Identified<Item> PLANTABLES = registerItemTag("plantables");
 
 	//taggs for cotton functions
-	public static final Tag<Block> CAULDRON_FIRE = TagRegistry.block(new Identifier(CottonCommons.MODID, "cauldron_fire"));
+	public static final Tag.Identified<Block> CAULDRON_FIRE = (Tag.Identified<Block>)TagRegistry.block(new Identifier(CottonCommons.MODID, "cauldron_fire"));
 
 	public static void init() {
 		if (CottonCommons.CONFIG.fillCommonTags) {
@@ -56,11 +56,11 @@ public class CommonTags {
 		}
 	}
 
-	private static Tag<Item> registerItemTag(String id) {
-		return TagRegistry.item(new Identifier(CottonDatapack.SHARED_NAMESPACE, id));
+	private static Tag.Identified<Item> registerItemTag(String id) {
+		return (Tag.Identified<Item>)TagRegistry.item(new Identifier(CottonDatapack.SHARED_NAMESPACE, id));
 	}
 
-	private static Tag<Block> registerBlockTag(String id) {
-		return TagRegistry.block(new Identifier(CottonDatapack.SHARED_NAMESPACE, id));
+	private static Tag.Identified<Block> registerBlockTag(String id) {
+		return (Tag.Identified<Block>)TagRegistry.block(new Identifier(CottonDatapack.SHARED_NAMESPACE, id));
 	}
 }

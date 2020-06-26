@@ -2,6 +2,7 @@ package io.github.cottonmc.cotton.datapack.mixins;
 
 import io.github.cottonmc.cotton.datapack.GlobalResourcePackProvider;
 import io.github.cottonmc.cotton.datapack.virtual.VirtualResourcePackManager;
+import net.minecraft.resource.DataPackSettings;
 import net.minecraft.resource.ResourcePackManager;
 import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.resource.ResourceType;
@@ -13,19 +14,17 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.File;
 
 @Mixin(MinecraftServer.class)
 public class MixinDataPackLoad {
 
-	@Shadow
-	@Final
-	private ResourcePackManager<ResourcePackProfile> dataPackManager;
 
-	@Inject(method = "loadWorldDataPacks", at = @At(value = "HEAD"))
-	public void addGlobalDataPacks(File file, LevelProperties properties, CallbackInfo info) {
-		dataPackManager.registerProvider(new GlobalResourcePackProvider());
-		dataPackManager.registerProvider(VirtualResourcePackManager.INSTANCE.getCreatorForType(ResourceType.SERVER_DATA));
+	@Inject(method = "loadDataPacks", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourcePackManager;setEnabledProfiles(Ljava/util/Collection;)V"))
+	private static void addGlobalDataPacks(ResourcePackManager<ResourcePackProfile> resourcePackManager, DataPackSettings dataPackSettings, boolean safeMode, CallbackInfoReturnable<DataPackSettings> info) {
+		((ResourcePackManagerAccessor)resourcePackManager).getProviders().add(new GlobalResourcePackProvider());
+		((ResourcePackManagerAccessor)resourcePackManager).getProviders().add(VirtualResourcePackManager.INSTANCE.getCreatorForType(ResourceType.SERVER_DATA));
 	}
 }

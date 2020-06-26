@@ -5,7 +5,8 @@
   "refmap": "mixins.cotton-datapack.refmap.json",
   "mixins": [
     "MixinDataPackLoad",
-    "MixinRecipeManager"
+    "MixinRecipeManager",
+    "ResourcePackManagerAccessor"
   ],
   "client": [
     "MixinClientBuiltinResourcePackProvider"
