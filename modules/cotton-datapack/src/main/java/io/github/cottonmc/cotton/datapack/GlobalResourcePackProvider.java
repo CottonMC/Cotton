@@ -30,7 +30,7 @@ public class GlobalResourcePackProvider implements ResourcePackProvider {
 
 			for(File file : files) {
 				String name = "global/" + file.getName();
-				T container = ResourcePackProfile.of(name, false, this.createResourcePack(file), factory, ResourcePackProfile.InsertionPosition.TOP);
+				T container = ResourcePackProfile.of(name, true, this.createResourcePack(file), factory, ResourcePackProfile.InsertionPosition.TOP);
 				if (container != null) {
 					packMap.put(name, container);
 				}
