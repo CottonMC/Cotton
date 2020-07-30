@@ -22,7 +22,7 @@ import java.io.File;
 public class MixinDataPackLoad {
 
 
-	@Inject(method = "loadDataPacks", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourcePackManager;setEnabledProfiles(Ljava/util/Collection;)V"))
+	@Inject(method = "loadDataPacks", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourcePackManager;scanPacks()V"))
 	private static void addGlobalDataPacks(ResourcePackManager<ResourcePackProfile> resourcePackManager, DataPackSettings dataPackSettings, boolean safeMode, CallbackInfoReturnable<DataPackSettings> info) {
 		((ResourcePackManagerAccessor)resourcePackManager).getProviders().add(new GlobalResourcePackProvider());
 		((ResourcePackManagerAccessor)resourcePackManager).getProviders().add(VirtualResourcePackManager.INSTANCE.getCreatorForType(ResourceType.SERVER_DATA));
