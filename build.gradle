@@ -4,9 +4,9 @@ plugins {
     id "fabric-loom" version "0.4-SNAPSHOT"
 }
 
-def minecraftVersion = "1.16.1"
-def yarnMappings = "1.16.1+build.9:v2"
-def loaderVersion = "0.8.8+build.202"
+def minecraftVersion = "1.16.3"
+def yarnMappings = "1.16.3+build.47:v2"
+def loaderVersion = "0.10.6+build.214"
 
 archivesBaseName = "cotton"
 version = "1.0.7"
@@ -35,7 +35,7 @@ dependencies {
     minecraft "com.mojang:minecraft:$minecraftVersion"
     mappings "net.fabricmc:yarn:$yarnMappings"
     modImplementation "net.fabricmc:fabric-loader:$loaderVersion"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.14.0+build.371-1.16"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.25.0+build.415-1.16"
 
     // `modApi`s below are for the dev env
     def modules = ["player-events", "logging", "config", "datapack", "commons", "cauldron"]
@@ -43,9 +43,9 @@ dependencies {
         modApi ("io.github.cottonmc.cotton:cotton-$module:+") { transitive = false }
         include "io.github.cottonmc.cotton:cotton-$module:+"
     }
-    modApi ("io.github.cottonmc:Jankson-Fabric:2.0.1+j1.2.0") { transitive = false }
-    modImplementation "io.github.cottonmc:LibCD:2.5.0+1.16.1"
-    include "io.github.cottonmc:Jankson-Fabric:2.0.1+j1.2.0"
+    modApi ("io.github.cottonmc:Jankson-Fabric:3.0.1+j1.2.0") { transitive = false }
+    modImplementation "io.github.cottonmc:LibCD:3.0.3+1.16.3"
+    include "io.github.cottonmc:Jankson-Fabric:3.0.1+j1.2.0"
 
     compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 }
