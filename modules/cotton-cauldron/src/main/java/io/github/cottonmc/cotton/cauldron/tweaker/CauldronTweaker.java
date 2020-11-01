@@ -1,28 +1,16 @@
 package io.github.cottonmc.cotton.cauldron.tweaker;
 
-import blue.endless.jankson.JsonArray;
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
-import io.github.cottonmc.libcd.api.CDLogger;
-import io.github.cottonmc.libcd.api.CDSyntaxError;
-import io.github.cottonmc.libcd.api.tweaker.ScriptBridge;
-import io.github.cottonmc.libcd.api.tweaker.Tweaker;
-import io.github.cottonmc.libcd.api.tweaker.recipe.RecipeParser;
-import net.minecraft.entity.*;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import io.github.cottonmc.libdp.api.Diskette;
+import io.github.cottonmc.libdp.api.driver.Driver;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -32,12 +20,12 @@ import java.util.concurrent.Executor;
 import java.util.function.Predicate;
 
 //TODO: improve system
-public class CauldronTweaker implements Tweaker {
+public class CauldronTweaker implements Driver {
 	public final Map<Predicate<CauldronContext>, CauldronBehavior> behaviors = new HashMap<>();
 	public static final CauldronTweaker INSTANCE = new CauldronTweaker();
-	private CDLogger logger = new CDLogger();
+	private Logger logger = LogManager.getLogger();
 	private JsonObject debug;
-	private ScriptBridge currentBridge;
+	private Diskette currentBridge;
 
 	/**
 	 * Used during data pack loading to clear the behavior list.
@@ -50,16 +38,17 @@ public class CauldronTweaker implements Tweaker {
 	}
 
 	@Override
-	public void applyReload(ResourceManager resourceManager, Executor executor) { }
-
-	@Override
-	public String getApplyMessage() {
-		return behaviors.size() + " cauldron " + (behaviors.size() == 1? "behavior" : "behaviors");
+	public void applyReload(ResourceManager resourceManager, Executor executor) {
 	}
 
 	@Override
-	public void prepareFor(ScriptBridge bridge) {
-		this.logger = new CDLogger(bridge.getId().getNamespace());
+	public String getApplyMessage() {
+		return behaviors.size() + " cauldron " + (behaviors.size() == 1 ? "behavior" : "behaviors");
+	}
+
+	@Override
+	public void prepareFor(Diskette bridge) {
+		this.logger = LogManager.getLogger(bridge.getId().getNamespace());
 		this.currentBridge = bridge;
 	}
 
@@ -71,8 +60,9 @@ public class CauldronTweaker implements Tweaker {
 	/**
 	 * Register a new cauldron behavior.
 	 * References functions defined in the same script as this is called.
+	 *
 	 * @param testName The name of the function used to test whether this behavior should run. Passed one argument of type {@link WrappedCauldronContext}.
-	 * @param runName The name of the function used to perform this behavior. Passed one argument of type {@link WrappedCauldronContext}.
+	 * @param runName  The name of the function used to perform this behavior. Passed one argument of type {@link WrappedCauldronContext}.
 	 */
 	public void registerBehavior(String testName, String runName) {
 		registerBehavior(currentBridge, testName, runName);
@@ -81,21 +71,22 @@ public class CauldronTweaker implements Tweaker {
 	/**
 	 * Register a new cauldron behavior.
 	 * References functions defined in the passed ScriptBridge instead of the one for the current script.
-	 * @param bridge The ScriptBridge passed in the `libcd` variable, or the ScriptBridge of another script if the functions are in another script bridge.
+	 *
+	 * @param bridge   The ScriptBridge passed in the `libcd` variable, or the ScriptBridge of another script if the functions are in another script bridge.
 	 * @param testName The name of the function used to test whether this behavior should run. Passed one argument of type {@link WrappedCauldronContext}.
-	 * @param runName The name of the function used to perform this behavior. Passed one argument of type {@link WrappedCauldronContext}.
+	 * @param runName  The name of the function used to perform this behavior. Passed one argument of type {@link WrappedCauldronContext}.
 	 */
-	public void registerBehavior(ScriptBridge bridge, String testName, String runName) {
+	public void registerBehavior(Diskette bridge, String testName, String runName) {
 		ScriptEngine engine = bridge.getEngine();
 		if (engine instanceof Invocable) {
 			String key = bridge.getId().toString();
-			if (!debug.containsKey(key)) {
-				debug.put(key, new JsonArray());
+			if (!debug.has(key)) {
+				debug.add(key, new JsonArray());
 			}
 			JsonArray array = (JsonArray) debug.get(key);
 			JsonObject toAdd = new JsonObject();
-			toAdd.put("test_func", new JsonPrimitive(testName));
-			toAdd.put("run_func", new JsonPrimitive(runName));
+			toAdd.add("test_func", new JsonPrimitive(testName));
+			toAdd.add("run_func", new JsonPrimitive(runName));
 			array.add(toAdd);
 			INSTANCE.behaviors.put(new ScriptedPredicate(bridge.getId(), (Invocable) engine, testName), new ScriptedBehavior(bridge.getId(), (Invocable) engine, runName));
 		} else {
@@ -105,20 +96,22 @@ public class CauldronTweaker implements Tweaker {
 
 
 	/**
-	 * Register a new cauldron behavior. Deprecated; use {@link CauldronTweaker#registerBehavior(ScriptBridge, String, String)} instead.
+	 * Register a new cauldron behavior. Deprecated; use {@link CauldronTweaker#registerBehavior(Diskette, String, String)} instead.
 	 * Construct new classes and pass them functions for these. Each are passed a {@link CauldronContext}.
-	 * @param context A predicate for under what conditions the behavior should be performed.
+	 *
+	 * @param context  A predicate for under what conditions the behavior should be performed.
 	 * @param behavior The behavior to perform when the conditions are met.
 	 */
 	@Deprecated
 	public void registerBehavior(Predicate<CauldronContext> context, CauldronBehavior behavior) {
-		int deprecated = debug.getInt("deprecated_behaviors", 0);
-		debug.put("deprecated_behaviors", new JsonPrimitive(deprecated + 1));
+		int deprecated = debug.get("deprecated_behaviors").getAsInt();
+		debug.add("deprecated_behaviors", new JsonPrimitive(deprecated + 1));
 		INSTANCE.behaviors.put(context, behavior);
 	}
 
 	/**
 	 * Drain a cauldron of its fluid (for ease of calling from scripts). Depreacated; use {@link WrappedCauldronContext#drain} instead.
+	 *
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
 	 * @param bottles How many bottles of fluid to drain.
 	 * @return Whether the drain was successful.
@@ -130,8 +123,9 @@ public class CauldronTweaker implements Tweaker {
 
 	/**
 	 * Fill a cauldron with a given fluid (for ease of calling from scripts). Deprecated; use {@link WrappedCauldronContext#fill} instead.
+	 *
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
-	 * @param fluid What fluid to fill with.
+	 * @param fluid   What fluid to fill with.
 	 * @param bottles How many bottles of fluid to fill.
 	 * @return Whether the fill was successful.
 	 */
@@ -142,8 +136,9 @@ public class CauldronTweaker implements Tweaker {
 
 	/**
 	 * Take items from the stack used in a cauldron behavior. Deprecated; use {@link WrappedCauldronContext#takeItem} instead.
+	 *
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
-	 * @param amount How many items to take.
+	 * @param amount  How many items to take.
 	 * @return Whether the items could be taken.
 	 */
 	@Deprecated
@@ -154,8 +149,9 @@ public class CauldronTweaker implements Tweaker {
 	/**
 	 * Give items to a player using a cauldron behavior, or drop them on the ground if there's no player. Deprecated; use {@link WrappedCauldronContext#giveItem} instead.
 	 * Items dropped will have the "NoCauldronCollect" scoreboard tag, which prevents in-spec cauldrons from picking them up hopper-style.
+	 *
 	 * @param context The {@link CauldronContext} being used.
-	 * @param stack The item stack to give.
+	 * @param stack   The item stack to give.
 	 * @return Whether the items could be given.
 	 */
 	@Deprecated
@@ -165,10 +161,11 @@ public class CauldronTweaker implements Tweaker {
 
 	/**
 	 * Play a sound effect from the cauldron. Deprecated; use {@link WrappedCauldronContext#playSound} instead.
+	 *
 	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
-	 * @param sound The ID of the sound to play.
-	 * @param volume The volume to play at.
-	 * @param pitch The pitch to play at.
+	 * @param sound   The ID of the sound to play.
+	 * @param volume  The volume to play at.
+	 * @param pitch   The pitch to play at.
 	 */
 	@Deprecated
 	public void playSound(WrappedCauldronContext context, String sound, float volume, float pitch) {
@@ -177,7 +174,8 @@ public class CauldronTweaker implements Tweaker {
 
 	/**
 	 * Spawn an entity above the cauldron. Deprecated; use {@link WrappedCauldronContext#spawnEntity} instead.
-	 * @param context The {@link CauldronContext} being used, wrapped for use outside of obf.
+	 *
+	 * @param context  The {@link CauldronContext} being used, wrapped for use outside of obf.
 	 * @param typeName The ID of the type of entity to spawn.
 	 */
 	@Deprecated
