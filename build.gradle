@@ -45,6 +45,7 @@ dependencies {
     }
     modApi ("io.github.cottonmc:Jankson-Fabric:3.0.1+j1.2.0") { transitive = false }
     modImplementation "io.github.cottonmc:LibCD:3.0.3+1.16.3"
+    modImplementation "io.github.cottonmc:LibDP:1.1.0+1.16.2"
     include "io.github.cottonmc:Jankson-Fabric:3.0.1+j1.2.0"
 
     compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
