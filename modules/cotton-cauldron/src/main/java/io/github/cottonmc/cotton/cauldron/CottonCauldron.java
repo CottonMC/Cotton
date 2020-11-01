@@ -1,12 +1,11 @@
 package io.github.cottonmc.cotton.cauldron;
 
 import io.github.cottonmc.cotton.cauldron.tweaker.CauldronTweaker;
-import io.github.cottonmc.libcd.api.LibCDInitializer;
-import io.github.cottonmc.libcd.api.condition.ConditionManager;
-import io.github.cottonmc.libcd.api.tweaker.TweakerManager;
+import io.github.cottonmc.libdp.api.DriverInitializer;
+import io.github.cottonmc.libdp.api.driver.DriverManager;
 import net.fabricmc.api.ModInitializer;
 
-public class CottonCauldron implements ModInitializer, LibCDInitializer {
+public class CottonCauldron implements ModInitializer, DriverInitializer {
     @Override
     public void onInitialize() {
         //example cauldron behavior code - turns a sponge into a wet sponge
@@ -40,12 +39,7 @@ public class CottonCauldron implements ModInitializer, LibCDInitializer {
     }
 
     @Override
-    public void initTweakers(TweakerManager tweakerManager) {
-        tweakerManager.addTweaker("cotton.cauldron.CauldronTweaker", CauldronTweaker.INSTANCE);
-    }
-
-    @Override
-    public void initConditions(ConditionManager conditionManager) {
-
+    public void init(DriverManager tweakerManager) {
+        tweakerManager.addDriver("cotton.cauldron.CauldronTweaker", CauldronTweaker.INSTANCE);
     }
 }

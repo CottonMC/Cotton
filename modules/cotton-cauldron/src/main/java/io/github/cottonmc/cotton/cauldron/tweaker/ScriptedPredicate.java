@@ -1,8 +1,9 @@
 package io.github.cottonmc.cotton.cauldron.tweaker;
 
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
-import io.github.cottonmc.libcd.api.CDLogger;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
@@ -11,12 +12,12 @@ import java.util.function.Predicate;
 public class ScriptedPredicate implements Predicate<CauldronContext> {
 	private Invocable engine;
 	private String funcName;
-	private CDLogger logger;
+	private Logger logger;
 
 	public ScriptedPredicate(Identifier scriptName, Invocable engine, String funcName) {
 		this.engine = engine;
 		this.funcName = funcName;
-		this.logger = new CDLogger(scriptName.getNamespace());
+		this.logger = LogManager.getLogger(scriptName.getNamespace());
 	}
 
 	@Override
