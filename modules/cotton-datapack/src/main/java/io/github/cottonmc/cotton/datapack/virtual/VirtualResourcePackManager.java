@@ -25,12 +25,12 @@ public enum VirtualResourcePackManager {
 	public ResourcePackProvider getCreatorForType(ResourceType type) {
 		return new ResourcePackProvider() {
 			@Override
-			public <T extends ResourcePackProfile> void register(Consumer<T> packConsumer, ResourcePackProfile.Factory<T> factory) {
+			public void register(Consumer<ResourcePackProfile> packConsumer, ResourcePackProfile.Factory factory) {
 				for (PackContainer packContainer : packs.get(type)) {
 					VirtualResourcePack pack = packContainer.getPack();
 					ClientResourcePackMode clientPackMode = packContainer.getClientPackMode();
 					String id = "virtual/" + pack.getId();
-					T container = ResourcePackProfile.of(
+					ResourcePackProfile container = ResourcePackProfile.of(
 							id,
 							type == ResourceType.CLIENT_RESOURCES && clientPackMode == ClientResourcePackMode.ALWAYS_ENABLED,
 							() -> pack,
