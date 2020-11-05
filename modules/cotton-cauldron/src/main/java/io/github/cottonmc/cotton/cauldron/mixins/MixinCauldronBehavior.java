@@ -3,7 +3,8 @@ package io.github.cottonmc.cotton.cauldron.mixins;
 import io.github.cottonmc.cotton.cauldron.Cauldron;
 import io.github.cottonmc.cotton.cauldron.CauldronBehavior;
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
-import io.github.cottonmc.cotton.cauldron.tweaker.CauldronTweaker;
+import io.github.cottonmc.cotton.cauldron.driver.CauldronDriver;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,8 +35,10 @@ public class MixinCauldronBehavior implements Cauldron {
 		// Run Cauldron Behaviors - this is the code to imitate when implementing on your own block
 		CauldronContext ctx = new CauldronContext(world, pos, state, state.get(CauldronBlock.LEVEL), state.get(CauldronBlock.LEVEL) == 0 ? Fluids.EMPTY : Fluids.WATER, DefaultedList.copyOf(ItemStack.EMPTY), player, hand, player.getStackInHand(hand));
 		Map<Predicate<CauldronContext>, CauldronBehavior> allBehaviors = new HashMap<>(CauldronBehavior.BEHAVIORS);
-		// This adds support for Tweaker cauldron behaviors
-		allBehaviors.putAll(CauldronTweaker.INSTANCE.behaviors);
+		if (FabricLoader.getInstance().isModLoaded("libdp")) {
+			// This adds support for LibDP driver cauldron behaviors
+			allBehaviors.putAll(CauldronDriver.INSTANCE.behaviors);
+		}
 		for (Predicate<CauldronContext> pred : allBehaviors.keySet()) {
 			if (pred.test(ctx)) {
 				CauldronBehavior behavior = allBehaviors.get(pred);

@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.cauldron.tweaker;
+package io.github.cottonmc.cotton.cauldron.driver;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -20,9 +20,9 @@ import java.util.concurrent.Executor;
 import java.util.function.Predicate;
 
 //TODO: improve system
-public class CauldronTweaker implements Driver {
+public class CauldronDriver implements Driver {
 	public final Map<Predicate<CauldronContext>, CauldronBehavior> behaviors = new HashMap<>();
-	public static final CauldronTweaker INSTANCE = new CauldronTweaker();
+	public static final CauldronDriver INSTANCE = new CauldronDriver();
 	private Logger logger = LogManager.getLogger();
 	private JsonObject debug;
 	private Diskette currentBridge;
@@ -96,7 +96,7 @@ public class CauldronTweaker implements Driver {
 
 
 	/**
-	 * Register a new cauldron behavior. Deprecated; use {@link CauldronTweaker#registerBehavior(Diskette, String, String)} instead.
+	 * Register a new cauldron behavior. Deprecated; use {@link CauldronDriver#registerBehavior(Diskette, String, String)} instead.
 	 * Construct new classes and pass them functions for these. Each are passed a {@link CauldronContext}.
 	 *
 	 * @param context  A predicate for under what conditions the behavior should be performed.

@@ -1,11 +1,8 @@
 package io.github.cottonmc.cotton.cauldron;
 
-import io.github.cottonmc.cotton.cauldron.tweaker.CauldronTweaker;
-import io.github.cottonmc.libdp.api.DriverInitializer;
-import io.github.cottonmc.libdp.api.driver.DriverManager;
 import net.fabricmc.api.ModInitializer;
 
-public class CottonCauldron implements ModInitializer, DriverInitializer {
+public class CottonCauldron implements ModInitializer {
     @Override
     public void onInitialize() {
         //example cauldron behavior code - turns a sponge into a wet sponge
@@ -36,10 +33,5 @@ public class CottonCauldron implements ModInitializer, DriverInitializer {
 //					((Cauldron)ctx.getState().getBlock()).drain(world, pos, ctx.getState(), Fluids.WATER, 3);
 //				}
 //		);
-    }
-
-    @Override
-    public void init(DriverManager tweakerManager) {
-        tweakerManager.addDriver("cotton.cauldron.CauldronTweaker", CauldronTweaker.INSTANCE);
     }
 }

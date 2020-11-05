@@ -1,4 +1,4 @@
-package io.github.cottonmc.cotton.cauldron.tweaker;
+package io.github.cottonmc.cotton.cauldron.driver;
 
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
 import io.github.cottonmc.libdp.api.DPSyntaxError;
