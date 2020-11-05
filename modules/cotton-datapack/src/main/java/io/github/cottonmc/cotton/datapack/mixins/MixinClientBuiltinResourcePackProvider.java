@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
 /*
@@ -19,8 +18,8 @@ import java.util.function.Consumer;
 @Mixin(ClientBuiltinResourcePackProvider.class)
 public class MixinClientBuiltinResourcePackProvider {
     @Inject(method = "register", at = @At("RETURN"))
-    private <T extends ResourcePackProfile> void addVirtualPacks(
-            Consumer<T> consumer, ResourcePackProfile.Factory<T> factory, CallbackInfo info
+    private void addVirtualPacks(
+            Consumer<ResourcePackProfile> consumer, ResourcePackProfile.Factory factory, CallbackInfo info
     ) {
         VirtualResourcePackManager.INSTANCE
                 .getCreatorForType(ResourceType.CLIENT_RESOURCES)

@@ -1,11 +1,10 @@
 package io.github.cottonmc.cotton.cauldron.tweaker;
 
 import io.github.cottonmc.cotton.cauldron.CauldronContext;
-import io.github.cottonmc.libcd.api.CDLogger;
-import io.github.cottonmc.libcd.api.CDSyntaxError;
-import io.github.cottonmc.libcd.api.tweaker.recipe.RecipeParser;
-import io.github.cottonmc.libcd.api.tweaker.util.TweakerUtils;
-import io.github.cottonmc.libcd.api.util.StackInfo;
+import io.github.cottonmc.libdp.api.DPSyntaxError;
+import io.github.cottonmc.libdp.api.driver.recipe.RecipeParser;
+import io.github.cottonmc.libdp.api.driver.util.DriverUtils;
+import io.github.cottonmc.libdp.api.util.StackInfo;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +19,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +29,9 @@ import java.util.List;
 
 public class WrappedCauldronContext {
 	private CauldronContext context;
-	private CDLogger logger;
+	private Logger logger;
 
-	public WrappedCauldronContext(CDLogger logger, CauldronContext context) {
+	public WrappedCauldronContext(Logger logger, CauldronContext context) {
 		this.context = context;
 		this.logger = logger;
 	}
@@ -92,7 +93,7 @@ public class WrappedCauldronContext {
 	/**
 	 * @return The logger to use when logging info or errors.
 	 */
-	public CDLogger getLogger() {
+	public Logger getLogger() {
 		return logger;
 	}
 
@@ -112,7 +113,7 @@ public class WrappedCauldronContext {
 	 * @return Whether the fill was successful.
 	 */
 	public boolean fill(String fluid, int bottles) {
-		return fill(TweakerUtils.INSTANCE.getFluid(fluid), bottles);
+		return fill(DriverUtils.INSTANCE.getRawFluid(fluid), bottles);
 	}
 
 	/**
@@ -161,7 +162,7 @@ public class WrappedCauldronContext {
 				context.getWorld().spawnEntity(entity);
 			}
 			return true;
-		} catch (CDSyntaxError e) {
+		} catch (DPSyntaxError e) {
 			getLogger().error("Could not parse cauldron tweaker item stack: " + e.getMessage());
 			return false;
 		}
@@ -187,7 +188,7 @@ public class WrappedCauldronContext {
 		EntityType<?> type = Registry.ENTITY_TYPE.get(new Identifier(entityType));
 		if (type.equals(EntityType.LIGHTNING_BOLT) && world instanceof ServerWorld) {
 			LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
-			lightning.method_29495(Vec3d.ofBottomCenter(pos));
+			lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(pos));
 			if (context.getPlayer() instanceof ServerPlayerEntity) {
 				lightning.setChanneler((ServerPlayerEntity)context.getPlayer());
 			}
@@ -196,7 +197,7 @@ public class WrappedCauldronContext {
 			Entity entity = type.create(world);
 			if (entity == null) return;
 			if (type.getSpawnGroup() == SpawnGroup.MONSTER) {
-				((MobEntity)entity).initialize(world, world.getLocalDifficulty(pos), SpawnReason.EVENT, null, null);
+				((MobEntity)entity).initialize((ServerWorldAccess) world, world.getLocalDifficulty(pos), SpawnReason.EVENT, null, null);
 			}
 			entity.setPos(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
 			world.spawnEntity(entity);

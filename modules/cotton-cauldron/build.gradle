@@ -7,8 +7,9 @@ version = "1.0.4"
 
 ext {
 	module_dependencies = [
-		"libcd"  : "2.3.0+1.15.2",
-		"commons": "1.0.0-rc.4"
+		"libcd"  : "3.0.3+1.16.3",
+		"commons": "1.0.0-rc.4",
+		"libdp": "1.1.0+1.16.2"
 	];
 }
 
