@@ -25,7 +25,8 @@
     "fabric-commands-v0": "*"
   },
   "custom": {
-    "modmenu:api": true,
-    "modmenu:parent": "cotton"
+    "modmenu": {
+      "parent": "cotton"
+    }
   }
 }
