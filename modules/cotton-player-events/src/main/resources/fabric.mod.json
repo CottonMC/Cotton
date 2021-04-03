@@ -18,7 +18,8 @@
   },
   "custom": {
     "modmenu": {
-      "parent": "cotton"
+      "parent": "cotton",
+      "badges": [ "library" ]
     }
   }
 }
