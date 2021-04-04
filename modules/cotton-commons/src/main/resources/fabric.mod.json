@@ -25,7 +25,9 @@
     "fabric-tag-extensions-v0": "*"
   },
   "custom": {
-    "modmenu:api": true,
-    "modmenu:parent": "cotton"
+    "modmenu": {
+      "parent": "cotton",
+      "badges": [ "library" ]
+    }
   }
 }

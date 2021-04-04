@@ -14,9 +14,8 @@
     "issues": "https://github.com/CottonMC/cotton/issues"
   },
   "custom": {
-    "modmenu:api": true,
     "modmenu": {
-      "badges": "library"
+      "badges": [ "library" ]
     }
   }
 }

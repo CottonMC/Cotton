@@ -13,7 +13,9 @@
     "fabricloader": ">=0.4.0"
   },
   "custom": {
-    "modmenu:api": true,
-    "modmenu:parent": "cotton"
+    "modmenu": {
+      "parent": "cotton",
+      "badges": [ "library" ]
+    }
   }
 }

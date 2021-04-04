@@ -25,7 +25,9 @@
     "cotton-commons": "*"
   },
   "custom": {
-    "modmenu:api": true,
-    "modmenu:parent": "cotton"
+    "modmenu": {
+      "parent": "cotton",
+      "badges": [ "library" ]
+    }
   }
 }
